@@ -31,9 +31,9 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1000 && resultCode == RESULT_OK) {
-            Uri selectedImage = data.getData();
+            Uri selectedImageUri = data.getData();
 
-            mImageCroper = new ImageCroper(getApplicationContext(), selectedImage);
+            mImageCroper = new ImageCroper(getApplicationContext(), selectedImageUri);
             mContainerImageCroper.addView(mImageCroper);
         } else {
             finish();
@@ -55,11 +55,11 @@ public class MainActivity extends ActionBarActivity {
 
     public void onButtonCropClicked(View v) {
         if(mImageCroper != null) {
-            Bitmap thumb = mImageCroper.crop();
+            Bitmap cropedImage = mImageCroper.crop();
 
             try {
                 FileOutputStream out = new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() + "/thumb.png");
-                thumb.compress(Bitmap.CompressFormat.PNG, 40, out);
+                cropedImage.compress(Bitmap.CompressFormat.PNG, 40, out);
             } catch (IOException e) {
                 e.printStackTrace();
             }
