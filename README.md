@@ -1,7 +1,7 @@
 # Android-ImageCroper
 Image crop view for android
 
-I'am trying to make library this project.\n
+I'am trying to make library this project.\\
 Maybe first virsion only provide crop as square.
 
 This library can not crop original bitmap. 
