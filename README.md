@@ -19,7 +19,7 @@ mImageCroper = new ImageCroper(getApplicationContext(), selectedImageUri);
 mContainerImageCroper.addView(mImageCroper);
 ```
 
-![](./Screenshot_01.png =590x)
+![](./Screenshot_01.png)
 
 and crop
 ```java
