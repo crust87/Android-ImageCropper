@@ -19,6 +19,8 @@ mImageCroper = new ImageCroper(getApplicationContext(), selectedImageUri);
 mContainerImageCroper.addView(mImageCroper);
 ```
 
+![alt tag](https://github.com/mabi87/Android-ImageCroper/blob/master/Screenshot_01.png)
+
 and crop
 ```java
 Bitmap cropedImage = mImageCroper.crop();
