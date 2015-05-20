@@ -49,8 +49,8 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 	
 	private EditBox mEditBox;
 	
-	private int mWidth;
-	private int mHeight;
+	private int mViewWidth;
+	private int mViewHeight;
 	
 	private int mLeftMargin;
 	private int mTopMargin;
@@ -82,8 +82,8 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		setWillNotDraw(false);
-		mWidth = getWidth();
-		mHeight = getHeight();
+		mViewWidth = getWidth();
+		mViewHeight = getHeight();
 		
 		float scaleX;
 	    float scaleY;
@@ -113,8 +113,8 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 	    	mScaledImage = Bitmap.createBitmap(mScaledImage, 0, 0, newWidth, newHeight, matrix, true);
 	    }
 	    
-	    mLeftMargin = (mWidth - mScaledImage.getWidth()) / 2;
-	    mTopMargin = (mHeight - mScaledImage.getHeight()) / 2;
+	    mLeftMargin = (mViewWidth - mScaledImage.getWidth()) / 2;
+	    mTopMargin = (mViewHeight - mScaledImage.getHeight()) / 2;
 	    
 	    mImageBound = new Rect(0 + mLeftMargin, 0 + mTopMargin, mScaledImage.getWidth() + mLeftMargin, mScaledImage.getHeight() + mTopMargin);
 	    mEditBox = new EditBox(mLeftMargin, mTopMargin, mImageBound);
@@ -175,19 +175,20 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 	}
 	
 	public Bitmap crop() {
-		int thumbX = mEditBox.getX() - mLeftMargin;
-		int thumbY = mEditBox.getY() - mTopMargin;
-		int thumbWidth = mEditBox.getWidtn();
-		    
-		if(thumbX + thumbWidth > mScaledImage.getWidth()) {
-			thumbWidth -= thumbX + thumbWidth - mScaledImage.getWidth();
+		float scale = (float) mScaledImage.getWidth() / mImage.getWidth();
+		int thumbX = (int) ((mEditBox.getX() - mLeftMargin) / scale);
+		int thumbY = (int) ((mEditBox.getY() - mTopMargin) / scale);
+		int thumbWidth = (int) (mEditBox.getWidtn() / scale);
+
+		if(thumbX + thumbWidth > mImage.getWidth()) {
+			thumbWidth -= thumbX + thumbWidth - mImage.getWidth();
 		}
-		    
+
 		if(thumbY + thumbWidth > mScaledImage.getHeight()) {
-			thumbWidth -= thumbY + thumbWidth - mScaledImage.getHeight();
+			thumbWidth -= thumbY + thumbWidth - mImage.getHeight();
 		}
-		    
-		Bitmap thumb = Bitmap.createBitmap(mScaledImage, thumbX, thumbY, thumbWidth, thumbWidth);
+
+		Bitmap thumb = Bitmap.createBitmap(mImage, thumbX, thumbY, thumbWidth, thumbWidth);
 
 		return thumb;
 	}
