@@ -17,6 +17,7 @@ import android.widget.FrameLayout;
 import com.mabi87.imagecroper.ImageCroper;
 
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -101,7 +102,14 @@ public class MainActivity extends ActionBarActivity {
 
     public void onButtonCropClicked(View v) {
         if(mImageCroper != null) {
-            mImageCroper.save(Environment.getExternalStorageDirectory().getAbsolutePath() + "/thumb.png");
+            Bitmap thumb = mImageCroper.crop();
+
+            try {
+                FileOutputStream out = new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() + "/thumb.png");
+                thumb.compress(Bitmap.CompressFormat.PNG, 40, out);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

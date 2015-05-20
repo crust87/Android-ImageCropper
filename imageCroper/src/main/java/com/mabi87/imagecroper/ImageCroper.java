@@ -1,3 +1,24 @@
+/*
+ * ImageCroper
+ * https://github.com/mabi87/Android-ImageCroper
+ *
+ * Mabi
+ * crust87@gmail.com
+ * last modify 2015-05-20
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.mabi87.imagecroper;
 
 import android.content.Context;
@@ -10,9 +31,6 @@ import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 	public static enum ACTION_LIST{anchor, move, none}
@@ -156,35 +174,22 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 	    pCanvas.drawBitmap(mScaledImage, null, mImageBound, mBitmapPaint);
 	}
 	
-	public void save(String thumbPath) {
-		FileOutputStream out = null;
-		try {
-		    int thumbX = mEditBox.getX() - mLeftMargin;
-		    int thumbY = mEditBox.getY() - mTopMargin;
-		    int thumbWidth = mEditBox.getWidtn();
+	public Bitmap crop() {
+		int thumbX = mEditBox.getX() - mLeftMargin;
+		int thumbY = mEditBox.getY() - mTopMargin;
+		int thumbWidth = mEditBox.getWidtn();
 		    
-		    if(thumbX + thumbWidth > mScaledImage.getWidth()) {
-		    	thumbWidth -= thumbX + thumbWidth - mScaledImage.getWidth();
-		    }
-		    
-		    if(thumbY + thumbWidth > mScaledImage.getHeight()) {
-		    	thumbWidth -= thumbY + thumbWidth - mScaledImage.getHeight();
-		    }
-		    
-		    Bitmap thumb = Bitmap.createBitmap(mScaledImage, thumbX, thumbY, thumbWidth, thumbWidth);
-		    out = new FileOutputStream(thumbPath);
-		    thumb.compress(Bitmap.CompressFormat.JPEG, 40, out);
-		} catch (Exception e) {
-		    e.printStackTrace();
-		} finally {
-		    try {
-		        if (out != null) {
-		            out.close();
-		        }
-		    } catch (IOException e) {
-		        e.printStackTrace();
-		    }
+		if(thumbX + thumbWidth > mScaledImage.getWidth()) {
+			thumbWidth -= thumbX + thumbWidth - mScaledImage.getWidth();
 		}
+		    
+		if(thumbY + thumbWidth > mScaledImage.getHeight()) {
+			thumbWidth -= thumbY + thumbWidth - mScaledImage.getHeight();
+		}
+		    
+		Bitmap thumb = Bitmap.createBitmap(mScaledImage, thumbX, thumbY, thumbWidth, thumbWidth);
+
+		return thumb;
 	}
 	
 }
