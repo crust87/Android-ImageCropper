@@ -3,6 +3,27 @@ Image crop view for android
 I'am trying to make library this project
 maybe first virsion only provide crop as square
 
+## Example
+
+request image
+```java
+Intent lIntent = new Intent(Intent.ACTION_PICK);
+lIntent.setType("image/*");
+lIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+startActivityForResult(lIntent, 1000);
+```
+
+create view and add view
+```java
+mImageCroper = new ImageCroper(getApplicationContext(), selectedImageUri);
+mContainerImageCroper.addView(mImageCroper);
+```
+
+and crop
+```java
+Bitmap cropedImage = mImageCroper.crop();
+```
+
 ## Licence
 Copyright 2015 Mabi
 
