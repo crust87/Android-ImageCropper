@@ -4,7 +4,7 @@
  *
  * Mabi
  * crust87@gmail.com
- * last modify 2015-05-20
+ * last modify 2015-05-21
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,15 +22,24 @@
 package com.mabi87.imagecroper;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.media.ExifInterface;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 	public static enum ACTION_LIST{anchor, move, none}
@@ -59,19 +68,55 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 	
 	private float mPostX;
 	private float mPostY;
-	
-	public ImageCroper(Context pContext, Bitmap pImage, int pAngle) {
+
+	public ImageCroper(Context pContext, Uri pSelectedImage) {
 		super(pContext);
 		mContext = pContext;
-		mImage = pImage;
-		mAngle = pAngle;
-		
+
+		InputStream imageStream = null;
+
+		try {
+			imageStream = mContext.getContentResolver().openInputStream(pSelectedImage);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			String path = getRealPathFromURI(pSelectedImage);
+			ExifInterface exif = new ExifInterface(path);
+
+			switch(Integer.parseInt(exif.getAttribute(ExifInterface.TAG_ORIENTATION))) {
+				case 3:
+					mAngle = 180;
+					break;
+				case 6:
+					mAngle = 90;
+					break;
+				case 8:
+					mAngle = 270;
+					break;
+				default:
+					mAngle = 0;
+			}
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inPreferredConfig = Bitmap.Config.RGB_565;
+
+		mImage = BitmapFactory.decodeStream(imageStream, null, options);
+
 		mHolder = getHolder();
 		mHolder.addCallback(this);
-		
+
 		mBitmapPaint = new Paint();
 		mBitmapPaint.setFilterBitmap(true);
-		
+
 		mEditBoxPaint = new Paint();
 		mEditBoxPaint.setColor(Color.parseColor("#ffffff"));
 		mEditBoxPaint.setAntiAlias(true);
@@ -174,23 +219,53 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 	    pCanvas.drawBitmap(mScaledImage, null, mImageBound, mBitmapPaint);
 	}
 	
-	public Bitmap crop() {
-		float scale = (float) mScaledImage.getWidth() / mImage.getWidth();
-		int thumbX = (int) ((mEditBox.getX() - mLeftMargin) / scale);
-		int thumbY = (int) ((mEditBox.getY() - mTopMargin) / scale);
-		int thumbWidth = (int) (mEditBox.getWidtn() / scale);
+//	public Bitmap crop() {
+//		float scale = (float) mScaledImage.getWidth() / mImage.getWidth();
+//
+//		int thumbX = (int) ((mEditBox.getX() - mLeftMargin) / scale);
+//		int thumbY = (int) ((mEditBox.getY() - mTopMargin) / scale);
+//		int thumbWidth = (int) (mEditBox.getWidtn() / scale);
+//
+//		if(thumbX + thumbWidth > mImage.getWidth()) {
+//			thumbWidth -= thumbX + thumbWidth - mImage.getWidth();
+//		}
+//
+//		if(thumbY + thumbWidth > mImage.getHeight()) {
+//			thumbWidth -= thumbY + thumbWidth - mImage.getHeight();
+//		}
+//
+//		return Bitmap.createBitmap(mImage, thumbX, thumbY, thumbWidth, thumbWidth);
+//	}
 
-		if(thumbX + thumbWidth > mImage.getWidth()) {
-			thumbWidth -= thumbX + thumbWidth - mImage.getWidth();
+	public Bitmap crop() {
+		int thumbX = (mEditBox.getX() - mLeftMargin);
+		int thumbY = (mEditBox.getY() - mTopMargin);
+		int thumbWidth = mEditBox.getWidtn();
+
+		if(thumbX + thumbWidth > mScaledImage.getWidth()) {
+			thumbWidth -= thumbX + thumbWidth - mScaledImage.getWidth();
 		}
 
 		if(thumbY + thumbWidth > mScaledImage.getHeight()) {
-			thumbWidth -= thumbY + thumbWidth - mImage.getHeight();
+			thumbWidth -= thumbY + thumbWidth - mScaledImage.getHeight();
 		}
 
-		Bitmap thumb = Bitmap.createBitmap(mImage, thumbX, thumbY, thumbWidth, thumbWidth);
+		return Bitmap.createBitmap(mScaledImage, thumbX, thumbY, thumbWidth, thumbWidth);
+	}
 
-		return thumb;
+	private String getRealPathFromURI(Uri contentUri) {
+		Cursor cursor = null;
+		try {
+			String[] proj = { MediaStore.Images.Media.DATA };
+			cursor = mContext.getContentResolver().query(contentUri, proj, null, null, null);
+			int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+			cursor.moveToFirst();
+			return cursor.getString(column_index);
+		} finally {
+			if (cursor != null) {
+				cursor.close();
+			}
+		}
 	}
 	
 }
