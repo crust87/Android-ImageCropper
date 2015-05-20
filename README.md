@@ -4,8 +4,8 @@ Image crop view for android
 I'am trying to make library this project.<br/>
 Maybe first virsion only provide crop as square.
 
-This library can not crop original bitmap. 
-only crop resized bitmap as screen size. 
+This library can not crop original bitmap.<br/>
+only crop resized bitmap as screen size.<br/>
 I will fix it as soon as i can. 
 
 ## Example
