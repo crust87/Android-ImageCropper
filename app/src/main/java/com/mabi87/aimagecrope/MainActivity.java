@@ -21,18 +21,10 @@ public class MainActivity extends ActionBarActivity {
 
     // Layout Components
     private FrameLayout mContainerImageCroper;
-    private TextView mTextImageWidth;
-    private TextView mTextImageHeight;
     private TextView mTextCropX;
     private TextView mTextCropY;
     private TextView mTextCropWidth;
     private TextView mTextCropHeight;
-    private TextView mTextViewWidth;
-    private TextView mTextViewHeight;
-    private TextView mTextBoxX;
-    private TextView mTextBoxY;
-    private TextView mTextBoxWidth;
-    private TextView mTextBoxHeight;
 
     // Components
     private ImageCroper mImageCroper;
@@ -51,33 +43,13 @@ public class MainActivity extends ActionBarActivity {
 
             mImageCroper = new ImageCroper(getApplicationContext(), selectedImageUri);
 
-            mImageCroper.setOnImageSetListener(new ImageCroper.OnImageSetListener() {
-                @Override
-                public void onImageSet(int imageWidth, int imageHeight) {
-                    mTextImageWidth.setText("image width: " + imageWidth);
-                    mTextImageHeight.setText("image height: " + imageHeight);
-                }
-            });
-
-            mImageCroper.setOnCropViewChangedListener(new ImageCroper.OnCropViewChangedListener() {
-                @Override
-                public void onCropViewChanged(int viewWidth, int viewHeight) {
-                    mTextViewWidth.setText("view width: " + viewWidth);
-                    mTextViewHeight.setText("view height: " + viewHeight);
-                }
-            });
-
             mImageCroper.setOnCropBoxChangedListener(new ImageCroper.OnCropBoxChangedListener() {
                 @Override
                 public void onCropBoxChange(CropBox cropBox) {
-                    mTextCropX.setText("crop x: " + cropBox.getRealX());
-                    mTextCropY.setText("crop y: " + cropBox.getRealY());
-                    mTextCropWidth.setText("crop width: " + cropBox.getRealWidth());
-                    mTextCropHeight.setText("crop height: " + cropBox.getRealHeight());
-                    mTextBoxX.setText("box x: " + cropBox.getX());
-                    mTextBoxY.setText("box y: " + cropBox.getY());
-                    mTextBoxWidth.setText("box width: " + cropBox.getWidth());
-                    mTextBoxHeight.setText("box height: " + cropBox.getHeight());
+                    mTextCropX.setText("crop x: " + cropBox.getCropX());
+                    mTextCropY.setText("crop y: " + cropBox.getCropY());
+                    mTextCropWidth.setText("crop width: " + cropBox.getCropWidth());
+                    mTextCropHeight.setText("crop height: " + cropBox.getCropHeight());
                 }
             });
 
@@ -91,19 +63,10 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         mContainerImageCroper = (FrameLayout) findViewById(R.id.containerImageCroper);
-
-        mTextImageWidth = (TextView) findViewById(R.id.textImageWidth);
-        mTextImageHeight = (TextView) findViewById(R.id.textImageHeight);
         mTextCropX = (TextView) findViewById(R.id.textCropX);
         mTextCropY = (TextView) findViewById(R.id.textCropY);
         mTextCropWidth = (TextView) findViewById(R.id.textCropWidth);
         mTextCropHeight = (TextView) findViewById(R.id.textCropHeight);
-        mTextViewWidth = (TextView) findViewById(R.id.textViewWidth);
-        mTextViewHeight = (TextView) findViewById(R.id.textViewHeight);
-        mTextBoxX = (TextView) findViewById(R.id.textBoxX);
-        mTextBoxY = (TextView) findViewById(R.id.textBoxY);
-        mTextBoxWidth = (TextView) findViewById(R.id.textBoxWidth);
-        mTextBoxHeight = (TextView) findViewById(R.id.textBoxHeight);
     }
 
     public void onButtonLoadClicked(View v) {

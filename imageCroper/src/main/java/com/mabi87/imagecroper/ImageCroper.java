@@ -45,7 +45,6 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 	// Components
 	private Context mContext;
 	private SurfaceHolder mHolder;
-
 	private Bitmap mImage;
 	private Bitmap mScaledImage;
 	private Rect mImageBound;
@@ -53,15 +52,13 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 	private CropBox mCropBox;
 
 	// Attributes
-	private int mAngle;
 	private int mViewWidth;
 	private int mViewHeight;
 
 	// Listener
-	private OnImageSetListener mOnImageSetListener;
 	private OnCropBoxChangedListener mOnCropBoxChangedListener;
-	private OnCropViewChangedListener mOnCropViewChangedListener;
 
+	// Constructor
 	public ImageCroper(Context pContext, Uri pSelectedImage) {
 		super(pContext);
 		mContext = pContext;
@@ -74,22 +71,24 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 			e.printStackTrace();
 		}
 
+		int lRotaion = 0;
+
 		try {
 			String path = getRealPathFromURI(pSelectedImage);
 			ExifInterface exif = new ExifInterface(path);
 
 			switch(Integer.parseInt(exif.getAttribute(ExifInterface.TAG_ORIENTATION))) {
 				case 3:
-					mAngle = 180;
+					lRotaion = 180;
 					break;
 				case 6:
-					mAngle = 90;
+					lRotaion = 90;
 					break;
 				case 8:
-					mAngle = 270;
+					lRotaion = 270;
 					break;
 				default:
-					mAngle = 0;
+					lRotaion = 0;
 			}
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
@@ -102,7 +101,11 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inPreferredConfig = Bitmap.Config.RGB_565;
 
+		Matrix matrix = new Matrix();
+		matrix.postRotate(lRotaion);
+
 		mImage = BitmapFactory.decodeStream(imageStream, null, options);
+		mImage = Bitmap.createBitmap(mImage , 0, 0, mImage.getWidth(), mImage.getHeight(), matrix, true);
 
 		mHolder = getHolder();
 		mHolder.addCallback(this);
@@ -119,48 +122,30 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 		
 		float scaleX;
 	    float scaleY;
-	    if(mAngle == 90) {
-	    	scaleX = (float) getWidth() / mImage.getHeight();
-		    scaleY = (float) getHeight() / mImage.getWidth();
-	    } else {
-	    	scaleX = (float) getWidth() / mImage.getWidth();
-		    scaleY = (float) getHeight() / mImage.getHeight();
-	    }
+
+		scaleX = (float) getWidth() / mImage.getWidth();
+		scaleY = (float) getHeight() / mImage.getHeight();
 	    
 	    int newWidth;
 	    int newHeight;
-		float scale;
+		float lScale;
+
 	    if(scaleX > scaleY) {
-	    	newWidth = (int) (mImage.getWidth() * scaleY);
-	    	newHeight = (int) (mImage.getHeight() * scaleY);
-			scale = scaleY;
+			lScale = scaleY;
 	    } else {
-	    	newWidth = (int) (mImage.getWidth() * scaleX);
-	    	newHeight = (int) (mImage.getHeight() * scaleX);
-			scale = scaleX;
+			lScale = scaleX;
 	    }
+
+		newWidth = (int) (mImage.getWidth() * lScale);
+		newHeight = (int) (mImage.getHeight() * lScale);
 	    
 	    mScaledImage = Bitmap.createScaledBitmap(mImage, newWidth, newHeight, true);
-	    
-	    if(mAngle == 90) {
-	    	Matrix matrix = new Matrix();
-	 	    matrix.postRotate(mAngle);
-	    	mScaledImage = Bitmap.createBitmap(mScaledImage, 0, 0, newWidth, newHeight, matrix, true);
-	    }
 
 		int lLeftMargin = (mViewWidth - mScaledImage.getWidth()) / 2;
 		int lTopMargin = (mViewHeight - mScaledImage.getHeight()) / 2;
 
 		mImageBound = new Rect(lLeftMargin, lTopMargin, mScaledImage.getWidth() + lLeftMargin, mScaledImage.getHeight() + lTopMargin);
-		mCropBox = new CropBox(lLeftMargin, lTopMargin, mImageBound, scale);
-
-		if(mOnImageSetListener != null) {
-			mOnImageSetListener.onImageSet(mImage.getWidth(), mImage.getHeight());
-		}
-
-		if(mOnCropViewChangedListener != null) {
-			mOnCropViewChangedListener.onCropViewChanged(mImageBound.width(), mImageBound.height());
-		}
+		mCropBox = new CropBox(lLeftMargin, lTopMargin, mImageBound, lScale);
 
 		if(mOnCropBoxChangedListener != null) {
 			mOnCropBoxChangedListener.onCropBoxChange(mCropBox);
@@ -206,39 +191,22 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 	private void drawPicture(Canvas pCanvas) {
 	    pCanvas.drawBitmap(mScaledImage, null, mImageBound, mImagePaint);
 	}
-	
-//	public Bitmap crop() {
-//		float scale = (float) mScaledImage.getWidth() / mImage.getWidth();
-//
-//		int thumbX = (int) ((mEditBox.getX() - mLeftMargin) / scale);
-//		int thumbY = (int) ((mEditBox.getY() - mTopMargin) / scale);
-//		int thumbWidth = (int) (mEditBox.getWidtn() / scale);
-//
-//		if(thumbX + thumbWidth > mImage.getWidth()) {
-//			thumbWidth -= thumbX + thumbWidth - mImage.getWidth();
-//		}
-//
-//		if(thumbY + thumbWidth > mImage.getHeight()) {
-//			thumbWidth -= thumbY + thumbWidth - mImage.getHeight();
-//		}
-//
-//		return Bitmap.createBitmap(mImage, thumbX, thumbY, thumbWidth, thumbWidth);
-//	}
 
 	public Bitmap crop() {
-		int thumbX = mCropBox.getX();
-		int thumbY = mCropBox.getY();
-		int thumbWidth = mCropBox.getWidth();
+		int lCropX = mCropBox.getCropX();
+		int lCropY = mCropBox.getCropY();
+		int lCropWidth = mCropBox.getCropWidth();
+		int lCropHeight = mCropBox.getCropHeight();
 
-		if(thumbX + thumbWidth > mScaledImage.getWidth()) {
-			thumbWidth -= thumbX + thumbWidth - mScaledImage.getWidth();
+		if(lCropX + lCropWidth > mImage.getWidth()) {
+			lCropWidth -= lCropX + lCropWidth - mImage.getWidth();
 		}
 
-		if(thumbY + thumbWidth > mScaledImage.getHeight()) {
-			thumbWidth -= thumbY + thumbWidth - mScaledImage.getHeight();
+		if(lCropY + lCropHeight > mImage.getHeight()) {
+			lCropHeight -= lCropY + lCropHeight - mImage.getHeight();
 		}
 
-		return Bitmap.createBitmap(mScaledImage, thumbX, thumbY, thumbWidth, thumbWidth);
+		return Bitmap.createBitmap(mImage, lCropX, lCropY, lCropWidth, lCropHeight);
 	}
 
 	private String getRealPathFromURI(Uri contentUri) {
@@ -256,36 +224,12 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 
-	public int getViewWidth() {
-		return mViewWidth;
-	}
-
-	public int getViewHeight() {
-		return mViewHeight;
-	}
-
-	public void setOnImageSetListener(OnImageSetListener pOnImageSetListener) {
-		mOnImageSetListener = pOnImageSetListener;
-	}
-
 	public void setOnCropBoxChangedListener(OnCropBoxChangedListener pOnCropBoxChangedListener) {
 		mOnCropBoxChangedListener = pOnCropBoxChangedListener;
 	}
 
-	public void setOnCropViewChangedListener(OnCropViewChangedListener pOnCropViewChangedListener) {
-		mOnCropViewChangedListener = pOnCropViewChangedListener;
-	}
-
-	public interface OnImageSetListener {
-		public abstract void onImageSet(int imageWidth, int imageHeight);
-	}
-
 	public interface OnCropBoxChangedListener {
 		public abstract void onCropBoxChange(CropBox cropBox);
-	}
-
-	public interface OnCropViewChangedListener {
-		public abstract void onCropViewChanged(int viewWidth, int viewHeight);
 	}
 
 }

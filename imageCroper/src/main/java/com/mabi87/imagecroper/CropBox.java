@@ -31,24 +31,26 @@ import android.graphics.Rect;
 import android.view.MotionEvent;
 
 public class CropBox extends Anchor {
-	
-	private Anchor mAnchor;
 
+	// Components
+	private Anchor mAnchor;
 	protected Rect mBound;
 	private Paint mMaskPaint1;
 	private Paint mMaskPaint2;
 	private Paint mBitmapPaint;
 	private Paint mCropBoxPaint;
-	
 	private Bitmap mBitmap;
 	private Canvas mCanvas;
-	
-	private ACTION_LIST mCurrentEvent;
 
+	// Attributes
+	private double anchorLoactionX = Math.cos((45 * Math.PI) / 180);
+	private double anchorLoactionY = Math.sin((45 * Math.PI) / 180);
 	private float mPostX;
 	private float mPostY;
-
 	private float mScale;
+
+	// Working variable
+	private ACTION_LIST mCurrentEvent;
 
 	public CropBox(float pX, float pY, Rect pBound, float pScale) {
 		super(pX + pBound.width()/2, pY + pBound.height()/2, MIN_BOX_SIZE + 100);
@@ -209,8 +211,6 @@ public class CropBox extends Anchor {
 		}
 	}
 
-	private double anchorLoactionX = Math.cos((45 * Math.PI) / 180);
-	private double anchorLoactionY = Math.sin((45 * Math.PI) / 180);
 	private void setAnchor() {
 		mAnchor.setLocation(x + anchorLoactionX * radius, y - anchorLoactionY * radius);
 	}
@@ -235,9 +235,7 @@ public class CropBox extends Anchor {
 	public void draw(Canvas pCanvas) {
 		mCanvas.drawRect(0, 0, pCanvas.getWidth(), pCanvas.getHeight(), mMaskPaint1);
 		mCanvas.drawCircle(x - mBound.left, y - mBound.top, radius, mMaskPaint2);
-		
 		pCanvas.drawBitmap(mBitmap, null, mBound, mBitmapPaint);
-		
 		pCanvas.drawCircle(x, y, radius, mCropBoxPaint);
 		
 		if(mCurrentEvent != ACTION_LIST.move) {
@@ -245,34 +243,34 @@ public class CropBox extends Anchor {
 		}
 	}
 	
-	public int getX() {
-		return (int)(x - radius) - mBound.left;
+	private float getX() {
+		return (x - radius) - mBound.left;
 	}
-	public int getY() {
-		return (int)(y - radius) - mBound.top;
+	private float getY() {
+		return (y - radius) - mBound.top;
 	}
-	public int getWidth() {
-		return (int)(radius * 2);
+	private float getWidth() {
+		return radius * 2;
 	}
-	public int getHeight() {
-		return (int)(radius * 2);
+	private float getHeight() {
+		return radius * 2;
 	}
-	public int getRealX() {
+	public int getCropX() {
 		return (int) (getX() / mScale);
 	}
-	public int getRealY() {
+	public int getCropY() {
 		return (int) (getY() / mScale);
 	}
-	public int getRealWidth() {
+	public int getCropWidth() {
 		return (int) (getWidth() / mScale);
 	}
-	public int getRealHeight() {
+	public int getCropHeight() {
 		return (int) (getHeight() / mScale);
 	}
 
 	@Override
 	public String toString() {
-		return "x: " + (int)(x - radius) + " y: " + (int)(y - radius) + " width " + (int)(radius * 2);
+		return "view x: " + getX() + " y: " + getY() + " width " + getWidth();
 	}
 	
 }

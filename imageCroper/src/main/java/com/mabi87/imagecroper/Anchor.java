@@ -29,12 +29,15 @@ import android.graphics.Paint;
 public class Anchor {
 	public static enum ACTION_LIST{anchor, move, none}
 
+	// Constants
 	public static final int ANCHOR_SIZE = 60;
 	public static final int ANCHOR_SIZE_HALF = ANCHOR_SIZE/2;
 	public static final int MIN_BOX_SIZE = 50;
 
+	// Components
 	private Paint mAnchorPaint;
-	
+
+	// Attributes
 	protected float x;
 	protected float y;
 	protected float radius;
