@@ -6,18 +6,9 @@ Maybe first virsion only provide crop as square.
 
 ## Example
 
-request image
-```java
-Intent lIntent = new Intent(Intent.ACTION_PICK);
-lIntent.setType("image/*");
-lIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-startActivityForResult(lIntent, 1000);
-```
-
 create view and add view
 ```java
 mImageCroper = new ImageCroper(getApplicationContext());
-mImageCroper.setImage(selectedImageUri);
 mContainerImageCroper.addView(mImageCroper);
 ```
 
@@ -29,7 +20,15 @@ or append your layout xml
         android:id="@+id/imageCroper"/>
 ```
 
-and set image uri
+request image
+```java
+Intent lIntent = new Intent(Intent.ACTION_PICK);
+lIntent.setType("image/*");
+lIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+startActivityForResult(lIntent, 1000);
+```
+
+and set image Uri
 ```java
 mImageCroper.setImage(selectedImageUri);
 ```
