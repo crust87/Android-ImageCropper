@@ -21,6 +21,19 @@ mImageCroper.setImage(selectedImageUri);
 mContainerImageCroper.addView(mImageCroper);
 ```
 
+or append your layout xml
+```xml
+<com.mabi87.imagecroper.ImageCroper
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/imageCroper"/>
+```
+
+and set image uri
+```java
+mImageCroper.setImage(selectedImageUri);
+```
+
 ![](./screenshot_02.png)
 
 and crop
