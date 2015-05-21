@@ -41,7 +41,9 @@ public class MainActivity extends ActionBarActivity {
         if (requestCode == 1000 && resultCode == RESULT_OK) {
             Uri selectedImageUri = data.getData();
 
-            mImageCroper = new ImageCroper(getApplicationContext(), selectedImageUri);
+            mImageCroper = new ImageCroper(getApplicationContext());
+            mImageCroper.setImage(selectedImageUri);
+            mContainerImageCroper.addView(mImageCroper);
 
             mImageCroper.setOnCropBoxChangedListener(new ImageCroper.OnCropBoxChangedListener() {
                 @Override
@@ -52,10 +54,6 @@ public class MainActivity extends ActionBarActivity {
                     mTextCropHeight.setText("crop height: " + cropBox.getCropHeight());
                 }
             });
-
-            mContainerImageCroper.addView(mImageCroper);
-        } else {
-            finish();
         }
     }
 
