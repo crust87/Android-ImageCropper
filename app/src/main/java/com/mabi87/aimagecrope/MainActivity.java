@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.mabi87.imagecroper.CropBox;
@@ -20,20 +19,18 @@ import java.io.IOException;
 public class MainActivity extends ActionBarActivity {
 
     // Layout Components
-    private FrameLayout mContainerImageCroper;
+    private ImageCroper mImageCroper;
     private TextView mTextCropX;
     private TextView mTextCropY;
     private TextView mTextCropWidth;
     private TextView mTextCropHeight;
-
-    // Components
-    private ImageCroper mImageCroper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         loadGUI();
+        bindEvent();
     }
 
     @Override
@@ -41,30 +38,30 @@ public class MainActivity extends ActionBarActivity {
         if (requestCode == 1000 && resultCode == RESULT_OK) {
             Uri selectedImageUri = data.getData();
 
-            mImageCroper = new ImageCroper(getApplicationContext());
             mImageCroper.setImage(selectedImageUri);
-            mContainerImageCroper.addView(mImageCroper);
-
-            mImageCroper.setOnCropBoxChangedListener(new ImageCroper.OnCropBoxChangedListener() {
-                @Override
-                public void onCropBoxChange(CropBox cropBox) {
-                    mTextCropX.setText("crop x: " + cropBox.getCropX());
-                    mTextCropY.setText("crop y: " + cropBox.getCropY());
-                    mTextCropWidth.setText("crop width: " + cropBox.getCropWidth());
-                    mTextCropHeight.setText("crop height: " + cropBox.getCropHeight());
-                }
-            });
         }
     }
 
     private void loadGUI() {
         setContentView(R.layout.activity_main);
 
-        mContainerImageCroper = (FrameLayout) findViewById(R.id.containerImageCroper);
+        mImageCroper = (ImageCroper) findViewById(R.id.imageCroper);
         mTextCropX = (TextView) findViewById(R.id.textCropX);
         mTextCropY = (TextView) findViewById(R.id.textCropY);
         mTextCropWidth = (TextView) findViewById(R.id.textCropWidth);
         mTextCropHeight = (TextView) findViewById(R.id.textCropHeight);
+    }
+
+    private void bindEvent() {
+        mImageCroper.setOnCropBoxChangedListener(new ImageCroper.OnCropBoxChangedListener() {
+            @Override
+            public void onCropBoxChange(CropBox cropBox) {
+                mTextCropX.setText("crop x: " + cropBox.getCropX());
+                mTextCropY.setText("crop y: " + cropBox.getCropY());
+                mTextCropWidth.setText("crop width: " + cropBox.getCropWidth());
+                mTextCropHeight.setText("crop height: " + cropBox.getCropHeight());
+            }
+        });
     }
 
     public void onButtonLoadClicked(View v) {
