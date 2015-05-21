@@ -41,6 +41,19 @@ and crop
 Bitmap cropedImage = mImageCroper.crop();
 ```
 
+you can set listner to crop box position and width change
+```java
+mImageCroper.setOnCropBoxChangedListener(new ImageCroper.OnCropBoxChangedListener() {
+        @Override
+        public void onCropBoxChange(CropBox cropBox) {
+                mTextCropX.setText("crop x: " + cropBox.getCropX());
+                mTextCropY.setText("crop y: " + cropBox.getCropY());
+                mTextCropWidth.setText("crop width: " + cropBox.getCropWidth());
+                mTextCropHeight.setText("crop height: " + cropBox.getCropHeight());
+        }
+});
+```
+
 ![](./result_01.png)
 
 ## Licence
