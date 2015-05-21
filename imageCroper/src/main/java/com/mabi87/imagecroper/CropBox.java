@@ -31,7 +31,7 @@ import android.graphics.Rect;
 
 import com.mabi87.imagecroper.ImageCroper.ACTION_LIST;
 
-public class EditBox extends Anchor {
+public class CropBox extends Anchor {
 	
 	private Anchor mAnchor;
 	private Paint mAnchorPaint;
@@ -46,7 +46,7 @@ public class EditBox extends Anchor {
 	
 	private ACTION_LIST mCurrentEvent;
 
-	public EditBox(float pX, float pY, Rect pBound) {
+	public CropBox(float pX, float pY, Rect pBound) {
 		super(pX + pBound.width()/2, pY + pBound.height()/2, MIN_BOX_SIZE + 100);
 		mBound = pBound;
 		

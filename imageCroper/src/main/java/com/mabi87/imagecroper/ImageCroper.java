@@ -54,9 +54,9 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 	
 	
 	private Paint mBitmapPaint;
-	private Paint mEditBoxPaint;
+	private Paint mCropBoxPaint;
 	
-	private EditBox mEditBox;
+	private CropBox mCropBox;
 	
 	private int mViewWidth;
 	private int mViewHeight;
@@ -117,11 +117,11 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 		mBitmapPaint = new Paint();
 		mBitmapPaint.setFilterBitmap(true);
 
-		mEditBoxPaint = new Paint();
-		mEditBoxPaint.setColor(Color.parseColor("#ffffff"));
-		mEditBoxPaint.setAntiAlias(true);
-		mEditBoxPaint.setStrokeWidth(5);
-		mEditBoxPaint.setStyle(Paint.Style.STROKE);
+		mCropBoxPaint = new Paint();
+		mCropBoxPaint.setColor(Color.parseColor("#ffffff"));
+		mCropBoxPaint.setAntiAlias(true);
+		mCropBoxPaint.setStrokeWidth(5);
+		mCropBoxPaint.setStyle(Paint.Style.STROKE);
 	}
 
 	@Override
@@ -162,7 +162,7 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 	    mTopMargin = (mViewHeight - mScaledImage.getHeight()) / 2;
 	    
 	    mImageBound = new Rect(0 + mLeftMargin, 0 + mTopMargin, mScaledImage.getWidth() + mLeftMargin, mScaledImage.getHeight() + mTopMargin);
-	    mEditBox = new EditBox(mLeftMargin, mTopMargin, mImageBound);
+		mCropBox = new CropBox(mLeftMargin, mTopMargin, mImageBound);
 	}
 	
 	@Override
@@ -172,21 +172,21 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			mPostX = x;
 			mPostY = y;
-			mCurrentAction = mEditBox.contains(event.getX(), event.getY());
+			mCurrentAction = mCropBox.contains(event.getX(), event.getY());
 		} else if(event.getAction() == MotionEvent.ACTION_MOVE) {
 			float dx = mPostX - x;
 			float dy = mPostY - y;
 			
 			if(mCurrentAction == ACTION_LIST.move) {
-				mEditBox.move(dx, dy);
+				mCropBox.move(dx, dy);
 			} if(mCurrentAction == ACTION_LIST.anchor) {
-				mEditBox.scale(dx, dy);
+				mCropBox.scale(dx, dy);
 			}
 			
 			mPostX = x;
 			mPostY = y;
 		} else if(event.getAction() == MotionEvent.ACTION_UP) {
-			mEditBox.setState(ACTION_LIST.none);
+			mCropBox.setState(ACTION_LIST.none);
 			mCurrentAction = null;
 		}
 		
@@ -208,11 +208,11 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 		super.onDraw(canvas);
 		
 		drawPicture(canvas);
-		drawEditBox(canvas);
+		drawCropBox(canvas);
 	}
 	
-	private void drawEditBox(Canvas pCanvas) {
-		mEditBox.draw(pCanvas, mEditBoxPaint);
+	private void drawCropBox(Canvas pCanvas) {
+		mCropBox.draw(pCanvas, mCropBoxPaint);
 	}
 	
 	private void drawPicture(Canvas pCanvas) {
@@ -238,9 +238,9 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 //	}
 
 	public Bitmap crop() {
-		int thumbX = (mEditBox.getX() - mLeftMargin);
-		int thumbY = (mEditBox.getY() - mTopMargin);
-		int thumbWidth = mEditBox.getWidtn();
+		int thumbX = (mCropBox.getX() - mLeftMargin);
+		int thumbY = (mCropBox.getY() - mTopMargin);
+		int thumbWidth = mCropBox.getWidtn();
 
 		if(thumbX + thumbWidth > mScaledImage.getWidth()) {
 			thumbWidth -= thumbX + thumbWidth - mScaledImage.getWidth();
@@ -267,5 +267,6 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 			}
 		}
 	}
+
 	
 }
