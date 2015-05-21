@@ -48,9 +48,12 @@ public class CropBox extends Anchor {
 	private float mPostX;
 	private float mPostY;
 
-	public CropBox(float pX, float pY, Rect pBound) {
+	private float mScale;
+
+	public CropBox(float pX, float pY, Rect pBound, float pScale) {
 		super(pX + pBound.width()/2, pY + pBound.height()/2, MIN_BOX_SIZE + 100);
 		mBound = pBound;
+		mScale = pScale;
 		
 		mAnchor = new Anchor(0, 0, ANCHOR_SIZE);
 		setAnchor();
@@ -116,15 +119,17 @@ public class CropBox extends Anchor {
 	
 	@Override
 	public boolean move(float pX, float pY) {
+		boolean isMoved = false;
+
 		if(y-radius-pY > mBound.top && y+radius-pY < mBound.bottom) {
-			return super.move(0, pY);
+			isMoved = super.move(0, pY);
 		}
 		
 		if(x-radius-pX > mBound.left && x+radius-pX < mBound.right) {
-			return super.move(pX, 0);
+			isMoved = super.move(pX, 0);
 		}
 
-		return false;
+		return isMoved;
 	}
 	
 	// Image scale
@@ -251,6 +256,18 @@ public class CropBox extends Anchor {
 	}
 	public int getHeight() {
 		return (int)(radius * 2);
+	}
+	public int getRealX() {
+		return (int) (getX() / mScale);
+	}
+	public int getRealY() {
+		return (int) (getY() / mScale);
+	}
+	public int getRealWidth() {
+		return (int) (getWidth() / mScale);
+	}
+	public int getRealHeight() {
+		return (int) (getHeight() / mScale);
 	}
 
 	@Override

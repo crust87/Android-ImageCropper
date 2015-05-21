@@ -19,6 +19,60 @@
             android:shadowDx="1.0"
             android:shadowDy="1.0"
             android:shadowRadius="1.0"
+            android:id="@+id/textImageWidth" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:shadowColor="#000000"
+            android:shadowDx="1.0"
+            android:shadowDy="1.0"
+            android:shadowRadius="1.0"
+            android:id="@+id/textImageHeight" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:shadowColor="#000000"
+            android:shadowDx="1.0"
+            android:shadowDy="1.0"
+            android:shadowRadius="1.0"
+            android:id="@+id/textCropX" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:shadowColor="#000000"
+            android:shadowDx="1.0"
+            android:shadowDy="1.0"
+            android:shadowRadius="1.0"
+            android:id="@+id/textCropY" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:shadowColor="#000000"
+            android:shadowDx="1.0"
+            android:shadowDy="1.0"
+            android:shadowRadius="1.0"
+            android:id="@+id/textCropWidth" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:shadowColor="#000000"
+            android:shadowDx="1.0"
+            android:shadowDy="1.0"
+            android:shadowRadius="1.0"
+            android:id="@+id/textCropHeight" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:shadowColor="#000000"
+            android:shadowDx="1.0"
+            android:shadowDy="1.0"
+            android:shadowRadius="1.0"
             android:id="@+id/textViewWidth" />
         <TextView
             android:layout_width="wrap_content"

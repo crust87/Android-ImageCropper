@@ -73,21 +73,5 @@ public class Anchor {
 			return ACTION_LIST.none;
 		}		
 	}
-	
-	public float getLeft() {
-		return x;
-	}
-	
-	public float getTop() {
-		return y;
-	}
-	
-	public float getRight() {
-		return x + radius;
-	}
-	
-	public float getBottom() {
-		return y + radius;
-	}
 
 }

@@ -58,6 +58,7 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 	private int mViewHeight;
 
 	// Listener
+	private OnImageSetListener mOnImageSetListener;
 	private OnCropBoxChangedListener mOnCropBoxChangedListener;
 	private OnCropViewChangedListener mOnCropViewChangedListener;
 
@@ -128,12 +129,15 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 	    
 	    int newWidth;
 	    int newHeight;
+		float scale;
 	    if(scaleX > scaleY) {
 	    	newWidth = (int) (mImage.getWidth() * scaleY);
 	    	newHeight = (int) (mImage.getHeight() * scaleY);
+			scale = scaleY;
 	    } else {
 	    	newWidth = (int) (mImage.getWidth() * scaleX);
 	    	newHeight = (int) (mImage.getHeight() * scaleX);
+			scale = scaleX;
 	    }
 	    
 	    mScaledImage = Bitmap.createScaledBitmap(mImage, newWidth, newHeight, true);
@@ -148,7 +152,11 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 		int lTopMargin = (mViewHeight - mScaledImage.getHeight()) / 2;
 
 		mImageBound = new Rect(lLeftMargin, lTopMargin, mScaledImage.getWidth() + lLeftMargin, mScaledImage.getHeight() + lTopMargin);
-		mCropBox = new CropBox(lLeftMargin, lTopMargin, mImageBound);
+		mCropBox = new CropBox(lLeftMargin, lTopMargin, mImageBound, scale);
+
+		if(mOnImageSetListener != null) {
+			mOnImageSetListener.onImageSet(mImage.getWidth(), mImage.getHeight());
+		}
 
 		if(mOnCropViewChangedListener != null) {
 			mOnCropViewChangedListener.onCropViewChanged(mImageBound.width(), mImageBound.height());
@@ -256,12 +264,20 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 		return mViewHeight;
 	}
 
+	public void setOnImageSetListener(OnImageSetListener pOnImageSetListener) {
+		mOnImageSetListener = pOnImageSetListener;
+	}
+
 	public void setOnCropBoxChangedListener(OnCropBoxChangedListener pOnCropBoxChangedListener) {
 		mOnCropBoxChangedListener = pOnCropBoxChangedListener;
 	}
 
 	public void setOnCropViewChangedListener(OnCropViewChangedListener pOnCropViewChangedListener) {
 		mOnCropViewChangedListener = pOnCropViewChangedListener;
+	}
+
+	public interface OnImageSetListener {
+		public abstract void onImageSet(int imageWidth, int imageHeight);
 	}
 
 	public interface OnCropBoxChangedListener {
