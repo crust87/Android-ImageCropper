@@ -24,12 +24,14 @@ mImageCroper = new ImageCroper(getApplicationContext(), selectedImageUri);
 mContainerImageCroper.addView(mImageCroper);
 ```
 
-![](./Screenshot_01.png)
+![](./screenshot_02.png)
 
 and crop
 ```java
 Bitmap cropedImage = mImageCroper.crop();
 ```
+
+![](./result_01.png)
 
 ## Licence
 Copyright 2015 Mabi
