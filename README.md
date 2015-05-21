@@ -16,7 +16,8 @@ startActivityForResult(lIntent, 1000);
 
 create view and add view
 ```java
-mImageCroper = new ImageCroper(getApplicationContext(), selectedImageUri);
+mImageCroper = new ImageCroper(getApplicationContext());
+mImageCroper.setImage(selectedImageUri);
 mContainerImageCroper.addView(mImageCroper);
 ```
 
