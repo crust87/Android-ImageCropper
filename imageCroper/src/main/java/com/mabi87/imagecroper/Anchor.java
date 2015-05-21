@@ -22,43 +22,50 @@
 package com.mabi87.imagecroper;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 
-import com.mabi87.imagecroper.ImageCroper.ACTION_LIST;
 
 public class Anchor {
+	public static enum ACTION_LIST{anchor, move, none}
+
 	public static final int ANCHOR_SIZE = 60;
 	public static final int ANCHOR_SIZE_HALF = ANCHOR_SIZE/2;
 	public static final int MIN_BOX_SIZE = 50;
+
+	private Paint mAnchorPaint;
 	
 	protected float x;
 	protected float y;
 	protected float radius;
 	
 	public Anchor(float pX, float pY, float pWidth) {
+		mAnchorPaint = new Paint();
+		mAnchorPaint.setColor(Color.parseColor("#ffffff"));
+		mAnchorPaint.setAntiAlias(true);
+		mAnchorPaint.setStrokeWidth(2);
+
 		x = pX;
 		y = pY;
 		radius = pWidth;
 	}
 	
-	public void move(float pX, float pY) {
+	public boolean move(float pX, float pY) {
 		x -= pX;
 		y -= pY;
+
+		return true;
 	}
 	
-	public void draw(Canvas pCanvas, Paint pPaint) {
-		pCanvas.drawCircle(x, y, ANCHOR_SIZE_HALF, pPaint);
+	public void draw(Canvas pCanvas) {
+		pCanvas.drawCircle(x, y, ANCHOR_SIZE_HALF, mAnchorPaint);
 	}
 	
 	public void setLocation(double pX, double pY) {
 		x = (float)pX;
 		y = (float)pY;
 	}
-	
-	public ACTION_LIST getAction() {
-		return ACTION_LIST.anchor;
-	}
-	
+
 	public ACTION_LIST contains(float pX, float pY) {
 		if((pX >= x - ANCHOR_SIZE && pX <= x + ANCHOR_SIZE) && (pY >= y - ANCHOR_SIZE && pY <= y + ANCHOR_SIZE)) {
 			return ACTION_LIST.anchor;

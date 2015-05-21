@@ -26,7 +26,6 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -42,33 +41,23 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
-	public static enum ACTION_LIST{anchor, move, none}
-	
+
+	// Components
 	private Context mContext;
 	private SurfaceHolder mHolder;
-	
+
 	private Bitmap mImage;
-	private int mAngle;
 	private Bitmap mScaledImage;
 	private Rect mImageBound;
-	
-	
-	private Paint mBitmapPaint;
-	private Paint mCropBoxPaint;
-	
+	private Paint mImagePaint;
 	private CropBox mCropBox;
-	
+
+	// Attributes
+	private int mAngle;
 	private int mViewWidth;
 	private int mViewHeight;
-	
-	private int mLeftMargin;
-	private int mTopMargin;
-	
-	private ACTION_LIST mCurrentAction;
-	
-	private float mPostX;
-	private float mPostY;
 
+	// Listener
 	private OnCropBoxChangedListener mOnCropBoxChangedListener;
 	private OnCropViewChangedListener mOnCropViewChangedListener;
 
@@ -117,14 +106,8 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 		mHolder = getHolder();
 		mHolder.addCallback(this);
 
-		mBitmapPaint = new Paint();
-		mBitmapPaint.setFilterBitmap(true);
-
-		mCropBoxPaint = new Paint();
-		mCropBoxPaint.setColor(Color.parseColor("#ffffff"));
-		mCropBoxPaint.setAntiAlias(true);
-		mCropBoxPaint.setStrokeWidth(5);
-		mCropBoxPaint.setStyle(Paint.Style.STROKE);
+		mImagePaint = new Paint();
+		mImagePaint.setFilterBitmap(true);
 	}
 
 	@Override
@@ -160,52 +143,34 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 	 	    matrix.postRotate(mAngle);
 	    	mScaledImage = Bitmap.createBitmap(mScaledImage, 0, 0, newWidth, newHeight, matrix, true);
 	    }
-	    
-	    mLeftMargin = (mViewWidth - mScaledImage.getWidth()) / 2;
-	    mTopMargin = (mViewHeight - mScaledImage.getHeight()) / 2;
-	    
-	    mImageBound = new Rect(0 + mLeftMargin, 0 + mTopMargin, mScaledImage.getWidth() + mLeftMargin, mScaledImage.getHeight() + mTopMargin);
-		mCropBox = new CropBox(mLeftMargin, mTopMargin, mImageBound);
+
+		int lLeftMargin = (mViewWidth - mScaledImage.getWidth()) / 2;
+		int lTopMargin = (mViewHeight - mScaledImage.getHeight()) / 2;
+
+		mImageBound = new Rect(lLeftMargin, lTopMargin, mScaledImage.getWidth() + lLeftMargin, mScaledImage.getHeight() + lTopMargin);
+		mCropBox = new CropBox(lLeftMargin, lTopMargin, mImageBound);
 
 		if(mOnCropViewChangedListener != null) {
 			mOnCropViewChangedListener.onCropViewChanged(mImageBound.width(), mImageBound.height());
 		}
 
 		if(mOnCropBoxChangedListener != null) {
-			mOnCropBoxChangedListener.onCropBoxChange(mCropBox.getX() - mLeftMargin, mCropBox.getY() - mTopMargin, mCropBox.getWidth(), mCropBox.getHeight());
+			mOnCropBoxChangedListener.onCropBoxChange(mCropBox);
 		}
 	}
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		float x = event.getX();
-		float y = event.getY();
-		if (event.getAction() == MotionEvent.ACTION_DOWN) {
-			mPostX = x;
-			mPostY = y;
-			mCurrentAction = mCropBox.contains(event.getX(), event.getY());
-		} else if(event.getAction() == MotionEvent.ACTION_MOVE) {
-			float dx = mPostX - x;
-			float dy = mPostY - y;
-			
-			if(mCurrentAction == ACTION_LIST.move) {
-				mCropBox.move(dx, dy);
-			} if(mCurrentAction == ACTION_LIST.anchor) {
-				mCropBox.scale(dx, dy);
-			}
-			
-			mPostX = x;
-			mPostY = y;
 
+		boolean isChanged = mCropBox.processTouchEvent(event);
+
+		if(isChanged) {
 			if(mOnCropBoxChangedListener != null) {
-				mOnCropBoxChangedListener.onCropBoxChange(mCropBox.getX() - mLeftMargin, mCropBox.getY() - mTopMargin, mCropBox.getWidth(), mCropBox.getHeight());
+				mOnCropBoxChangedListener.onCropBoxChange(mCropBox);
 			}
-		} else if(event.getAction() == MotionEvent.ACTION_UP) {
-			mCropBox.setState(ACTION_LIST.none);
-			mCurrentAction = null;
+
+			invalidate();
 		}
-		
-		invalidate();
 
 		return true;
 	}
@@ -227,11 +192,11 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 	}
 	
 	private void drawCropBox(Canvas pCanvas) {
-		mCropBox.draw(pCanvas, mCropBoxPaint);
+		mCropBox.draw(pCanvas);
 	}
 	
 	private void drawPicture(Canvas pCanvas) {
-	    pCanvas.drawBitmap(mScaledImage, null, mImageBound, mBitmapPaint);
+	    pCanvas.drawBitmap(mScaledImage, null, mImageBound, mImagePaint);
 	}
 	
 //	public Bitmap crop() {
@@ -253,8 +218,8 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 //	}
 
 	public Bitmap crop() {
-		int thumbX = (mCropBox.getX() - mLeftMargin);
-		int thumbY = (mCropBox.getY() - mTopMargin);
+		int thumbX = mCropBox.getX();
+		int thumbY = mCropBox.getY();
 		int thumbWidth = mCropBox.getWidth();
 
 		if(thumbX + thumbWidth > mScaledImage.getWidth()) {
@@ -300,7 +265,7 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 	}
 
 	public interface OnCropBoxChangedListener {
-		public abstract void onCropBoxChange(int boxX, int boxY, int boxWidth, int boxHeight);
+		public abstract void onCropBoxChange(CropBox cropBox);
 	}
 
 	public interface OnCropViewChangedListener {

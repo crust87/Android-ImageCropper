@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.mabi87.imagecroper.CropBox;
 import com.mabi87.imagecroper.ImageCroper;
 
 import java.io.FileOutputStream;
@@ -54,11 +55,11 @@ public class MainActivity extends ActionBarActivity {
 
             mImageCroper.setOnCropBoxChangedListener(new ImageCroper.OnCropBoxChangedListener() {
                 @Override
-                public void onCropBoxChange(int boxX, int boxY, int boxWidth, int boxHeight) {
-                    mTextBoxX.setText("box x: " + boxX);
-                    mTextBoxY.setText("box y: " + boxY);
-                    mTextBoxWidth.setText("box width: " + boxWidth);
-                    mTextBoxHeight.setText("box height: " + boxHeight);
+                public void onCropBoxChange(CropBox cropBox) {
+                    mTextBoxX.setText("box x: " + cropBox.getX());
+                    mTextBoxY.setText("box y: " + cropBox.getY());
+                    mTextBoxWidth.setText("box width: " + cropBox.getWidth());
+                    mTextBoxHeight.setText("box height: " + cropBox.getHeight());
                 }
             });
 
