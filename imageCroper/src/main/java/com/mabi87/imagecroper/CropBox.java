@@ -203,12 +203,13 @@ public class CropBox extends Anchor {
 	public int getX() {
 		return (int)(x - radius);
 	}
-	
 	public int getY() {
 		return (int)(y - radius);
 	}
-	
-	public int getWidtn() {
+	public int getWidth() {
+		return (int)(radius * 2);
+	}
+	public int getHeight() {
 		return (int)(radius * 2);
 	}
 

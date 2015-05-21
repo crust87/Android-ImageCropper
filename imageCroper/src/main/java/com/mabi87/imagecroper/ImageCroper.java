@@ -69,6 +69,9 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 	private float mPostX;
 	private float mPostY;
 
+	private OnCropBoxChangedListener mOnCropBoxChangedListener;
+	private OnCropViewChangedListener mOnCropViewChangedListener;
+
 	public ImageCroper(Context pContext, Uri pSelectedImage) {
 		super(pContext);
 		mContext = pContext;
@@ -163,6 +166,14 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 	    
 	    mImageBound = new Rect(0 + mLeftMargin, 0 + mTopMargin, mScaledImage.getWidth() + mLeftMargin, mScaledImage.getHeight() + mTopMargin);
 		mCropBox = new CropBox(mLeftMargin, mTopMargin, mImageBound);
+
+		if(mOnCropViewChangedListener != null) {
+			mOnCropViewChangedListener.onCropViewChanged(mImageBound.width(), mImageBound.height());
+		}
+
+		if(mOnCropBoxChangedListener != null) {
+			mOnCropBoxChangedListener.onCropBoxChange(mCropBox.getX() - mLeftMargin, mCropBox.getY() - mTopMargin, mCropBox.getWidth(), mCropBox.getHeight());
+		}
 	}
 	
 	@Override
@@ -185,6 +196,10 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 			
 			mPostX = x;
 			mPostY = y;
+
+			if(mOnCropBoxChangedListener != null) {
+				mOnCropBoxChangedListener.onCropBoxChange(mCropBox.getX() - mLeftMargin, mCropBox.getY() - mTopMargin, mCropBox.getWidth(), mCropBox.getHeight());
+			}
 		} else if(event.getAction() == MotionEvent.ACTION_UP) {
 			mCropBox.setState(ACTION_LIST.none);
 			mCurrentAction = null;
@@ -240,7 +255,7 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 	public Bitmap crop() {
 		int thumbX = (mCropBox.getX() - mLeftMargin);
 		int thumbY = (mCropBox.getY() - mTopMargin);
-		int thumbWidth = mCropBox.getWidtn();
+		int thumbWidth = mCropBox.getWidth();
 
 		if(thumbX + thumbWidth > mScaledImage.getWidth()) {
 			thumbWidth -= thumbX + thumbWidth - mScaledImage.getWidth();
@@ -268,5 +283,28 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 		}
 	}
 
-	
+	public int getViewWidth() {
+		return mViewWidth;
+	}
+
+	public int getViewHeight() {
+		return mViewHeight;
+	}
+
+	public void setOnCropBoxChangedListener(OnCropBoxChangedListener pOnCropBoxChangedListener) {
+		mOnCropBoxChangedListener = pOnCropBoxChangedListener;
+	}
+
+	public void setOnCropViewChangedListener(OnCropViewChangedListener pOnCropViewChangedListener) {
+		mOnCropViewChangedListener = pOnCropViewChangedListener;
+	}
+
+	public interface OnCropBoxChangedListener {
+		public abstract void onCropBoxChange(int boxX, int boxY, int boxWidth, int boxHeight);
+	}
+
+	public interface OnCropViewChangedListener {
+		public abstract void onCropViewChanged(int viewWidth, int viewHeight);
+	}
+
 }

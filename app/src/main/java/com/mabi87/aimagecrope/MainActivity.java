@@ -8,6 +8,7 @@ import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.mabi87.imagecroper.ImageCroper;
 
@@ -17,8 +18,16 @@ import java.io.IOException;
 
 public class MainActivity extends ActionBarActivity {
 
-    // Components
+    // Layout Components
     private FrameLayout mContainerImageCroper;
+    private TextView mTextViewWidth;
+    private TextView mTextViewHeight;
+    private TextView mTextBoxX;
+    private TextView mTextBoxY;
+    private TextView mTextBoxWidth;
+    private TextView mTextBoxHeight;
+
+    // Components
     private ImageCroper mImageCroper;
 
     @Override
@@ -34,16 +43,42 @@ public class MainActivity extends ActionBarActivity {
             Uri selectedImageUri = data.getData();
 
             mImageCroper = new ImageCroper(getApplicationContext(), selectedImageUri);
+
+            mImageCroper.setOnCropViewChangedListener(new ImageCroper.OnCropViewChangedListener() {
+                @Override
+                public void onCropViewChanged(int viewWidth, int viewHeight) {
+                    mTextViewWidth.setText("view width: " + viewWidth);
+                    mTextViewHeight.setText("view height: " + viewHeight);
+                }
+            });
+
+            mImageCroper.setOnCropBoxChangedListener(new ImageCroper.OnCropBoxChangedListener() {
+                @Override
+                public void onCropBoxChange(int boxX, int boxY, int boxWidth, int boxHeight) {
+                    mTextBoxX.setText("box x: " + boxX);
+                    mTextBoxY.setText("box y: " + boxY);
+                    mTextBoxWidth.setText("box width: " + boxWidth);
+                    mTextBoxHeight.setText("box height: " + boxHeight);
+                }
+            });
+
             mContainerImageCroper.addView(mImageCroper);
         } else {
             finish();
         }
     }
 
-    protected void loadGUI() {
+    private void loadGUI() {
         setContentView(R.layout.activity_main);
 
         mContainerImageCroper = (FrameLayout) findViewById(R.id.containerImageCroper);
+
+        mTextViewWidth = (TextView) findViewById(R.id.textViewWidth);
+        mTextViewHeight = (TextView) findViewById(R.id.textViewHeight);
+        mTextBoxX = (TextView) findViewById(R.id.textBoxX);
+        mTextBoxY = (TextView) findViewById(R.id.textBoxY);
+        mTextBoxWidth = (TextView) findViewById(R.id.textBoxWidth);
+        mTextBoxHeight = (TextView) findViewById(R.id.textBoxHeight);
     }
 
     public void onButtonLoadClicked(View v) {
