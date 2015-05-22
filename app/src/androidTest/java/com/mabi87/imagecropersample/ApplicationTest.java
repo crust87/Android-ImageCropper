@@ -1,4 +1,4 @@
-package com.mabi87.aimagecrope;
+package com.mabi87.imagecropersample;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
