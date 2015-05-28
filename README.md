@@ -55,6 +55,12 @@ mImageCroper.setOnCropBoxChangedListener(new ImageCroper.OnCropBoxChangedListene
 });
 ```
 
+if you want change crop box color
+``` java
+mImageCroper.setBoxColor(Color.RED);
+```
+
+
 ## Licence
 Copyright 2015 Mabi
 
