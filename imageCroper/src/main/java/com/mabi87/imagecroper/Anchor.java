@@ -35,7 +35,7 @@ public class Anchor {
 	public static final int MIN_BOX_SIZE = 50;
 
 	// Components
-	private Paint mAnchorPaint;
+	protected Paint mPaint;
 
 	// Attributes
 	protected float x;
@@ -43,10 +43,10 @@ public class Anchor {
 	protected float radius;
 	
 	public Anchor(float pX, float pY, float pWidth) {
-		mAnchorPaint = new Paint();
-		mAnchorPaint.setColor(Color.parseColor("#ffffff"));
-		mAnchorPaint.setAntiAlias(true);
-		mAnchorPaint.setStrokeWidth(2);
+		mPaint = new Paint();
+		mPaint.setColor(Color.WHITE);
+		mPaint.setAntiAlias(true);
+		mPaint.setStrokeWidth(2);
 
 		x = pX;
 		y = pY;
@@ -61,7 +61,7 @@ public class Anchor {
 	}
 	
 	public void draw(Canvas pCanvas) {
-		pCanvas.drawCircle(x, y, ANCHOR_SIZE_HALF, mAnchorPaint);
+		pCanvas.drawCircle(x, y, ANCHOR_SIZE_HALF, mPaint);
 	}
 	
 	public void setLocation(double pX, double pY) {
@@ -75,6 +75,15 @@ public class Anchor {
 		} else {
 			return ACTION_LIST.none;
 		}		
+	}
+
+	public void setColor(String colorCode) {
+		int color = Color.parseColor(colorCode);
+		mPaint.setColor(color);
+	}
+
+	public void setColor(int color) {
+		mPaint.setColor(color);
 	}
 
 }

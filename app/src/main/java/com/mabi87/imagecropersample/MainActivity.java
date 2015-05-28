@@ -2,6 +2,7 @@ package com.mabi87.imagecropersample;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -31,6 +32,7 @@ public class MainActivity extends ActionBarActivity {
 
         loadGUI();
         bindEvent();
+        init();
     }
 
     @Override
@@ -62,6 +64,10 @@ public class MainActivity extends ActionBarActivity {
                 mTextCropHeight.setText("crop height: " + cropBox.getCropHeight());
             }
         });
+    }
+
+    private void init() {
+        mImageCroper.setBoxColor(Color.RED);
     }
 
     public void onButtonLoadClicked(View v) {

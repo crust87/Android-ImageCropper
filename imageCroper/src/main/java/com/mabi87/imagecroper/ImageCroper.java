@@ -26,6 +26,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -56,6 +57,7 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 	private int mViewWidth;
 	private int mViewHeight;
 	private Uri mSelectedImage;
+	private int mBoxColor;
 
 	// Listener
 	private OnCropBoxChangedListener mOnCropBoxChangedListener;
@@ -85,6 +87,8 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 	private void initImageCroper() {
 		mHolder = getHolder();
 		mHolder.addCallback(this);
+
+		mBoxColor = Color.WHITE;
 	}
 
 	public void setImage(Uri pSelectedImage) {
@@ -123,9 +127,9 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 				if(mOnCropBoxChangedListener != null) {
 					mOnCropBoxChangedListener.onCropBoxChange(mCropBox);
 				}
-
-				invalidate();
 			}
+
+			invalidate();
 		}
 
 		return true;
@@ -213,6 +217,7 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 
 		mImageBound = new Rect(lLeftMargin, lTopMargin, mScaledImage.getWidth() + lLeftMargin, mScaledImage.getHeight() + lTopMargin);
 		mCropBox = new CropBox(lLeftMargin, lTopMargin, mImageBound, lScale);
+		mCropBox.setColor(mBoxColor);
 
 		if(mOnCropBoxChangedListener != null) {
 			mOnCropBoxChangedListener.onCropBoxChange(mCropBox);
@@ -276,6 +281,22 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 
 	public interface OnCropBoxChangedListener {
 		public abstract void onCropBoxChange(CropBox cropBox);
+	}
+
+	public void setBoxColor(int color) {
+		mBoxColor = color;
+
+		if(mCropBox != null) {
+			mCropBox.setColor(mBoxColor);
+		}
+	}
+
+	public void setBoxColor(String colorCode) {
+		mBoxColor = Color.parseColor(colorCode);
+
+		if(mCropBox != null) {
+			mCropBox.setColor(mBoxColor);
+		}
 	}
 
 }

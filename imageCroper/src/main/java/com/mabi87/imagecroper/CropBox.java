@@ -38,7 +38,6 @@ public class CropBox extends Anchor {
 	private Paint mMaskPaint1;
 	private Paint mMaskPaint2;
 	private Paint mBitmapPaint;
-	private Paint mCropBoxPaint;
 	private Bitmap mBitmap;
 	private Canvas mCanvas;
 
@@ -56,27 +55,24 @@ public class CropBox extends Anchor {
 		super(pX + pBound.width()/2, pY + pBound.height()/2, MIN_BOX_SIZE + 100);
 		mBound = pBound;
 		mScale = pScale;
+
+		mPaint.setStrokeWidth(5);
+		mPaint.setStyle(Paint.Style.STROKE);
 		
 		mAnchor = new Anchor(0, 0, ANCHOR_SIZE);
 		setAnchor();
 		
 		mMaskPaint1 = new Paint();
-		mMaskPaint1.setColor(Color.parseColor("#000000"));
+		mMaskPaint1.setColor(Color.BLACK);
 		mMaskPaint1.setAntiAlias(true);
 		
 		mMaskPaint2 = new Paint();
-		mMaskPaint2.setColor(Color.parseColor("#ffffff")); 
+		mMaskPaint2.setColor(Color.WHITE);
 		mMaskPaint2.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.XOR));
 		
 		mBitmapPaint = new Paint();
 		mBitmapPaint.setFilterBitmap(true);
 		mBitmapPaint.setAlpha(128);
-
-		mCropBoxPaint = new Paint();
-		mCropBoxPaint.setColor(Color.parseColor("#ffffff"));
-		mCropBoxPaint.setAntiAlias(true);
-		mCropBoxPaint.setStrokeWidth(5);
-		mCropBoxPaint.setStyle(Paint.Style.STROKE);
 		
 		mBitmap = Bitmap.createBitmap(pBound.width(), pBound.height(), Bitmap.Config.ARGB_8888);
 		mCanvas = new Canvas(mBitmap);
@@ -236,7 +232,7 @@ public class CropBox extends Anchor {
 		mCanvas.drawRect(0, 0, pCanvas.getWidth(), pCanvas.getHeight(), mMaskPaint1);
 		mCanvas.drawCircle(x - mBound.left, y - mBound.top, radius, mMaskPaint2);
 		pCanvas.drawBitmap(mBitmap, null, mBound, mBitmapPaint);
-		pCanvas.drawCircle(x, y, radius, mCropBoxPaint);
+		pCanvas.drawCircle(x, y, radius, mPaint);
 		
 		if(mCurrentEvent != ACTION_LIST.move) {
 			mAnchor.draw(pCanvas);
@@ -272,5 +268,16 @@ public class CropBox extends Anchor {
 	public String toString() {
 		return "view x: " + getX() + " y: " + getY() + " width " + getWidth();
 	}
-	
+
+	@Override
+	public void setColor(int color) {
+		super.setColor(color);
+		mAnchor.setColor(color);
+	}
+
+	@Override
+	public void setColor(String colorCode) {
+		super.setColor(colorCode);
+		mAnchor.setColor(colorCode);
+	}
 }
