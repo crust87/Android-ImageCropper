@@ -60,6 +60,21 @@ if you want change crop box color
 mImageCroper.setBoxColor(Color.RED);
 ```
 
+or
+```xml
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <com.mabi87.imagecroper.ImageCroper
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        custom:box_color="#ff0000"
+        android:id="@+id/imageCroper"/>
+</FrameLayout>
+```
+
 
 ## Licence
 Copyright 2015 Mabi
