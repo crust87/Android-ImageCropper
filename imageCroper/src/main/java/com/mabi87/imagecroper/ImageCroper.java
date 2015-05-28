@@ -22,6 +22,7 @@
 package com.mabi87.imagecroper;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -43,6 +44,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
+	// Constants
+	private static final int DEFAULT_BOX_COLOR = Color.WHITE;
 
 	// Components
 	private Context mContext;
@@ -57,7 +60,7 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 	private int mViewWidth;
 	private int mViewHeight;
 	private Uri mSelectedImage;
-	private int mBoxColor;
+	private int mBoxColor = DEFAULT_BOX_COLOR;
 
 	// Listener
 	private OnCropBoxChangedListener mOnCropBoxChangedListener;
@@ -74,6 +77,9 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 		super(context, attrs);
 		mContext = context;
 
+		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ImageCroper, 0, 0);
+		mBoxColor = a.getColor(R.styleable.ImageCroper_box_color, DEFAULT_BOX_COLOR);
+
 		initImageCroper();
 	}
 
@@ -81,14 +87,15 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 		super(context, attrs, defStyleAttr);
 		mContext = context;
 
+		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ImageCroper, defStyleAttr, 0);
+		mBoxColor = a.getColor(R.styleable.ImageCroper_box_color, DEFAULT_BOX_COLOR);
+
 		initImageCroper();
 	}
 
 	private void initImageCroper() {
 		mHolder = getHolder();
 		mHolder.addCallback(this);
-
-		mBoxColor = Color.WHITE;
 	}
 
 	public void setImage(Uri pSelectedImage) {
