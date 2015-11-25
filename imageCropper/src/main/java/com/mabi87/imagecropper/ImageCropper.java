@@ -34,11 +34,14 @@ import android.graphics.Rect;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,7 +62,7 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 	// Attributes
 	private int mViewWidth;
 	private int mViewHeight;
-	private Uri mSelectedImage;
+	private String mImagePath;
 	private int mBoxColor = DEFAULT_BOX_COLOR;
 
 	// Listener
@@ -98,8 +101,28 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 		mHolder.addCallback(this);
 	}
 
-	public void setImage(Uri pSelectedImage) {
-		mSelectedImage = pSelectedImage;
+	/**
+	 *
+	 * @param imageUri it will convert into real path
+     */
+	public void setImage(Uri imageUri) {
+		setImage(getRealPathFromURI(imageUri));
+	}
+
+	/**
+	 *
+	 * @param imageFile it will convert into absolute path
+     */
+	public void setImage(File imageFile) {
+		setImage(imageFile.getAbsolutePath());
+	}
+
+	/**
+	 *
+	 * @param imagePath path of image to draw on view
+     */
+	public void setImage(String imagePath) {
+		mImagePath = imagePath;
 
 		openImage();
 		invalidate();
@@ -147,23 +170,22 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 			return;
 		}
 
-		if(mSelectedImage == null) {
+		if(TextUtils.isEmpty(mImagePath)) {
 			return;
 		}
 
 		InputStream imageStream = null;
 
 		try {
-			imageStream = mContext.getContentResolver().openInputStream(mSelectedImage);
+			imageStream = new FileInputStream(mImagePath);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 
+		// check rotation
 		int lRotaion = 0;
-
 		try {
-			String path = getRealPathFromURI(mSelectedImage);
-			ExifInterface exif = new ExifInterface(path);
+			ExifInterface exif = new ExifInterface(mImagePath);
 
 			switch(Integer.parseInt(exif.getAttribute(ExifInterface.TAG_ORIENTATION))) {
 				case 3:
@@ -250,6 +272,11 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 		}
 	}
 
+	/**
+	 * crop image
+	 *
+	 * @return Bitmap of cropped image
+     */
 	public Bitmap crop() {
 		int lCropX = mCropBox.getCropX();
 		int lCropY = mCropBox.getCropY();
