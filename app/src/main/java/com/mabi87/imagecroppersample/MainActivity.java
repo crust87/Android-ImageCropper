@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.mabi87.imagecropper.CropBox;
 import com.mabi87.imagecropper.ImageCropper;
+import com.mabi87.imagecropper.RectCropBox;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

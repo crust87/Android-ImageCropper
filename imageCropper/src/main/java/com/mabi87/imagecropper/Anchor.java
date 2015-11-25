@@ -27,12 +27,9 @@ import android.graphics.Paint;
 
 
 public class Anchor {
-	public static enum ACTION_LIST{anchor, move, none}
-
 	// Constants
 	public static final int ANCHOR_SIZE = 60;
 	public static final int ANCHOR_SIZE_HALF = ANCHOR_SIZE/2;
-	public static final int MIN_BOX_SIZE = 50;
 
 	// Components
 	protected Paint mPaint;
@@ -69,11 +66,11 @@ public class Anchor {
 		y = (float)pY;
 	}
 
-	public ACTION_LIST contains(float pX, float pY) {
+	public boolean contains(float pX, float pY) {
 		if((pX >= x - ANCHOR_SIZE && pX <= x + ANCHOR_SIZE) && (pY >= y - ANCHOR_SIZE && pY <= y + ANCHOR_SIZE)) {
-			return ACTION_LIST.anchor;
+			return true;
 		} else {
-			return ACTION_LIST.none;
+			return false;
 		}		
 	}
 
