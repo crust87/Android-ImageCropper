@@ -4,6 +4,9 @@ Image crop view for android
 I'am trying to make library this project.<br/>
 Maybe first virsion only provide crop as square.
 
+see
+https://play.google.com/store/apps/details?id=com.mabi87.imagecropper
+
 ## Example
 
 create view and add view
