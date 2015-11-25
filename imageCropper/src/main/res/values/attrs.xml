@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="ImageCroper">
+    <declare-styleable name="ImageCropper">
         <attr name="box_color" format="color" />
     </declare-styleable>
 </resources>

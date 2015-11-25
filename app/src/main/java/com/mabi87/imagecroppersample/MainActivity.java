@@ -1,4 +1,4 @@
-package com.mabi87.imagecropersample;
+package com.mabi87.imagecroppersample;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,8 +9,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.TextView;
 
-import com.mabi87.imagecroper.CropBox;
-import com.mabi87.imagecroper.ImageCroper;
+import com.mabi87.imagecropper.CropBox;
+import com.mabi87.imagecropper.ImageCropper;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,7 +19,7 @@ import java.io.IOException;
 public class MainActivity extends ActionBarActivity {
 
     // Layout Components
-    private ImageCroper mImageCroper;
+    private ImageCropper mImageCropper;
     private TextView mTextCropX;
     private TextView mTextCropY;
     private TextView mTextCropWidth;
@@ -39,14 +39,14 @@ public class MainActivity extends ActionBarActivity {
         if (requestCode == 1000 && resultCode == RESULT_OK) {
             Uri selectedImageUri = data.getData();
 
-            mImageCroper.setImage(selectedImageUri);
+            mImageCropper.setImage(selectedImageUri);
         }
     }
 
     private void loadGUI() {
         setContentView(R.layout.activity_main);
 
-        mImageCroper = (ImageCroper) findViewById(R.id.imageCroper);
+        mImageCropper = (ImageCropper) findViewById(R.id.imageCropper);
         mTextCropX = (TextView) findViewById(R.id.textCropX);
         mTextCropY = (TextView) findViewById(R.id.textCropY);
         mTextCropWidth = (TextView) findViewById(R.id.textCropWidth);
@@ -54,7 +54,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void bindEvent() {
-        mImageCroper.setOnCropBoxChangedListener(new ImageCroper.OnCropBoxChangedListener() {
+        mImageCropper.setOnCropBoxChangedListener(new ImageCropper.OnCropBoxChangedListener() {
             @Override
             public void onCropBoxChange(CropBox cropBox) {
                 mTextCropX.setText("crop x: " + cropBox.getCropX());
@@ -76,8 +76,8 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onButtonCropClicked(View v) {
-        if(mImageCroper != null) {
-            Bitmap cropedImage = mImageCroper.crop();
+        if(mImageCropper != null) {
+            Bitmap cropedImage = mImageCropper.crop();
 
             try {
                 FileOutputStream out = new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath() + "/thumb.png");

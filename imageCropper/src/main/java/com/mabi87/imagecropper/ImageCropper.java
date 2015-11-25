@@ -1,6 +1,6 @@
 /*
- * ImageCroper
- * https://github.com/mabi87/Android-ImageCroper
+ * ImageCropper
+ * https://github.com/mabi87/Android-ImageCropper
  *
  * Mabi
  * crust87@gmail.com
@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.mabi87.imagecroper;
+package com.mabi87.imagecropper;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -43,7 +43,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
+public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback {
 	// Constants
 	private static final int DEFAULT_BOX_COLOR = Color.WHITE;
 
@@ -66,34 +66,34 @@ public class ImageCroper extends SurfaceView implements SurfaceHolder.Callback {
 	private OnCropBoxChangedListener mOnCropBoxChangedListener;
 
 	// Constructor
-	public ImageCroper(Context context) {
+	public ImageCropper(Context context) {
 		super(context);
 		mContext = context;
 
-		initImageCroper();
+		initImageCropper();
 	}
 
-	public ImageCroper(Context context, AttributeSet attrs) {
+	public ImageCropper(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		mContext = context;
 
-		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ImageCroper, 0, 0);
-		mBoxColor = a.getColor(R.styleable.ImageCroper_box_color, DEFAULT_BOX_COLOR);
+		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ImageCropper, 0, 0);
+		mBoxColor = a.getColor(R.styleable.ImageCropper_box_color, DEFAULT_BOX_COLOR);
 
-		initImageCroper();
+		initImageCropper();
 	}
 
-	public ImageCroper(Context context, AttributeSet attrs, int defStyleAttr) {
+	public ImageCropper(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
 		mContext = context;
 
-		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ImageCroper, defStyleAttr, 0);
-		mBoxColor = a.getColor(R.styleable.ImageCroper_box_color, DEFAULT_BOX_COLOR);
+		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ImageCropper, defStyleAttr, 0);
+		mBoxColor = a.getColor(R.styleable.ImageCropper_box_color, DEFAULT_BOX_COLOR);
 
-		initImageCroper();
+		initImageCropper();
 	}
 
-	private void initImageCroper() {
+	private void initImageCropper() {
 		mHolder = getHolder();
 		mHolder.addCallback(this);
 	}

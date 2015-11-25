@@ -1,4 +1,4 @@
-# Android-ImageCroper
+# Android-ImageCropper
 Image crop view for android
 
 I'am trying to make library this project.<br/>
@@ -8,16 +8,16 @@ Maybe first virsion only provide crop as square.
 
 create view and add view
 ```java
-mImageCroper = new ImageCroper(getApplicationContext());
-mContainerImageCroper.addView(mImageCroper);
+mImageCropper = new ImageCropper(getApplicationContext());
+mContainerImageCropper.addView(mImageCropper);
 ```
 
 or append your layout xml
 ```xml
-<com.mabi87.imagecroper.ImageCroper
+<com.mabi87.imagecropper.ImageCropper
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/imageCroper"/>
+        android:id="@+id/imageCropper"/>
 ```
 
 request image
@@ -30,21 +30,21 @@ startActivityForResult(lIntent, 1000);
 
 and set image Uri
 ```java
-mImageCroper.setImage(selectedImageUri);
+mImageCropper.setImage(selectedImageUri);
 ```
 
 ![](./screenshot_02.png)
 
 and crop
 ```java
-Bitmap cropedImage = mImageCroper.crop();
+Bitmap cropedImage = mImageCropper.crop();
 ```
 
 ![](./result_01.png)
 
 you can set listner to crop box position and width change
 ```java
-mImageCroper.setOnCropBoxChangedListener(new ImageCroper.OnCropBoxChangedListener() {
+mImageCropper.setOnCropBoxChangedListener(new ImageCropper.OnCropBoxChangedListener() {
         @Override
         public void onCropBoxChange(CropBox cropBox) {
                 mTextCropX.setText("crop x: " + cropBox.getCropX());
@@ -57,7 +57,7 @@ mImageCroper.setOnCropBoxChangedListener(new ImageCroper.OnCropBoxChangedListene
 
 if you want change crop box color
 ``` java
-mImageCroper.setBoxColor(Color.RED);
+mImageCropper.setBoxColor(Color.RED);
 ```
 
 or
@@ -67,11 +67,11 @@ or
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <com.mabi87.imagecroper.ImageCroper
+    <com.mabi87.imagecropper.ImageCropper
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         custom:box_color="#ff0000"
-        android:id="@+id/imageCroper"/>
+        android:id="@+id/imageCropper"/>
 </FrameLayout>
 ```
 

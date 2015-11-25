@@ -2,10 +2,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <com.mabi87.imagecroper.ImageCroper
+    <com.mabi87.imagecropper.ImageCropper
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/imageCroper"/>
+        android:id="@+id/imageCropper"/>
 
     <LinearLayout
         android:orientation="vertical"

@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Android-ImageCroper.iml" filepath="$PROJECT_DIR$/Android-ImageCroper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Android-ImageCropper.iml" filepath="$PROJECT_DIR$/Android-ImageCropper.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/imageCroper/imageCroper.iml" filepath="$PROJECT_DIR$/imageCroper/imageCroper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/imageCropper/imageCropper.iml" filepath="$PROJECT_DIR$/imageCropper/imageCropper.iml" />
     </modules>
   </component>
 </project>
