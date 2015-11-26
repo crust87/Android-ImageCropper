@@ -29,51 +29,52 @@ import android.graphics.Paint;
 public class Anchor {
 	// Constants
 	public static final int ANCHOR_SIZE = 60;
-	public static final int ANCHOR_SIZE_HALF = ANCHOR_SIZE/2;
 
 	// Components
 	protected Paint mPaint;
 
 	// Attributes
-	protected float x;
-	protected float y;
-	protected float radius;
+	private int mId;
+	protected float mX;
+	protected float mY;
+	protected float mRadius;
+	private float mTouchArea;
+
+	public Anchor(int id) {
+		this(id, 0, 0, ANCHOR_SIZE / 2);
+	}
 	
-	public Anchor(float pX, float pY, float pWidth) {
+	public Anchor(int id, float x, float y, float radius) {
 		mPaint = new Paint();
 		mPaint.setColor(Color.WHITE);
 		mPaint.setAntiAlias(true);
 		mPaint.setStrokeWidth(2);
 
-		x = pX;
-		y = pY;
-		radius = pWidth;
-	}
-	
-	public boolean move(float pX, float pY) {
-		x -= pX;
-		y -= pY;
-
-		return true;
+		mId = id;
+		mX = x;
+		mY = y;
+		mRadius = radius;
+		mTouchArea = radius * 2;
 	}
 	
 	public void draw(Canvas pCanvas) {
-		pCanvas.drawCircle(x, y, ANCHOR_SIZE_HALF, mPaint);
+		pCanvas.drawCircle(mX, mY, mRadius, mPaint);
 	}
 	
-	public void setLocation(double pX, double pY) {
-		x = (float)pX;
-		y = (float)pY;
+	public void setLocation(double x, double y) {
+		mX = (float)x;
+		mY = (float)y;
 	}
 
-	public boolean contains(float pX, float pY) {
-		if((pX >= x - ANCHOR_SIZE && pX <= x + ANCHOR_SIZE) && (pY >= y - ANCHOR_SIZE && pY <= y + ANCHOR_SIZE)) {
+	public boolean contains(float x, float y) {
+		if((x >= mX - mTouchArea && x <= mX + mTouchArea) && (y >= mY - mTouchArea && y <= mY + mTouchArea)) {
 			return true;
 		} else {
 			return false;
 		}		
 	}
 
+	// Getters and Setters
 	public void setColor(String colorCode) {
 		int color = Color.parseColor(colorCode);
 		mPaint.setColor(color);
@@ -83,4 +84,11 @@ public class Anchor {
 		mPaint.setColor(color);
 	}
 
+	public int getId() {
+		return mId;
+	}
+
+	public void setId(int id) {
+		mId = id;
+	}
 }

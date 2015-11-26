@@ -48,7 +48,7 @@ public class CircleCropBox extends CropBox {
 
 		radius = MIN_SIZE + 100;
 		
-		mAnchor = new Anchor(0, 0, Anchor.ANCHOR_SIZE);
+		mAnchor = new Anchor(0);
 		setAnchor();
 	}
 
