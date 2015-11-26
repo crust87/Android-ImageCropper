@@ -63,6 +63,7 @@ public class RectCropBox extends CropBox {
 	public boolean processTouchEvent(MotionEvent event) {
 		float x = event.getX();
 		float y = event.getY();
+
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			mPostX = x;
 			mPostY = y;
@@ -116,28 +117,70 @@ public class RectCropBox extends CropBox {
 	// Image scale
 	public boolean resize(float x, float y) {
 		if(mCurrentAnchor != -1) {
+            float lRight = mX + mWidth;
+            float lBottom = mY + mHeight;
+
+            float dX = mX;
+            float dY = mY;
+            float dWidth = mWidth;
+            float dHeight = mHeight;
+
 			switch(mCurrentAnchor) {
 				case TOP_LEFT:
-                    mX -= x;
-                    mY -= y;
-                    mWidth += x;
-                    mHeight += y;
-                    return true;
+                    dX -= x;
+                    dY -= y;
+                    dWidth += x;
+                    dHeight += y;
+                    break;
 				case TOP_RIGHT:
-                    mY -= y;
-                    mWidth -= x;
-                    mHeight += y;
-					return true;
+                    dY -= y;
+                    dWidth -= x;
+                    dHeight += y;
+                    break;
 				case BOTTOM_LEFT:
-                    mX -= x;
-                    mWidth += x;
-                    mHeight -= y;
-                    return true;
+                    dX -= x;
+                    dWidth += x;
+                    dHeight -= y;
+                    break;
 				case BOTTOM_RIGHT:
-                    mWidth -= x;
-                    mHeight -= y;
-                    return true;
+                    dWidth -= x;
+                    dHeight -= y;
+                    break;
 			}
+
+            if(dX < mBound.left) {
+                dX = mBound.left;
+                dWidth = lRight - dX;
+            }
+
+            if(dX + dWidth > mBound.right) {
+                dWidth = mBound.right - dX;
+            }
+
+            if(dY < mBound.top) {
+                dY = mBound.top;
+                dHeight = lBottom - dY;
+            }
+
+            if(dY + dHeight > mBound.bottom) {
+                dHeight = mBound.bottom - dY;
+            }
+
+            // FUCK!!!!!
+            if(dWidth < MIN_SIZE) {
+                dWidth = MIN_SIZE;
+            }
+
+            if(dHeight < MIN_SIZE) {
+                dHeight = MIN_SIZE;
+            }
+
+            mX = dX;
+            mY = dY;
+            mWidth = dWidth;
+            mHeight = dHeight;
+
+            return true;
 		}
 
 		return false;

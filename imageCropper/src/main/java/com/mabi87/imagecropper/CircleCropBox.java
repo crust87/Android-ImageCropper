@@ -104,7 +104,7 @@ public class CircleCropBox extends CropBox {
 	public boolean scale(float d) {
 		float lRadius = mRadius - d;
 		
-		if(lRadius > MIN_SIZE) {
+		if(lRadius > MIN_HALF_SIZE) {
 			boolean lLeft = mX - lRadius > mBound.left;
 			boolean lTop = mY - lRadius > mBound.top;
 			boolean lRight = mX + lRadius < mBound.right;

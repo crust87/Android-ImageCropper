@@ -31,8 +31,9 @@ import android.graphics.Rect;
 import android.view.MotionEvent;
 
 public abstract class CropBox {
-	public static final int MIN_SIZE = 50;
-	public static final int DEFAULT_HALF_SIZE = MIN_SIZE + 100;
+	public static final int MIN_SIZE = 100;
+	public static final int MIN_HALF_SIZE = MIN_SIZE / 2;
+	public static final int DEFAULT_HALF_SIZE = MIN_SIZE + 50;
 
 	public static enum ACTION_LIST{resize, move, none}
 
