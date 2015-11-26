@@ -245,7 +245,7 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 		int lTopMargin = (mViewHeight - mScaledImage.getHeight()) / 2;
 
 		mImageBound = new Rect(lLeftMargin, lTopMargin, mScaledImage.getWidth() + lLeftMargin, mScaledImage.getHeight() + lTopMargin);
-		mCropBox = new CircleCropBox(lLeftMargin, lTopMargin, mImageBound, lScale);
+		mCropBox = new RectCropBox(lLeftMargin, lTopMargin, mImageBound, lScale);
 		mCropBox.setColor(mBoxColor);
 
 		if(mOnCropBoxChangedListener != null) {

@@ -32,6 +32,7 @@ import android.view.MotionEvent;
 
 public abstract class CropBox {
 	public static final int MIN_SIZE = 50;
+	public static final int DEFAULT_HALF_SIZE = MIN_SIZE + 100;
 
 	public static enum ACTION_LIST{resize, move, none}
 
@@ -45,18 +46,18 @@ public abstract class CropBox {
 	protected Canvas mCanvas;
 
 	// Attributes
-	protected float x;
-	protected float y;
+	protected float mX;
+	protected float mY;
 	protected float mPostX;
 	protected float mPostY;
 	protected float mScale;
 
 
-	public CropBox(float pX, float pY, Rect pBound, float pScale) {
-		x = pX + pBound.width()/2;
-		y = pY + pBound.height()/2;
-		mBound = pBound;
-		mScale = pScale;
+	public CropBox(float x, float y, Rect bound, float scale) {
+		mX = x + bound.width()/2;
+		mY = y + bound.height()/2;
+		mBound = bound;
+		mScale = scale;
 
 		mPaint = new Paint();
 		mPaint.setColor(Color.WHITE);
@@ -76,22 +77,22 @@ public abstract class CropBox {
 		mBitmapPaint.setFilterBitmap(true);
 		mBitmapPaint.setAlpha(128);
 		
-		mBitmap = Bitmap.createBitmap(pBound.width(), pBound.height(), Bitmap.Config.ARGB_8888);
+		mBitmap = Bitmap.createBitmap(bound.width(), bound.height(), Bitmap.Config.ARGB_8888);
 		mCanvas = new Canvas(mBitmap);
 	}
 
 	public abstract boolean processTouchEvent(MotionEvent event);
-	public boolean move(float pX, float pY) {
-		x -= pX;
-		y -= pY;
+	public boolean move(float x, float y) {
+		mX -= x;
+		mY -= y;
 
 		return true;
 	}
 
 	protected abstract void setAnchor();
 
-	public abstract boolean contains(float pX, float pY);
-	public abstract void draw(Canvas pCanvas);
+	public abstract boolean contains(float x, float y);
+	public abstract void draw(Canvas canvas);
 
 	protected abstract float getX();
 	protected abstract float getY();

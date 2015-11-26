@@ -29,26 +29,33 @@ import java.util.ArrayList;
 
 public class RectCropBox extends CropBox {
 
-	private enum ANCHOR_ITEM {topLeft, topRight, bottomLeft, bottomRight};
+    // Constants
+	private static final int TOP_LEFT = 0;
+	private static final int TOP_RIGHT = 1;
+	private static final int BOTTOM_LEFT = 2;
+	private static final int BOTTOM_RIGHT = 3;
+
+	private static final int[] ANCHOR_ITEM = {TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT};
 
 	// Components
 	private ArrayList<Anchor> mAnchors;
 
 	// Attributes
-	private float radius;
+	private float mWidth;
+    private float mHeight;
 
 	// Working variable
 	private ACTION_LIST mCurrentEvent;
-	private ANCHOR_ITEM mCurrentAnchor;
+	private int mCurrentAnchor;
 
-	public RectCropBox(float pX, float pY, Rect pBound, float pScale) {
-		super(pX, pY, pBound, pScale);
+	public RectCropBox(float x, float y, Rect bound, float scale) {
+		super(x - DEFAULT_HALF_SIZE, y - DEFAULT_HALF_SIZE, bound, scale);
 
-		radius = MIN_SIZE + 100;
+        mWidth = mHeight = DEFAULT_HALF_SIZE * 2;
 
 		mAnchors = new ArrayList<Anchor>();
-		for(int i = 0; i < ANCHOR_ITEM.values().length; i++) {
-			mAnchors.add(new Anchor(0));
+		for(int i = 0; i < ANCHOR_ITEM.length; i++) {
+			mAnchors.add(new Anchor(ANCHOR_ITEM[i]));
 		}
 		setAnchor();
 	}
@@ -83,7 +90,7 @@ public class RectCropBox extends CropBox {
 			return true;
 		} else if(event.getAction() == MotionEvent.ACTION_UP) {
 			mCurrentEvent = ACTION_LIST.none;
-			mCurrentAnchor = null;
+			mCurrentAnchor = -1;
 
 			return false;
 		}
@@ -92,73 +99,84 @@ public class RectCropBox extends CropBox {
 	}
 	
 	@Override
-	public boolean move(float pX, float pY) {
+	public boolean move(float x, float y) {
 		boolean isMoved = false;
 
-		if(y-radius-pY > mBound.top && y+radius-pY < mBound.bottom) {
-			isMoved = super.move(0, pY);
+		if(mY-y > mBound.top && mY+mHeight-y < mBound.bottom) {
+			isMoved = super.move(0, y);
 		}
 		
-		if(x-radius-pX > mBound.left && x+radius-pX < mBound.right) {
-			isMoved = super.move(pX, 0);
+		if(mX-x > mBound.left && mX+mWidth-x < mBound.right) {
+			isMoved = super.move(x, 0);
 		}
 
 		return isMoved;
 	}
 	
 	// Image scale
-	public boolean resize(float dX, float dY) {
-		if(mCurrentAnchor != null) {
+	public boolean resize(float x, float y) {
+		if(mCurrentAnchor != -1) {
 			switch(mCurrentAnchor) {
-				case topLeft:
-					break;
-				case topRight:
-					break;
-				case bottomLeft:
-					break;
-				case bottomRight:
-					break;
+				case TOP_LEFT:
+                    mX -= x;
+                    mY -= y;
+                    mWidth += x;
+                    mHeight += y;
+                    return true;
+				case TOP_RIGHT:
+                    mY -= y;
+                    mWidth -= x;
+                    mHeight += y;
+					return true;
+				case BOTTOM_LEFT:
+                    mX -= x;
+                    mWidth += x;
+                    mHeight -= y;
+                    return true;
+				case BOTTOM_RIGHT:
+                    mWidth -= x;
+                    mHeight -= y;
+                    return true;
 			}
 		}
 
-		return true;
+		return false;
 	}
 
 	@Override
 	protected void setAnchor() {
-		for(ANCHOR_ITEM anchorItem: ANCHOR_ITEM.values()) {
-			Anchor anchor = mAnchors.get(anchorItem.ordinal());
-			switch(anchorItem) {
-				case topLeft:
-					anchor.setLocation(x - radius, y - radius);
+		for(Anchor anchor: mAnchors) {
+			switch(anchor.getId()) {
+				case TOP_LEFT:
+					anchor.setLocation(mX, mY);
 					break;
-				case topRight:
-					anchor.setLocation(x + radius, y - radius);
+				case TOP_RIGHT:
+					anchor.setLocation(mX + mWidth, mY);
 					break;
-				case bottomLeft:
-					anchor.setLocation(x - radius, y + radius);
+				case BOTTOM_LEFT:
+					anchor.setLocation(mX, mY + mHeight);
 					break;
-				case bottomRight:
-					anchor.setLocation(x + radius, y + radius);
+				case BOTTOM_RIGHT:
+					anchor.setLocation(mX + mWidth, mY + mHeight);
 					break;
 			}
 		}
 	}
 
 	@Override
-	public boolean contains(float pX, float pY) {
+	public boolean contains(float x, float y) {
 		for(int i = 0; i < mAnchors.size(); i++) {
 			Anchor anchor = mAnchors.get(i);
-			if (anchor.contains(pX, pY)) {
+			if (anchor.contains(x, y)) {
 				mCurrentEvent = ACTION_LIST.resize;
-				mCurrentAnchor = ANCHOR_ITEM.values()[i];
+				mCurrentAnchor = ANCHOR_ITEM[i];
 				return false;
 			}
 		}
 
-		mCurrentAnchor = null;
+		mCurrentAnchor = -1;
 
-		if((pX >= x-radius && pX <= x+radius) && (pY >= y-radius && pY <= y+radius)) {
+		if((x >= mX && x <= mX+mWidth) && (y >= mY && y <= mY+mHeight)) {
 			mCurrentEvent = ACTION_LIST.move;
 			return true;
 		}
@@ -168,37 +186,37 @@ public class RectCropBox extends CropBox {
 	}
 
 	@Override
-	public void draw(Canvas pCanvas) {
-		mCanvas.drawRect(0, 0, pCanvas.getWidth(), pCanvas.getHeight(), mMaskPaint1);
+	public void draw(Canvas canvas) {
+		mCanvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), mMaskPaint1);
 		mCanvas.drawRect(getX(), getY(), getX() + getWidth(), getY() + getHeight(), mMaskPaint2);
-		pCanvas.drawBitmap(mBitmap, null, mBound, mBitmapPaint);
-		pCanvas.drawRect(x - radius, y - radius, x + radius, y + radius, mPaint);
+        canvas.drawBitmap(mBitmap, null, mBound, mBitmapPaint);
+        canvas.drawRect(mX, mY, mX + mWidth, mY + mHeight, mPaint);
 		
 		if(mCurrentEvent != ACTION_LIST.move) {
 			for(Anchor anchor: mAnchors) {
-				anchor.draw(pCanvas);
+				anchor.draw(canvas);
 			}
 		}
 	}
 
 	@Override
 	protected float getX() {
-		return (x - radius) - mBound.left;
+		return mX - mBound.left;
 	}
 
 	@Override
 	protected float getY() {
-		return (y - radius) - mBound.top;
+		return mY - mBound.top;
 	}
 
 	@Override
 	protected float getWidth() {
-		return radius * 2;
+		return mWidth;
 	}
 
 	@Override
 	protected float getHeight() {
-		return radius * 2;
+		return mHeight;
 	}
 
 	@Override

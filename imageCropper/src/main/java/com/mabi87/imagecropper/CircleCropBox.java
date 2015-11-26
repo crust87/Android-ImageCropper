@@ -21,12 +21,7 @@
 
 package com.mabi87.imagecropper;
 
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 
@@ -36,9 +31,9 @@ public class CircleCropBox extends CropBox {
 	private Anchor mAnchor;
 
 	// Attributes
-	private double anchorLoactionX = Math.cos((45 * Math.PI) / 180);
-	private double anchorLoactionY = Math.sin((45 * Math.PI) / 180);
-	private float radius;
+	private double mAnchorLoactionX = Math.cos((45 * Math.PI) / 180);
+	private double mAnchorLoactionY = Math.sin((45 * Math.PI) / 180);
+	private float mRadius;
 
 	// Working variable
 	private ACTION_LIST mCurrentEvent;
@@ -46,7 +41,7 @@ public class CircleCropBox extends CropBox {
 	public CircleCropBox(float pX, float pY, Rect pBound, float pScale) {
 		super(pX, pY, pBound, pScale);
 
-		radius = MIN_SIZE + 100;
+        mRadius = DEFAULT_HALF_SIZE;
 		
 		mAnchor = new Anchor(0);
 		setAnchor();
@@ -94,11 +89,11 @@ public class CircleCropBox extends CropBox {
 	public boolean move(float pX, float pY) {
 		boolean isMoved = false;
 
-		if(y-radius-pY > mBound.top && y+radius-pY < mBound.bottom) {
+		if(mY-mRadius-pY > mBound.top && mY+mRadius-pY < mBound.bottom) {
 			isMoved = super.move(0, pY);
 		}
 		
-		if(x-radius-pX > mBound.left && x+radius-pX < mBound.right) {
+		if(mX-mRadius-pX > mBound.left && mX+mRadius-pX < mBound.right) {
 			isMoved = super.move(pX, 0);
 		}
 
@@ -107,72 +102,72 @@ public class CircleCropBox extends CropBox {
 	
 	// Image scale
 	public boolean scale(float d) {
-		float lRadius = radius - d;
+		float lRadius = mRadius - d;
 		
 		if(lRadius > MIN_SIZE) {
-			boolean lLeft = x - lRadius > mBound.left;
-			boolean lTop = y - lRadius > mBound.top;
-			boolean lRight = x + lRadius < mBound.right;
-			boolean lBottom = y + lRadius < mBound.bottom;
+			boolean lLeft = mX - lRadius > mBound.left;
+			boolean lTop = mY - lRadius > mBound.top;
+			boolean lRight = mX + lRadius < mBound.right;
+			boolean lBottom = mY + lRadius < mBound.bottom;
 			
-			boolean lLeftNot = (x + d) - lRadius > mBound.left;
-			boolean lTopNot = (y + d) - lRadius > mBound.top;
-			boolean lRightNot = (x - d) + lRadius < mBound.right;
-			boolean lBottomNot = (y - d) + lRadius < mBound.bottom;
+			boolean lLeftNot = (mX + d) - lRadius > mBound.left;
+			boolean lTopNot = (mY + d) - lRadius > mBound.top;
+			boolean lRightNot = (mX - d) + lRadius < mBound.right;
+			boolean lBottomNot = (mY - d) + lRadius < mBound.bottom;
 			
 			if(lLeft && lTop && lRight && lBottom) {
-				radius = lRadius;
+                mRadius = lRadius;
 			} else if(!lLeft && lTop && lRight && lBottom) {
 				// Left
 				if(lRightNot) {
-					radius = lRadius;
-					x -= d;
+                    mRadius = lRadius;
+					mX -= d;
 				}
 			} else if(!lLeft && !lTop && lRight && lBottom) {
 				// Left & Top
 				if(lRightNot && lBottomNot) {
-					radius = lRadius;
-					x -= d;
-					y -= d;
+                    mRadius = lRadius;
+					mX -= d;
+					mY -= d;
 				}
 			} else if(lLeft && !lTop && lRight && lBottom) {
 				// Top
 				if(lBottomNot) {
-					radius = lRadius;
-					y -= d;
+                    mRadius = lRadius;
+					mY -= d;
 				}
 			} else if(lLeft && !lTop && !lRight && lBottom) {
 				// Top & Right
 				if(lBottomNot && lLeftNot) {
-					radius = lRadius;
-					x += d;
-					y -= d;
+                    mRadius = lRadius;
+					mX += d;
+					mY -= d;
 				}
 			} else if(lLeft && lTop && !lRight && lBottom) {
 				// Right
 				if(lLeftNot) {
-					radius = lRadius;
-					x += d;
+                    mRadius = lRadius;
+					mX += d;
 				}
 			} else if(lLeft && lTop && !lRight && !lBottom) {
 				// Right & Bottom
 				if(lLeftNot && lTopNot) {
-					radius = lRadius;
-					x += d;
-					y += d;
+                    mRadius = lRadius;
+					mX += d;
+					mY += d;
 				}
 			} else if(lLeft && lTop && lRight && !lBottom) {
 				// Bottom
 				if(lTopNot) {
-					radius = lRadius;
-					y += d;
+                    mRadius = lRadius;
+					mY += d;
 				}
 			} else if(!lLeft && lTop && lRight && !lBottom) {
 				// Left & Bottom
 				if(lRightNot && lTopNot) {
-					radius = lRadius;
-					x -= d;
-					y += d;
+                    mRadius = lRadius;
+					mX -= d;
+					mY += d;
 				}
 			}
 
@@ -184,17 +179,17 @@ public class CircleCropBox extends CropBox {
 
 	@Override
 	protected void setAnchor() {
-		mAnchor.setLocation(x + anchorLoactionX * radius, y - anchorLoactionY * radius);
+		mAnchor.setLocation(mX + mAnchorLoactionX * mRadius, mY - mAnchorLoactionY * mRadius);
 	}
 
 	@Override
-	public boolean contains(float pX, float pY) {
-		if(mAnchor.contains(pX, pY)) {
+	public boolean contains(float x, float y) {
+		if(mAnchor.contains(x, y)) {
 			mCurrentEvent = ACTION_LIST.resize;
 			return false;
 		}
 
-		if((pX >= x-radius && pX <= x+radius) && (pY >= y-radius && pY <= y+radius)) {
+		if((x >= x-mRadius && x <= x+mRadius) && (y >= y-mRadius && y <= y+mRadius)) {
 			mCurrentEvent = ACTION_LIST.move;
 			return true;
 		}
@@ -204,34 +199,34 @@ public class CircleCropBox extends CropBox {
 	}
 
 	@Override
-	public void draw(Canvas pCanvas) {
-		mCanvas.drawRect(0, 0, pCanvas.getWidth(), pCanvas.getHeight(), mMaskPaint1);
-		mCanvas.drawCircle(x - mBound.left, y - mBound.top, radius, mMaskPaint2);
-		pCanvas.drawBitmap(mBitmap, null, mBound, mBitmapPaint);
-		pCanvas.drawCircle(x, y, radius, mPaint);
+	public void draw(Canvas canvas) {
+		mCanvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), mMaskPaint1);
+		mCanvas.drawCircle(mX - mBound.left, mY - mBound.top, mRadius, mMaskPaint2);
+        canvas.drawBitmap(mBitmap, null, mBound, mBitmapPaint);
+        canvas.drawCircle(mX, mY, mRadius, mPaint);
 		
 		if(mCurrentEvent != ACTION_LIST.move) {
-			mAnchor.draw(pCanvas);
+			mAnchor.draw(canvas);
 		}
 	}
 	@Override
 	protected float getX() {
-		return (x - radius) - mBound.left;
+		return (mX - mRadius) - mBound.left;
 	}
 
 	@Override
 	protected float getY() {
-		return (y - radius) - mBound.top;
+		return (mY - mRadius) - mBound.top;
 	}
 
 	@Override
 	protected float getWidth() {
-		return radius * 2;
+		return mRadius * 2;
 	}
 
 	@Override
 	protected float getHeight() {
-		return radius * 2;
+		return mRadius * 2;
 	}
 
 	@Override
