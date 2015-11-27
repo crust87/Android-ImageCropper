@@ -5,26 +5,26 @@
     <item
         android:id="@+id/action_open"
         android:icon="@drawable/ic_action_open"
-        android:title="Open"
+        android:title="@string/action_open"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_crop"
         android:icon="@drawable/ic_action_crop"
-        android:title="Crop"
+        android:title="@string/action_crop"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_set_circle"
         android:orderInCategory="100"
-        android:title="Circle Crop Box"
+        android:title="@string/action_circle_crop_box"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_set_rect"
         android:orderInCategory="100"
-        android:title="Rect Crop Box"
+        android:title="@string/action_rect_crop_box"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_toggle_info"
         android:orderInCategory="100"
-        android:title="Toggle Crop Info"
+        android:title="@string/action_toggle_crop_info"
         app:showAsAction="never" />
 </menu>

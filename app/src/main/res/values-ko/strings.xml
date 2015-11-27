@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">이미지 자르기</string>
+
+    <!-- Action Bar -->
+    <string name="action_open">열기</string>
+    <string name="action_crop">자르기</string>
+    <string name="action_circle_crop_box">동그라미 상자</string>
+    <string name="action_rect_crop_box">네모 상자</string>
+    <string name="action_toggle_crop_info">자르기 정보 토글</string>
+</resources>

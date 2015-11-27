@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Image Cropper</string>
+
+    <!-- Action Bar -->
+    <string name="action_open">Open</string>
+    <string name="action_crop">Crop</string>
+    <string name="action_circle_crop_box">Circle Crop Box</string>
+    <string name="action_rect_crop_box">Rect Crop Box</string>
+    <string name="action_toggle_crop_info">Toggle Crop Info</string>
+</resources>
