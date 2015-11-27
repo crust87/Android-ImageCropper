@@ -53,7 +53,7 @@ mImageCropper.setOnCropBoxChangedListener(new ImageCropper.OnCropBoxChangedListe
         }
 });
 ```
-
+<br />
 Application Icon is designed by Freepik
 http://www.freepik.com/
 
