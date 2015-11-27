@@ -37,7 +37,7 @@ and set image Uri
 mImageCropper.setImage(imageUri);
 ```
 
-![](./screenshot_01.png) ![](./screenshot_02.png)
+![](./Screenshot1.png) ![](./Screenshot2.png)
 
 and crop
 ```java
