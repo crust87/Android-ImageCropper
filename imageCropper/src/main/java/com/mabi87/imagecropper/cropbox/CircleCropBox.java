@@ -19,11 +19,13 @@
  * limitations under the License.
  */
 
-package com.mabi87.imagecropper;
+package com.mabi87.imagecropper.cropbox;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.view.MotionEvent;
+
+import com.mabi87.imagecropper.cropbox.anchor.Anchor;
 
 public class CircleCropBox extends CropBox {
 
@@ -38,12 +40,12 @@ public class CircleCropBox extends CropBox {
 	// Working variable
 	private ACTION_LIST mCurrentEvent;
 
-	public CircleCropBox(float pX, float pY, Rect pBound, float pScale) {
-		super(pX, pY, pBound, pScale);
+	public CircleCropBox(float x, float y, Rect bound, float scale, int lineWidth, int anchorSize) {
+		super(x, y, bound, scale, lineWidth, anchorSize);
 
         mRadius = DEFAULT_HALF_SIZE;
 		
-		mAnchor = new Anchor(0);
+		mAnchor = new Anchor(0, mAnchorSize);
 		setAnchor();
 	}
 

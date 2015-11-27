@@ -40,6 +40,11 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.mabi87.imagecropper.cropbox.CircleCropBox;
+import com.mabi87.imagecropper.cropbox.CropBox;
+import com.mabi87.imagecropper.cropbox.CropBoxFactory;
+import com.mabi87.imagecropper.cropbox.RectCropBox;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -69,6 +74,8 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 	private String mImagePath;
 	private int mBoxColor = DEFAULT_BOX_COLOR;
 	private int mBoxType = DEFAULT_BOX_TYPE;
+	private int mLineWidth;
+	private int mAnchorSize;
 	private boolean isImageOpen;
 
 	// Listener
@@ -111,6 +118,12 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 		} else {
 			mBoxType = DEFAULT_BOX_TYPE;
 		}
+
+		int defaultLineWidth = getResources().getDimensionPixelSize(R.dimen.default_line_width);
+		mLineWidth = typedArray.getLayoutDimension(R.styleable.ImageCropper_line_width, defaultLineWidth);
+
+		int defaultAnchorSize = getResources().getDimensionPixelSize(R.dimen.default_anchor_size);
+		mAnchorSize = typedArray.getLayoutDimension(R.styleable.ImageCropper_anchor_size, defaultAnchorSize);
 	}
 
 	private void initImageCropper() {
@@ -264,14 +277,7 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 
 		mImageBound = new Rect(lLeftMargin, lTopMargin, mScaledImage.getWidth() + lLeftMargin, mScaledImage.getHeight() + lTopMargin);
 
-		if(mBoxType == CIRCLE_CROP_BOX) {
-			mCropBox = new CircleCropBox(lLeftMargin, lTopMargin, mImageBound, lScale);
-		} else if(mBoxType == RECT_CROP_BOX) {
-			mCropBox = new RectCropBox(lLeftMargin, lTopMargin, mImageBound, lScale);
-		} else {
-			mCropBox = new CircleCropBox(lLeftMargin, lTopMargin, mImageBound, lScale);
-		}
-
+		mCropBox = CropBoxFactory.create(mBoxType, lLeftMargin, lTopMargin, mImageBound, lScale, mLineWidth, mAnchorSize);
 		mCropBox.setColor(mBoxColor);
 
 		if(mOnCropBoxChangedListener != null) {
@@ -376,6 +382,14 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 			openImage();
 			invalidate();
 		}
+	}
+
+	public int getLineWidth() {
+		return mLineWidth;
+	}
+
+	public void setLineWidth(int lineWidth) {
+		mLineWidth = lineWidth;
 	}
 
 	public boolean isImageOpen() {

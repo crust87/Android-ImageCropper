@@ -19,11 +19,13 @@
  * limitations under the License.
  */
 
-package com.mabi87.imagecropper;
+package com.mabi87.imagecropper.cropbox;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.view.MotionEvent;
+
+import com.mabi87.imagecropper.cropbox.anchor.Anchor;
 
 import java.util.ArrayList;
 
@@ -48,14 +50,14 @@ public class RectCropBox extends CropBox {
 	private ACTION_LIST mCurrentEvent;
 	private int mCurrentAnchor;
 
-	public RectCropBox(float x, float y, Rect bound, float scale) {
-		super(x - DEFAULT_HALF_SIZE, y - DEFAULT_HALF_SIZE, bound, scale);
+	public RectCropBox(float x, float y, Rect bound, float scale, int lineWidth, int anchorSize) {
+		super(x - DEFAULT_HALF_SIZE, y - DEFAULT_HALF_SIZE, bound, scale, lineWidth, anchorSize);
 
         mWidth = mHeight = DEFAULT_HALF_SIZE * 2;
 
 		mAnchors = new ArrayList<Anchor>();
 		for(int i = 0; i < ANCHOR_ITEM.length; i++) {
-			mAnchors.add(new Anchor(ANCHOR_ITEM[i]));
+			mAnchors.add(new Anchor(ANCHOR_ITEM[i], mAnchorSize));
 		}
 		setAnchor();
 	}

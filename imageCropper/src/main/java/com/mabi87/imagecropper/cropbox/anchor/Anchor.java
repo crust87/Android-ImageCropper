@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.mabi87.imagecropper;
+package com.mabi87.imagecropper.cropbox.anchor;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -27,21 +27,19 @@ import android.graphics.Paint;
 
 
 public class Anchor {
-	// Constants
-	public static final int ANCHOR_SIZE = 60;
-
 	// Components
 	protected Paint mPaint;
 
 	// Attributes
 	private int mId;
+	private int mAnchorSize;
 	protected float mX;
 	protected float mY;
 	protected float mRadius;
 	private float mTouchArea;
 
-	public Anchor(int id) {
-		this(id, 0, 0, ANCHOR_SIZE / 2);
+	public Anchor(int id, int anchorSize) {
+		this(id, 0, 0, anchorSize / 2);
 	}
 	
 	public Anchor(int id, float x, float y, float radius) {

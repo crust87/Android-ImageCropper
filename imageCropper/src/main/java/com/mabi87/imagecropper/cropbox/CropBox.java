@@ -19,8 +19,9 @@
  * limitations under the License.
  */
 
-package com.mabi87.imagecropper;
+package com.mabi87.imagecropper.cropbox;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -52,19 +53,22 @@ public abstract class CropBox {
 	protected float mPostX;
 	protected float mPostY;
 	protected float mScale;
+	protected int mLineWidth;
+	protected int mAnchorSize;
 
-
-	public CropBox(float x, float y, Rect bound, float scale) {
+	public CropBox(float x, float y, Rect bound, float scale, int lineWidth, int anchorSize) {
 		mX = x + bound.width()/2;
 		mY = y + bound.height()/2;
 		mBound = bound;
 		mScale = scale;
+		mLineWidth = lineWidth;
+		mAnchorSize = anchorSize;
 
 		mPaint = new Paint();
 		mPaint.setColor(Color.WHITE);
 		mPaint.setAntiAlias(true);
-		mPaint.setStrokeWidth(5);
 		mPaint.setStyle(Paint.Style.STROKE);
+		mPaint.setStrokeWidth(mLineWidth);
 		
 		mMaskPaint1 = new Paint();
 		mMaskPaint1.setColor(Color.BLACK);
@@ -117,5 +121,14 @@ public abstract class CropBox {
 	public void setColor(String colorCode) {
 		int color = Color.parseColor(colorCode);
 		mPaint.setColor(color);
+	}
+
+	public int getLineWidth() {
+		return mLineWidth;
+	}
+
+	public void setLineWidth(int lineWidth) {
+		mLineWidth = lineWidth;
+		mPaint.setStrokeWidth(mLineWidth);
 	}
 }

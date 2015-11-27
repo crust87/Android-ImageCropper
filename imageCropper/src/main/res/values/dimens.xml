@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="default_line_width">2dp</dimen>
+    <dimen name="default_anchor_size">20dp</dimen>
+
+    <dimen name="default_box_size">96dp</dimen>
+    <dimen name="min_box_Size">48dp</dimen>
+</resources>
