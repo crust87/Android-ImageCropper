@@ -1,8 +1,7 @@
 # Android-ImageCropper
 Image crop view for android
 
-I'am trying to make library this project.<br/>
-Maybe first virsion only provide crop as square.
+![](./Screenshot1.png) ![](./Screenshot2.png)
 
 see
 https://play.google.com/store/apps/details?id=com.mabi87.imagecropper
@@ -36,8 +35,6 @@ and set image Uri
 ```java
 mImageCropper.setImage(imageUri);
 ```
-
-![](./Screenshot1.png) ![](./Screenshot2.png)
 
 and crop
 ```java
