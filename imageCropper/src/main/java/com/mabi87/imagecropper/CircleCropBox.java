@@ -189,7 +189,7 @@ public class CircleCropBox extends CropBox {
 			return false;
 		}
 
-		if((x >= x-mRadius && x <= x+mRadius) && (y >= y-mRadius && y <= y+mRadius)) {
+		if((x >= mX-mRadius && x <= mX+mRadius) && (y >= mY-mRadius && y <= mY+mRadius)) {
 			mCurrentEvent = ACTION_LIST.move;
 			return true;
 		}
