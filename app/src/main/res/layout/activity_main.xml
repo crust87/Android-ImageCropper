@@ -1,7 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:imageCropper="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <com.mabi87.imagecropper.ImageCropper
         android:id="@+id/imageCropper"
@@ -11,44 +11,52 @@
         imageCropper:box_type="circle" />
 
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/layoutInfo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
         <TextView
+            android:id="@+id/textCropX"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#ffffff"
             android:shadowColor="#000000"
             android:shadowDx="1.0"
             android:shadowDy="1.0"
             android:shadowRadius="1.0"
-            android:id="@+id/textCropX" />
+            android:textColor="#ffffff" />
+
         <TextView
+            android:id="@+id/textCropY"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#ffffff"
             android:shadowColor="#000000"
             android:shadowDx="1.0"
             android:shadowDy="1.0"
             android:shadowRadius="1.0"
-            android:id="@+id/textCropY" />
+            android:textColor="#ffffff" />
+
         <TextView
+            android:id="@+id/textCropWidth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#ffffff"
             android:shadowColor="#000000"
             android:shadowDx="1.0"
             android:shadowDy="1.0"
             android:shadowRadius="1.0"
-            android:id="@+id/textCropWidth" />
+            android:textColor="#ffffff" />
+
         <TextView
+            android:id="@+id/textCropHeight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#ffffff"
             android:shadowColor="#000000"
             android:shadowDx="1.0"
             android:shadowDy="1.0"
             android:shadowRadius="1.0"
-            android:id="@+id/textCropHeight" />
+            android:textColor="#ffffff" />
+
     </LinearLayout>
+
 </FrameLayout>

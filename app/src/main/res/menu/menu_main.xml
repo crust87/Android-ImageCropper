@@ -1,12 +1,30 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
-    <item android:id="@+id/action_open" android:title="Open" android:icon="@drawable/ic_action_open"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+    <item
+        android:id="@+id/action_open"
+        android:icon="@drawable/ic_action_open"
+        android:title="Open"
         app:showAsAction="ifRoom" />
-    <item android:id="@+id/action_crop" android:title="Crop" android:icon="@drawable/ic_action_crop"
+    <item
+        android:id="@+id/action_crop"
+        android:icon="@drawable/ic_action_crop"
+        android:title="Crop"
         app:showAsAction="ifRoom" />
-    <item android:id="@+id/action_set_circle" android:title="Circle Crop Box"
-        android:orderInCategory="100" app:showAsAction="never" />
-    <item android:id="@+id/action_set_rect" android:title="Rect Crop Box"
-        android:orderInCategory="100" app:showAsAction="never" />
+    <item
+        android:id="@+id/action_set_circle"
+        android:orderInCategory="100"
+        android:title="Circle Crop Box"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_set_rect"
+        android:orderInCategory="100"
+        android:title="Rect Crop Box"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_toggle_info"
+        android:orderInCategory="100"
+        android:title="Toggle Crop Info"
+        app:showAsAction="never" />
 </menu>

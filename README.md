@@ -17,35 +17,34 @@ mContainerImageCropper.addView(mImageCropper);
 
 or append your layout xml
 ```xml
-<com.mabi87.imagecropper.ImageCropper
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:imageCropper="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.mabi87.imagecropper.ImageCropper
+        android:id="@+id/imageCropper"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/imageCropper"/>
-```
+        imageCropper:box_color="#ffffff"
+        imageCropper:box_type="circle" />
 
-request image
-```java
-Intent lIntent = new Intent(Intent.ACTION_PICK);
-lIntent.setType("image/*");
-lIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-startActivityForResult(lIntent, 1000);
+</FrameLayout>
 ```
 
 and set image Uri
 ```java
-mImageCropper.setImage(selectedImageUri);
+mImageCropper.setImage(imageUri);
 ```
 
-![](./screenshot_02.png)
+![](./screenshot_01.png) ![](./screenshot_02.png)
 
 and crop
 ```java
 Bitmap cropedImage = mImageCropper.crop();
 ```
 
-![](./result_01.png)
-
-you can set listner to crop box position and width change
+you can set listener to crop box position and width change
 ```java
 mImageCropper.setOnCropBoxChangedListener(new ImageCropper.OnCropBoxChangedListener() {
         @Override
@@ -57,29 +56,6 @@ mImageCropper.setOnCropBoxChangedListener(new ImageCropper.OnCropBoxChangedListe
         }
 });
 ```
-
-if you want change crop box color
-``` java
-mImageCropper.setBoxColor(Color.RED);
-```
-
-or
-```xml
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
-    <com.mabi87.imagecropper.ImageCropper
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        custom:box_color="#ff0000"
-        android:id="@+id/imageCropper"/>
-</FrameLayout>
-```
-
-![](./screenshot_03.png)
-
 
 ## Licence
 Copyright 2015 Mabi

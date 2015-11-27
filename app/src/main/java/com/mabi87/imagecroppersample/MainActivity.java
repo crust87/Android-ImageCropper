@@ -1,10 +1,7 @@
 package com.mabi87.imagecroppersample;
 
-import android.app.ActivityManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -13,6 +10,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +27,7 @@ public class MainActivity extends ActionBarActivity {
 
     // Layout Components
     private ImageCropper mImageCropper;
+    private View mLayoutInfo;
     private TextView mTextCropX;
     private TextView mTextCropY;
     private TextView mTextCropWidth;
@@ -69,6 +68,13 @@ public class MainActivity extends ActionBarActivity {
             case R.id.action_set_rect:
                 mImageCropper.setBoxType(ImageCropper.RECT_CROP_BOX);
                 return true;
+            case R.id.action_toggle_info:
+                if(mLayoutInfo.getVisibility() != View.VISIBLE) {
+                    mLayoutInfo.setVisibility(View.VISIBLE);
+                } else {
+                    mLayoutInfo.setVisibility(View.GONE);
+                }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -87,6 +93,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         mImageCropper = (ImageCropper) findViewById(R.id.imageCropper);
+        mLayoutInfo = findViewById(R.id.layoutInfo);
         mTextCropX = (TextView) findViewById(R.id.textCropX);
         mTextCropY = (TextView) findViewById(R.id.textCropY);
         mTextCropWidth = (TextView) findViewById(R.id.textCropWidth);
@@ -117,10 +124,10 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void cropImage() {
-        if(mImageCropper != null) {
+        if (mImageCropper != null) {
             Bitmap cropedImage = mImageCropper.crop();
 
-            if(cropedImage != null) {
+            if (cropedImage != null) {
                 String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + System.currentTimeMillis() + ".png";
 
                 try {
@@ -133,7 +140,7 @@ public class MainActivity extends ActionBarActivity {
                     mLastResultPath = null;
                 }
 
-                if(!TextUtils.isEmpty(mLastResultPath)) {
+                if (!TextUtils.isEmpty(mLastResultPath)) {
                     mImageCropper.setImage(mLastResultPath);
                 } else {
                     Toast.makeText(MainActivity.this, "There is no result!", Toast.LENGTH_LONG).show();
