@@ -1,10 +1,13 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
     <com.mabi87.imagecropper.ImageCropper
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        custom:box_color="#ffffff"
+        custom:box_type="circle"
         android:id="@+id/imageCropper"/>
 
     <LinearLayout
@@ -53,6 +56,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:layout_marginBottom="48dp"
         android:layout_gravity="bottom">
 
         <Button
@@ -75,5 +79,26 @@
             android:text="show result"
             android:layout_weight="1"
             android:onClick="onButtonShowClicked" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="bottom">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="SET CIRCLE BOX"
+            android:layout_weight="1"
+            android:onClick="onButtonBoxCircle" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="SET RECT BOX"
+            android:layout_weight="1"
+            android:onClick="onButtonBoxRect" />
     </LinearLayout>
 </FrameLayout>

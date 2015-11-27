@@ -2,5 +2,6 @@
 <resources>
     <declare-styleable name="ImageCropper">
         <attr name="box_color" format="color" />
+        <attr name="box_type" format="string" />
     </declare-styleable>
 </resources>

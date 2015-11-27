@@ -166,13 +166,20 @@ public class RectCropBox extends CropBox {
                 dHeight = mBound.bottom - dY;
             }
 
-            // FUCK!!!!!
             if(dWidth < MIN_SIZE) {
-                dWidth = MIN_SIZE;
+				dWidth = MIN_SIZE;
+
+				if(mCurrentAnchor == TOP_LEFT || mCurrentAnchor == BOTTOM_LEFT) {
+					dX = lRight - MIN_SIZE;
+				}
             }
 
             if(dHeight < MIN_SIZE) {
-                dHeight = MIN_SIZE;
+				dHeight = MIN_SIZE;
+
+				if(mCurrentAnchor == TOP_LEFT || mCurrentAnchor == TOP_RIGHT) {
+					dY = lBottom - MIN_SIZE;
+				}
             }
 
             mX = dX;

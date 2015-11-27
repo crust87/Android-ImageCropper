@@ -48,7 +48,11 @@ import java.io.InputStream;
 
 public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback {
 	// Constants
+	public static final int CIRCLE_CROP_BOX = 0;
+	public static final int RECT_CROP_BOX = 1;
+
 	private static final int DEFAULT_BOX_COLOR = Color.WHITE;
+	private static final int DEFAULT_BOX_TYPE = CIRCLE_CROP_BOX;
 
 	// Components
 	private Context mContext;
@@ -64,6 +68,8 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 	private int mViewHeight;
 	private String mImagePath;
 	private int mBoxColor = DEFAULT_BOX_COLOR;
+	private int mBoxType = DEFAULT_BOX_TYPE;
+	private boolean isImageOpen;
 
 	// Listener
 	private OnCropBoxChangedListener mOnCropBoxChangedListener;
@@ -80,9 +86,7 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 		super(context, attrs);
 		mContext = context;
 
-		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ImageCropper, 0, 0);
-		mBoxColor = a.getColor(R.styleable.ImageCropper_box_color, DEFAULT_BOX_COLOR);
-
+		initAttributes(context, attrs, 0);
 		initImageCropper();
 	}
 
@@ -90,15 +94,29 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 		super(context, attrs, defStyleAttr);
 		mContext = context;
 
-		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ImageCropper, defStyleAttr, 0);
-		mBoxColor = a.getColor(R.styleable.ImageCropper_box_color, DEFAULT_BOX_COLOR);
-
+		initAttributes(context, attrs, defStyleAttr);
 		initImageCropper();
+	}
+
+	private void initAttributes(Context context, AttributeSet attrs, int defStyleAttr) {
+		TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ImageCropper, defStyleAttr, 0);
+
+		mBoxColor = typedArray.getColor(R.styleable.ImageCropper_box_color, DEFAULT_BOX_COLOR);
+
+		String lBoxType = typedArray.getString(R.styleable.ImageCropper_box_type);
+		if(TextUtils.equals(lBoxType, "circle")) {
+			mBoxType = CIRCLE_CROP_BOX;
+		} else if(TextUtils.equals(lBoxType, "rect")) {
+			mBoxType = RECT_CROP_BOX;
+		} else {
+			mBoxType = DEFAULT_BOX_TYPE;
+		}
 	}
 
 	private void initImageCropper() {
 		mHolder = getHolder();
 		mHolder.addCallback(this);
+		isImageOpen = false;
 	}
 
 	/**
@@ -245,12 +263,22 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 		int lTopMargin = (mViewHeight - mScaledImage.getHeight()) / 2;
 
 		mImageBound = new Rect(lLeftMargin, lTopMargin, mScaledImage.getWidth() + lLeftMargin, mScaledImage.getHeight() + lTopMargin);
-		mCropBox = new CircleCropBox(lLeftMargin, lTopMargin, mImageBound, lScale);
+
+		if(mBoxType == CIRCLE_CROP_BOX) {
+			mCropBox = new CircleCropBox(lLeftMargin, lTopMargin, mImageBound, lScale);
+		} else if(mBoxType == RECT_CROP_BOX) {
+			mCropBox = new RectCropBox(lLeftMargin, lTopMargin, mImageBound, lScale);
+		} else {
+			mCropBox = new CircleCropBox(lLeftMargin, lTopMargin, mImageBound, lScale);
+		}
+
 		mCropBox.setColor(mBoxColor);
 
 		if(mOnCropBoxChangedListener != null) {
 			mOnCropBoxChangedListener.onCropBoxChange(mCropBox);
 		}
+
+		isImageOpen = true;
 	}
 
 	protected void onDraw(Canvas canvas) {
@@ -333,4 +361,16 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 		}
 	}
 
+	public int getBoxType() {
+		return mBoxType;
+	}
+
+	public void setBoxType(int boxType) {
+		mBoxType = boxType;
+
+		if(isImageOpen) {
+			openImage();
+			invalidate();
+		}
+	}
 }

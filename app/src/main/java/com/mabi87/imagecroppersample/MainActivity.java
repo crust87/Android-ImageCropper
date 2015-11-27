@@ -110,4 +110,12 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+    public void onButtonBoxCircle(View v) {
+        mImageCropper.setBoxType(ImageCropper.CIRCLE_CROP_BOX);
+    }
+
+    public void onButtonBoxRect(View v) {
+        mImageCropper.setBoxType(ImageCropper.RECT_CROP_BOX);
+    }
+
 }
