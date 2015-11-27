@@ -3,5 +3,7 @@
     <declare-styleable name="ImageCropper">
         <attr name="box_color" format="color" />
         <attr name="box_type" format="string" />
+        <attr name="line_width" format="dimension" />
+        <attr name="anchor_size" format="dimension" />
     </declare-styleable>
 </resources>
