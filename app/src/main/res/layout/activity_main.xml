@@ -1,14 +1,14 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:imageCropper="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
     <com.mabi87.imagecropper.ImageCropper
+        android:id="@+id/imageCropper"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        custom:box_color="#ffffff"
-        custom:box_type="circle"
-        android:id="@+id/imageCropper"/>
+        imageCropper:box_color="#ffffff"
+        imageCropper:box_type="circle" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -50,55 +50,5 @@
             android:shadowDy="1.0"
             android:shadowRadius="1.0"
             android:id="@+id/textCropHeight" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginBottom="48dp"
-        android:layout_gravity="bottom">
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:text="Load Image"
-            android:layout_weight="1"
-            android:onClick="onButtonLoadClicked" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:text="Crop Image"
-            android:layout_weight="1"
-            android:onClick="onButtonCropClicked" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:text="show result"
-            android:layout_weight="1"
-            android:onClick="onButtonShowClicked" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_gravity="bottom">
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:text="SET CIRCLE BOX"
-            android:layout_weight="1"
-            android:onClick="onButtonBoxCircle" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:text="SET RECT BOX"
-            android:layout_weight="1"
-            android:onClick="onButtonBoxRect" />
     </LinearLayout>
 </FrameLayout>

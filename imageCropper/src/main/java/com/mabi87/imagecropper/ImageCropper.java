@@ -306,6 +306,10 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 	 * @return Bitmap of cropped image
      */
 	public Bitmap crop() {
+		if(!isImageOpen) {
+			return null;
+		}
+
 		int lCropX = mCropBox.getCropX();
 		int lCropY = mCropBox.getCropY();
 		int lCropWidth = mCropBox.getCropWidth();
@@ -372,5 +376,13 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 			openImage();
 			invalidate();
 		}
+	}
+
+	public boolean isImageOpen() {
+		return isImageOpen;
+	}
+
+	public void setImageOpen(boolean imageOpen) {
+		isImageOpen = imageOpen;
 	}
 }
