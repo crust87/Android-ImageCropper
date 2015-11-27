@@ -86,18 +86,31 @@ public class CircleCropBox extends CropBox {
 	}
 	
 	@Override
-	public boolean move(float pX, float pY) {
-		boolean isMoved = false;
+	public boolean move(float x, float y) {
+		float dx = x;
+		float dy = y;
 
-		if(mY-mRadius-pY > mBound.top && mY+mRadius-pY < mBound.bottom) {
-			isMoved = super.move(0, pY);
-		}
-		
-		if(mX-mRadius-pX > mBound.left && mX+mRadius-pX < mBound.right) {
-			isMoved = super.move(pX, 0);
+		float top = mY - mRadius - y;
+		if(top < mBound.top) {
+			dy = y - mBound.top + top;
 		}
 
-		return isMoved;
+		float bottom = mY + mRadius - y;
+		if(bottom > mBound.bottom) {
+			dy = y - mBound.bottom + bottom;
+		}
+
+		float left = mX - mRadius - x;
+		if(left < mBound.left) {
+			dx = x - mBound.left + left;
+		}
+
+		float right = mX + mRadius - x;
+		if(right > mBound.right) {
+			dx = x - mBound.right + right;
+		}
+
+		return super.move(dx, dy);
 	}
 	
 	// Image scale
