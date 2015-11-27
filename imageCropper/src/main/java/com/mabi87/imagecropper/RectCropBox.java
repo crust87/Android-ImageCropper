@@ -101,17 +101,30 @@ public class RectCropBox extends CropBox {
 	
 	@Override
 	public boolean move(float x, float y) {
-		boolean isMoved = false;
+		float dx = x;
+		float dy = y;
 
-		if(mY-y > mBound.top && mY+mHeight-y < mBound.bottom) {
-			isMoved = super.move(0, y);
-		}
-		
-		if(mX-x > mBound.left && mX+mWidth-x < mBound.right) {
-			isMoved = super.move(x, 0);
+		float top = mY - y;
+		if(top < mBound.top) {
+			dy = y - mBound.top + top;
 		}
 
-		return isMoved;
+		float bottom = mY + mHeight - y;
+		if(bottom > mBound.bottom) {
+			dy = y - mBound.bottom + bottom;
+		}
+
+		float left = mX - x;
+		if(left < mBound.left) {
+			dx = x - mBound.left + left;
+		}
+
+		float right = mX + mWidth - x;
+		if(right > mBound.right) {
+			dx = x - mBound.right + right;
+		}
+
+		return super.move(dx, dy);
 	}
 	
 	// Image scale
