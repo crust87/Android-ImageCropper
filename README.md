@@ -54,6 +54,9 @@ mImageCropper.setOnCropBoxChangedListener(new ImageCropper.OnCropBoxChangedListe
 });
 ```
 
+Application Icon is designed by Freepik
+http://www.freepik.com/
+
 ## Licence
 Copyright 2015 Mabi
 
