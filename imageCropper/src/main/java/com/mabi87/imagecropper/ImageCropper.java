@@ -56,7 +56,6 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 	public static final int CIRCLE_CROP_BOX = 0;
 	public static final int RECT_CROP_BOX = 1;
 
-	private static final int DEFAULT_BOX_COLOR = Color.WHITE;
 	private static final int DEFAULT_BOX_TYPE = CIRCLE_CROP_BOX;
 
 	// Components
@@ -72,7 +71,7 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 	private int mViewWidth;
 	private int mViewHeight;
 	private String mImagePath;
-	private int mBoxColor = DEFAULT_BOX_COLOR;
+	private int mBoxColor;
 	private int mBoxType = DEFAULT_BOX_TYPE;
 	private int mLineWidth;
 	private int mAnchorSize;
@@ -108,7 +107,7 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 	private void initAttributes(Context context, AttributeSet attrs, int defStyleAttr) {
 		TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ImageCropper, defStyleAttr, 0);
 
-		mBoxColor = typedArray.getColor(R.styleable.ImageCropper_box_color, DEFAULT_BOX_COLOR);
+		mBoxColor = typedArray.getColor(R.styleable.ImageCropper_box_color, getResources().getColor(R.color.default_box_color));
 
 		String lBoxType = typedArray.getString(R.styleable.ImageCropper_box_type);
 		if(TextUtils.equals(lBoxType, "circle")) {
@@ -141,7 +140,7 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 	}
 
 	/**
-	 *
+	 *box_color
 	 * @param imageFile it will convert into absolute path
      */
 	public void setImage(File imageFile) {
@@ -277,8 +276,7 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 
 		mImageBound = new Rect(lLeftMargin, lTopMargin, mScaledImage.getWidth() + lLeftMargin, mScaledImage.getHeight() + lTopMargin);
 
-		mCropBox = CropBoxFactory.create(mBoxType, lLeftMargin, lTopMargin, mImageBound, lScale, mLineWidth, mAnchorSize);
-		mCropBox.setColor(mBoxColor);
+		mCropBox = CropBoxFactory.create(getContext(), mBoxType, lLeftMargin, lTopMargin, mImageBound, lScale, mBoxColor, mLineWidth, mAnchorSize);
 
 		if(mOnCropBoxChangedListener != null) {
 			mOnCropBoxChangedListener.onCropBoxChange(mCropBox);

@@ -21,7 +21,9 @@
 
 package com.mabi87.imagecropper.cropbox;
 
+import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 
@@ -40,12 +42,23 @@ public class CircleCropBox extends CropBox {
 	// Working variable
 	private ACTION_LIST mCurrentEvent;
 
-	public CircleCropBox(float x, float y, Rect bound, float scale, int lineWidth, int anchorSize) {
-		super(x, y, bound, scale, lineWidth, anchorSize);
+	public CircleCropBox(Context context) {
+		super(context);
+	}
 
-        mRadius = DEFAULT_HALF_SIZE;
-		
+	@Override
+	public void setAttributes(float x, float y, Rect bound, float scale, int boxColor, int lineWidth, int anchorSize) {
+		super.setAttributes(x, y, bound, scale, boxColor, lineWidth, anchorSize);
+
+		mRadius = mDefaultHalfSize;
+	}
+
+	@Override
+	public void init() {
+		super.init();
+
 		mAnchor = new Anchor(0, mAnchorSize);
+        mAnchor.setColor(mBoxColor);
 		setAnchor();
 	}
 
@@ -119,7 +132,7 @@ public class CircleCropBox extends CropBox {
 	public boolean scale(float d) {
 		float lRadius = mRadius - d;
 		
-		if(lRadius > MIN_HALF_SIZE) {
+		if(lRadius > mMinHalfSize) {
 			boolean lLeft = mX - lRadius > mBound.left;
 			boolean lTop = mY - lRadius > mBound.top;
 			boolean lRight = mX + lRadius < mBound.right;
@@ -277,7 +290,6 @@ public class CircleCropBox extends CropBox {
 
 	@Override
 	public void setColor(String colorCode) {
-		super.setColor(colorCode);
-		mAnchor.setColor(colorCode);
+		super.setColor(Color.parseColor(colorCode));
 	}
 }
