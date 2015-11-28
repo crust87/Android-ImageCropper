@@ -26,7 +26,9 @@ or append your layout xml
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         imageCropper:box_color="#ffffff"
-        imageCropper:box_type="circle" />
+        imageCropper:box_type="circle"
+        imageCropper:line_width="2dp"
+        imageCropper:anchor_size="20dp" />
 
 </FrameLayout>
 ```
