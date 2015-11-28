@@ -19,11 +19,15 @@
  * limitations under the License.
  */
 
-package com.mabi87.imagecropper;
+package com.mabi87.imagecropper.cropbox;
 
+import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.view.MotionEvent;
+
+import com.mabi87.imagecropper.cropbox.anchor.Anchor;
 
 import java.util.ArrayList;
 
@@ -48,15 +52,29 @@ public class RectCropBox extends CropBox {
 	private ACTION_LIST mCurrentEvent;
 	private int mCurrentAnchor;
 
-	public RectCropBox(float x, float y, Rect bound, float scale) {
-		super(x - DEFAULT_HALF_SIZE, y - DEFAULT_HALF_SIZE, bound, scale);
+	public RectCropBox(Context context) {
+		super(context);
+	}
 
-        mWidth = mHeight = DEFAULT_HALF_SIZE * 2;
+	@Override
+	public void setAttributes(float x, float y, Rect bound, float scale, int boxColor, int lineWidth, int anchorSize) {
+		super.setAttributes(x - mDefaultHalfSize, y - mDefaultHalfSize, bound, scale, boxColor, lineWidth, anchorSize);
+
+		mWidth = mDefaultHalfSize * 2;
+		mHeight = mDefaultHalfSize * 2;
+	}
+
+	@Override
+	public void init() {
+		super.init();
 
 		mAnchors = new ArrayList<Anchor>();
-		for(int i = 0; i < ANCHOR_ITEM.length; i++) {
-			mAnchors.add(new Anchor(ANCHOR_ITEM[i]));
-		}
+        for(int anchorItem: ANCHOR_ITEM) {
+            Anchor anchor = new Anchor(anchorItem, mAnchorSize);
+            anchor.setColor(mBoxColor);
+            mAnchors.add(anchor);
+        }
+
 		setAnchor();
 	}
 
@@ -179,19 +197,19 @@ public class RectCropBox extends CropBox {
                 dHeight = mBound.bottom - dY;
             }
 
-            if(dWidth < MIN_SIZE) {
-				dWidth = MIN_SIZE;
+            if(dWidth < mMinSize) {
+				dWidth = mMinSize;
 
 				if(mCurrentAnchor == TOP_LEFT || mCurrentAnchor == BOTTOM_LEFT) {
-					dX = lRight - MIN_SIZE;
+					dX = lRight - mMinSize;
 				}
             }
 
-            if(dHeight < MIN_SIZE) {
-				dHeight = MIN_SIZE;
+            if(dHeight < mMinSize) {
+				dHeight = mMinSize;
 
 				if(mCurrentAnchor == TOP_LEFT || mCurrentAnchor == TOP_RIGHT) {
-					dY = lBottom - MIN_SIZE;
+					dY = lBottom - mMinSize;
 				}
             }
 
@@ -311,15 +329,12 @@ public class RectCropBox extends CropBox {
 	public void setColor(int color) {
 		super.setColor(color);
 		for(Anchor anchor: mAnchors) {
-			anchor.setColor(color);
+			anchor.setColor(mBoxColor);
 		}
 	}
 
 	@Override
 	public void setColor(String colorCode) {
-		super.setColor(colorCode);
-		for(Anchor anchor: mAnchors) {
-			anchor.setColor(colorCode);
-		}
+		super.setColor(Color.parseColor(colorCode));
 	}
 }

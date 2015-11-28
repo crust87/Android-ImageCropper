@@ -19,8 +19,9 @@
  * limitations under the License.
  */
 
-package com.mabi87.imagecropper;
+package com.mabi87.imagecropper.cropbox;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -30,14 +31,13 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 
-public abstract class CropBox {
-	public static final int MIN_SIZE = 100;
-	public static final int MIN_HALF_SIZE = MIN_SIZE / 2;
-	public static final int DEFAULT_HALF_SIZE = MIN_SIZE + 50;
+import com.mabi87.imagecropper.R;
 
+public abstract class CropBox {
 	public static enum ACTION_LIST{resize, move, none}
 
 	// Components
+	protected Context mContext;
 	protected Rect mBound;
 	protected Paint mPaint;
 	protected Paint mMaskPaint1;
@@ -47,38 +47,58 @@ public abstract class CropBox {
 	protected Canvas mCanvas;
 
 	// Attributes
+	protected int mMinSize;
+	protected int mMinHalfSize;
+	protected int mDefaultHalfSize;
 	protected float mX;
 	protected float mY;
 	protected float mPostX;
 	protected float mPostY;
 	protected float mScale;
+	protected int mBoxColor;
+	protected int mLineWidth;
+	protected int mAnchorSize;
 
+	public CropBox(Context context) {
+		mContext = context;
 
-	public CropBox(float x, float y, Rect bound, float scale) {
+		mMinSize = mContext.getResources().getDimensionPixelSize(R.dimen.min_box_Size);
+		mMinHalfSize = mMinSize / 2;
+		mDefaultHalfSize = mContext.getResources().getDimensionPixelSize(R.dimen.default_box_size) / 2;
+	}
+
+	public void setAttributes(float x, float y, Rect bound, float scale, int boxColor, int lineWidth, int anchorSize) {
 		mX = x + bound.width()/2;
 		mY = y + bound.height()/2;
 		mBound = bound;
 		mScale = scale;
+		mBoxColor = boxColor;
+		mLineWidth = lineWidth;
+		mAnchorSize = anchorSize;
+	}
 
+	public void init() {
 		mPaint = new Paint();
 		mPaint.setColor(Color.WHITE);
 		mPaint.setAntiAlias(true);
-		mPaint.setStrokeWidth(5);
 		mPaint.setStyle(Paint.Style.STROKE);
-		
+		mPaint.setStrokeWidth(mLineWidth);
+		mPaint.setColor(mBoxColor);
+		mPaint.setStrokeWidth(mLineWidth);
+
 		mMaskPaint1 = new Paint();
 		mMaskPaint1.setColor(Color.BLACK);
 		mMaskPaint1.setAntiAlias(true);
-		
+
 		mMaskPaint2 = new Paint();
 		mMaskPaint2.setColor(Color.WHITE);
 		mMaskPaint2.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.XOR));
-		
+
 		mBitmapPaint = new Paint();
 		mBitmapPaint.setFilterBitmap(true);
 		mBitmapPaint.setAlpha(128);
-		
-		mBitmap = Bitmap.createBitmap(bound.width(), bound.height(), Bitmap.Config.ARGB_8888);
+
+		mBitmap = Bitmap.createBitmap(mBound.width(), mBound.height(), Bitmap.Config.ARGB_8888);
 		mCanvas = new Canvas(mBitmap);
 	}
 
@@ -111,11 +131,20 @@ public abstract class CropBox {
 	}
 
 	public void setColor(int color) {
-		mPaint.setColor(color);
+		mBoxColor = color;
+		mPaint.setColor(mBoxColor);
 	}
 
 	public void setColor(String colorCode) {
-		int color = Color.parseColor(colorCode);
-		mPaint.setColor(color);
+		setColor(Color.parseColor(colorCode));
+	}
+
+	public int getLineWidth() {
+		return mLineWidth;
+	}
+
+	public void setLineWidth(int lineWidth) {
+		mLineWidth = lineWidth;
+		mPaint.setStrokeWidth(mLineWidth);
 	}
 }

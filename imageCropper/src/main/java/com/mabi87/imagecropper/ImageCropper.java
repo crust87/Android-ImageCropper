@@ -40,6 +40,11 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.mabi87.imagecropper.cropbox.CircleCropBox;
+import com.mabi87.imagecropper.cropbox.CropBox;
+import com.mabi87.imagecropper.cropbox.CropBoxFactory;
+import com.mabi87.imagecropper.cropbox.RectCropBox;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -51,7 +56,6 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 	public static final int CIRCLE_CROP_BOX = 0;
 	public static final int RECT_CROP_BOX = 1;
 
-	private static final int DEFAULT_BOX_COLOR = Color.WHITE;
 	private static final int DEFAULT_BOX_TYPE = CIRCLE_CROP_BOX;
 
 	// Components
@@ -67,8 +71,10 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 	private int mViewWidth;
 	private int mViewHeight;
 	private String mImagePath;
-	private int mBoxColor = DEFAULT_BOX_COLOR;
+	private int mBoxColor;
 	private int mBoxType = DEFAULT_BOX_TYPE;
+	private int mLineWidth;
+	private int mAnchorSize;
 	private boolean isImageOpen;
 
 	// Listener
@@ -101,7 +107,7 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 	private void initAttributes(Context context, AttributeSet attrs, int defStyleAttr) {
 		TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ImageCropper, defStyleAttr, 0);
 
-		mBoxColor = typedArray.getColor(R.styleable.ImageCropper_box_color, DEFAULT_BOX_COLOR);
+		mBoxColor = typedArray.getColor(R.styleable.ImageCropper_box_color, getResources().getColor(R.color.default_box_color));
 
 		String lBoxType = typedArray.getString(R.styleable.ImageCropper_box_type);
 		if(TextUtils.equals(lBoxType, "circle")) {
@@ -111,6 +117,12 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 		} else {
 			mBoxType = DEFAULT_BOX_TYPE;
 		}
+
+		int defaultLineWidth = getResources().getDimensionPixelSize(R.dimen.default_line_width);
+		mLineWidth = typedArray.getLayoutDimension(R.styleable.ImageCropper_line_width, defaultLineWidth);
+
+		int defaultAnchorSize = getResources().getDimensionPixelSize(R.dimen.default_anchor_size);
+		mAnchorSize = typedArray.getLayoutDimension(R.styleable.ImageCropper_anchor_size, defaultAnchorSize);
 	}
 
 	private void initImageCropper() {
@@ -128,7 +140,7 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 	}
 
 	/**
-	 *
+	 *box_color
 	 * @param imageFile it will convert into absolute path
      */
 	public void setImage(File imageFile) {
@@ -264,15 +276,7 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 
 		mImageBound = new Rect(lLeftMargin, lTopMargin, mScaledImage.getWidth() + lLeftMargin, mScaledImage.getHeight() + lTopMargin);
 
-		if(mBoxType == CIRCLE_CROP_BOX) {
-			mCropBox = new CircleCropBox(lLeftMargin, lTopMargin, mImageBound, lScale);
-		} else if(mBoxType == RECT_CROP_BOX) {
-			mCropBox = new RectCropBox(lLeftMargin, lTopMargin, mImageBound, lScale);
-		} else {
-			mCropBox = new CircleCropBox(lLeftMargin, lTopMargin, mImageBound, lScale);
-		}
-
-		mCropBox.setColor(mBoxColor);
+		mCropBox = CropBoxFactory.create(getContext(), mBoxType, lLeftMargin, lTopMargin, mImageBound, lScale, mBoxColor, mLineWidth, mAnchorSize);
 
 		if(mOnCropBoxChangedListener != null) {
 			mOnCropBoxChangedListener.onCropBoxChange(mCropBox);
@@ -376,6 +380,14 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 			openImage();
 			invalidate();
 		}
+	}
+
+	public int getLineWidth() {
+		return mLineWidth;
+	}
+
+	public void setLineWidth(int lineWidth) {
+		mLineWidth = lineWidth;
 	}
 
 	public boolean isImageOpen() {

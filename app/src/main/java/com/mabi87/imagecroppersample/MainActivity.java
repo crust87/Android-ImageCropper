@@ -14,7 +14,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mabi87.imagecropper.CropBox;
+import com.mabi87.imagecropper.cropbox.CropBox;
 import com.mabi87.imagecropper.ImageCropper;
 
 import java.io.FileOutputStream;
