@@ -89,4 +89,12 @@ public class Anchor {
 	public void setId(int id) {
 		mId = id;
 	}
+
+	public float getRadius() {
+		return mRadius;
+	}
+
+	public void setRadius(float radius) {
+		mRadius = radius;
+	}
 }

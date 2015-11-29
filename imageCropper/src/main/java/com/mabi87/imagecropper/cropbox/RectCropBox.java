@@ -337,4 +337,11 @@ public class RectCropBox extends CropBox {
 	public void setColor(String colorCode) {
 		super.setColor(Color.parseColor(colorCode));
 	}
+
+	@Override
+	protected void onSetAnchorSize() {
+		for(Anchor anchor: mAnchors) {
+			anchor.setRadius(mAnchorSize / 2);
+		}
+	}
 }

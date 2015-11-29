@@ -388,6 +388,22 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 
 	public void setLineWidth(int lineWidth) {
 		mLineWidth = lineWidth;
+
+		if(mCropBox != null) {
+			mCropBox.setLineWidth(mLineWidth);
+		}
+	}
+
+	public int getAnchorSize() {
+		return mAnchorSize;
+	}
+
+	public void setAnchorSize(int anchorSize) {
+		mAnchorSize = anchorSize;
+
+		if(mCropBox != null) {
+			mCropBox.setAnchorSize(mAnchorSize);
+		}
 	}
 
 	public boolean isImageOpen() {

@@ -292,4 +292,9 @@ public class CircleCropBox extends CropBox {
 	public void setColor(String colorCode) {
 		super.setColor(Color.parseColor(colorCode));
 	}
+
+	@Override
+	protected void onSetAnchorSize() {
+		mAnchor.setRadius(mAnchorSize / 2);
+	}
 }

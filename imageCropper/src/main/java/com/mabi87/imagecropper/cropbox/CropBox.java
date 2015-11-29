@@ -147,4 +147,15 @@ public abstract class CropBox {
 		mLineWidth = lineWidth;
 		mPaint.setStrokeWidth(mLineWidth);
 	}
+
+	public int getAnchorSize() {
+		return mAnchorSize;
+	}
+
+	public void setAnchorSize(int anchorSize) {
+		mAnchorSize = anchorSize;
+		onSetAnchorSize();
+	}
+
+	protected abstract void onSetAnchorSize();
 }
