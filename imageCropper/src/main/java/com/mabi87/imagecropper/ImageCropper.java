@@ -85,6 +85,11 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 		super(context);
 		mContext = context;
 
+		mBoxColor = getResources().getColor(R.color.default_box_color);
+		mBoxType = DEFAULT_BOX_TYPE;
+		mLineWidth = getResources().getDimensionPixelSize(R.dimen.default_line_width);
+		mAnchorSize = getResources().getDimensionPixelSize(R.dimen.default_anchor_size);
+
 		initImageCropper();
 	}
 
