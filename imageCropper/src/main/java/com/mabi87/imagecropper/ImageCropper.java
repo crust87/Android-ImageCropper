@@ -64,16 +64,13 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 	private Bitmap mScaledImage;
 	private Rect mImageBound;
 	private Paint mImagePaint;
+	private CropBox.CropBoxBuilder mCropBoxBuilder;
 	private CropBox mCropBox;
 
 	// Attributes
 	private int mViewWidth;
 	private int mViewHeight;
 	private String mImagePath;
-	private int mBoxColor;
-	private int mBoxType = DEFAULT_BOX_TYPE;
-	private int mLineWidth;
-	private int mAnchorSize;
 	private boolean isImageOpen;
 
 	// Listener
@@ -83,18 +80,16 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 	public ImageCropper(Context context) {
 		super(context);
 		mContext = context;
+		mCropBoxBuilder = new CropBox.CropBoxBuilder();
 
-		mBoxColor = getResources().getColor(R.color.default_box_color);
-		mBoxType = DEFAULT_BOX_TYPE;
-		mLineWidth = getResources().getDimensionPixelSize(R.dimen.default_line_width);
-		mAnchorSize = getResources().getDimensionPixelSize(R.dimen.default_anchor_size);
-
+		initAttributes();
 		initImageCropper();
 	}
 
 	public ImageCropper(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		mContext = context;
+		mCropBoxBuilder = new CropBox.CropBoxBuilder();
 
 		initAttributes(context, attrs, 0);
 		initImageCropper();
@@ -103,30 +98,35 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 	public ImageCropper(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
 		mContext = context;
+		mCropBoxBuilder = new CropBox.CropBoxBuilder();
 
 		initAttributes(context, attrs, defStyleAttr);
 		initImageCropper();
 	}
 
+	private void initAttributes() {
+		mCropBoxBuilder.setBoxColor(getResources().getColor(R.color.default_box_color))
+				.setBoxType(DEFAULT_BOX_TYPE)
+				.setLineWidth(getResources().getDimensionPixelSize(R.dimen.default_line_width))
+				.setAnchorSize(getResources().getDimensionPixelSize(R.dimen.default_anchor_size));
+	}
+
 	private void initAttributes(Context context, AttributeSet attrs, int defStyleAttr) {
 		TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ImageCropper, defStyleAttr, 0);
 
-		mBoxColor = typedArray.getColor(R.styleable.ImageCropper_box_color, getResources().getColor(R.color.default_box_color));
+		mCropBoxBuilder.setBoxColor(typedArray.getColor(R.styleable.ImageCropper_box_color, getResources().getColor(R.color.default_box_color)));
 
 		String lBoxType = typedArray.getString(R.styleable.ImageCropper_box_type);
 		if(TextUtils.equals(lBoxType, "circle")) {
-			mBoxType = CIRCLE_CROP_BOX;
+			mCropBoxBuilder.setBoxType(CIRCLE_CROP_BOX);
 		} else if(TextUtils.equals(lBoxType, "rect")) {
-			mBoxType = RECT_CROP_BOX;
-		} else {
-			mBoxType = DEFAULT_BOX_TYPE;
+			mCropBoxBuilder.setBoxType(RECT_CROP_BOX);
 		}
 
 		int defaultLineWidth = getResources().getDimensionPixelSize(R.dimen.default_line_width);
-		mLineWidth = typedArray.getLayoutDimension(R.styleable.ImageCropper_line_width, defaultLineWidth);
-
 		int defaultAnchorSize = getResources().getDimensionPixelSize(R.dimen.default_anchor_size);
-		mAnchorSize = typedArray.getLayoutDimension(R.styleable.ImageCropper_anchor_size, defaultAnchorSize);
+		mCropBoxBuilder.setLineWidth(typedArray.getLayoutDimension(R.styleable.ImageCropper_line_width, defaultLineWidth))
+				.setAnchorSize(typedArray.getLayoutDimension(R.styleable.ImageCropper_anchor_size, defaultAnchorSize));
 	}
 
 	private void initImageCropper() {
@@ -280,21 +280,12 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 
 		mImageBound = new Rect(lLeftMargin, lTopMargin, mScaledImage.getWidth() + lLeftMargin, mScaledImage.getHeight() + lTopMargin);
 
-		CropBox cropBox;
-		switch(mBoxType) {
-			case CIRCLE_CROP_BOX:
-				cropBox = new CircleCropBox(getContext());
-				break;
-			case RECT_CROP_BOX:
-				cropBox = new RectCropBox(getContext());
-				break;
-			default:
-				cropBox = new CircleCropBox(getContext());
-				break;
-		}
+		mCropBoxBuilder.setLeftMargin(lLeftMargin)
+				.setTopMargin(lTopMargin)
+				.setBound(mImageBound)
+				.setScale(lScale);
 
-		cropBox.setAttributes(lLeftMargin, lTopMargin, mImageBound, lScale, mBoxColor, mLineWidth, mAnchorSize);
-		cropBox.init();
+		mCropBox = mCropBoxBuilder.createCropBox(getContext());
 
 		if(mOnCropBoxChangedListener != null) {
 			mOnCropBoxChangedListener.onCropBoxChange(mCropBox);
@@ -372,55 +363,39 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 	}
 
 	public void setBoxColor(int color) {
-		mBoxColor = color;
+		mCropBoxBuilder.setBoxColor(color);
 
 		if(mCropBox != null) {
-			mCropBox.setColor(mBoxColor);
+			mCropBox.setColor(color);
 		}
 	}
 
 	public void setBoxColor(String colorCode) {
-		mBoxColor = Color.parseColor(colorCode);
-
-		if(mCropBox != null) {
-			mCropBox.setColor(mBoxColor);
-		}
-	}
-
-	public int getBoxType() {
-		return mBoxType;
+		setBoxColor(Color.parseColor(colorCode));
 	}
 
 	public void setBoxType(int boxType) {
-		mBoxType = boxType;
+		mCropBoxBuilder.setBoxType(boxType);
 
 		if(isImageOpen) {
-			openImage();
+			mCropBox = mCropBoxBuilder.createCropBox(getContext());
 			invalidate();
 		}
 	}
 
-	public int getLineWidth() {
-		return mLineWidth;
-	}
-
 	public void setLineWidth(int lineWidth) {
-		mLineWidth = lineWidth;
+		mCropBoxBuilder.setLineWidth(lineWidth);
 
 		if(mCropBox != null) {
-			mCropBox.setLineWidth(mLineWidth);
+			mCropBox.setLineWidth(lineWidth);
 		}
 	}
 
-	public int getAnchorSize() {
-		return mAnchorSize;
-	}
-
 	public void setAnchorSize(int anchorSize) {
-		mAnchorSize = anchorSize;
+		mCropBoxBuilder.setAnchorSize(anchorSize);
 
 		if(mCropBox != null) {
-			mCropBox.setAnchorSize(mAnchorSize);
+			mCropBox.setAnchorSize(anchorSize);
 		}
 	}
 

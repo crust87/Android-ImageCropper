@@ -42,19 +42,19 @@ public class CircleCropBox extends CropBox {
 	// Working variable
 	private ACTION_LIST mCurrentEvent;
 
-	public CircleCropBox(Context context) {
+	protected CircleCropBox(Context context) {
 		super(context);
 	}
 
 	@Override
-	public void setAttributes(float x, float y, Rect bound, float scale, int boxColor, int lineWidth, int anchorSize) {
+	protected void setAttributes(float x, float y, Rect bound, float scale, int boxColor, int lineWidth, int anchorSize) {
 		super.setAttributes(x, y, bound, scale, boxColor, lineWidth, anchorSize);
 
 		mRadius = mDefaultHalfSize;
 	}
 
 	@Override
-	public void init() {
+	protected void init() {
 		super.init();
 
 		mAnchor = new Anchor(0, mAnchorSize);

@@ -52,12 +52,12 @@ public class RectCropBox extends CropBox {
 	private ACTION_LIST mCurrentEvent;
 	private int mCurrentAnchor;
 
-	public RectCropBox(Context context) {
+	protected RectCropBox(Context context) {
 		super(context);
 	}
 
 	@Override
-	public void setAttributes(float x, float y, Rect bound, float scale, int boxColor, int lineWidth, int anchorSize) {
+	protected void setAttributes(float x, float y, Rect bound, float scale, int boxColor, int lineWidth, int anchorSize) {
 		super.setAttributes(x - mDefaultHalfSize, y - mDefaultHalfSize, bound, scale, boxColor, lineWidth, anchorSize);
 
 		mWidth = mDefaultHalfSize * 2;
@@ -65,7 +65,7 @@ public class RectCropBox extends CropBox {
 	}
 
 	@Override
-	public void init() {
+	protected void init() {
 		super.init();
 
 		mAnchors = new ArrayList<Anchor>();

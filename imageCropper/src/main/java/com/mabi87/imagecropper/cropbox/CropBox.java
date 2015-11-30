@@ -31,6 +31,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 
+import com.mabi87.imagecropper.ImageCropper;
 import com.mabi87.imagecropper.R;
 
 public abstract class CropBox {
@@ -59,7 +60,7 @@ public abstract class CropBox {
 	protected int mLineWidth;
 	protected int mAnchorSize;
 
-	public CropBox(Context context) {
+	protected CropBox(Context context) {
 		mContext = context;
 
 		mMinSize = mContext.getResources().getDimensionPixelSize(R.dimen.min_box_Size);
@@ -67,7 +68,7 @@ public abstract class CropBox {
 		mDefaultHalfSize = mContext.getResources().getDimensionPixelSize(R.dimen.default_box_size) / 2;
 	}
 
-	public void setAttributes(float x, float y, Rect bound, float scale, int boxColor, int lineWidth, int anchorSize) {
+	protected void setAttributes(float x, float y, Rect bound, float scale, int boxColor, int lineWidth, int anchorSize) {
 		mX = x + bound.width()/2;
 		mY = y + bound.height()/2;
 		mBound = bound;
@@ -77,7 +78,7 @@ public abstract class CropBox {
 		mAnchorSize = anchorSize;
 	}
 
-	public void init() {
+	protected void init() {
 		mPaint = new Paint();
 		mPaint.setColor(Color.WHITE);
 		mPaint.setAntiAlias(true);
@@ -158,4 +159,75 @@ public abstract class CropBox {
 	}
 
 	protected abstract void onSetAnchorSize();
+
+	public static class CropBoxBuilder {
+		private int newBoxType;
+		private float newLeftMargin;
+		private float newTopMargin;
+		private Rect newBound;
+		private float newScale;
+		private int newBoxColor;
+		private int newLineWidth;
+		private int newAnchorSize;
+
+		public CropBoxBuilder setBoxType(int boxType) {
+			newBoxType = boxType;
+			return this;
+		}
+
+		public CropBoxBuilder setLeftMargin(float leftMargin) {
+			newLeftMargin = leftMargin;
+			return this;
+		}
+
+		public CropBoxBuilder setTopMargin(float topMargin) {
+			newTopMargin = topMargin;
+			return this;
+		}
+
+		public CropBoxBuilder setBound(Rect bound) {
+			newBound = bound;
+			return this;
+		}
+
+		public CropBoxBuilder setScale(float scale) {
+			newScale = scale;
+			return this;
+		}
+
+		public CropBoxBuilder setBoxColor(int boxColor) {
+			newBoxColor = boxColor;
+			return this;
+		}
+
+		public CropBoxBuilder setLineWidth(int lineWidth) {
+			newLineWidth = lineWidth;
+			return this;
+		}
+
+		public CropBoxBuilder setAnchorSize(int anchorSize) {
+			newAnchorSize = anchorSize;
+			return this;
+		}
+
+		public CropBox createCropBox(Context context) {
+			CropBox cropBox;
+			switch (newBoxType) {
+				case ImageCropper.CIRCLE_CROP_BOX:
+					cropBox = new CircleCropBox(context);
+					break;
+				case ImageCropper.RECT_CROP_BOX:
+					cropBox = new RectCropBox(context);
+					break;
+				default:
+					cropBox = new CircleCropBox(context);
+					break;
+			}
+
+			cropBox.setAttributes(newLeftMargin, newTopMargin, newBound, newScale, newBoxColor, newLineWidth, newAnchorSize);
+			cropBox.init();
+
+			return cropBox;
+		}
+	}
 }
