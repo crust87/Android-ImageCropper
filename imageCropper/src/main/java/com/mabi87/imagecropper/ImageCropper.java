@@ -40,9 +40,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.mabi87.imagecropper.cropbox.CircleCropBox;
 import com.mabi87.imagecropper.cropbox.CropBox;
-import com.mabi87.imagecropper.cropbox.RectCropBox;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -114,19 +112,25 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 	private void initAttributes(Context context, AttributeSet attrs, int defStyleAttr) {
 		TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ImageCropper, defStyleAttr, 0);
 
-		mCropBoxBuilder.setBoxColor(typedArray.getColor(R.styleable.ImageCropper_box_color, getResources().getColor(R.color.default_box_color)));
+		int boxColor = typedArray.getColor(R.styleable.ImageCropper_box_color, getResources().getColor(R.color.default_box_color));
+		int boxType = CIRCLE_CROP_BOX;
 
 		String lBoxType = typedArray.getString(R.styleable.ImageCropper_box_type);
 		if(TextUtils.equals(lBoxType, "circle")) {
-			mCropBoxBuilder.setBoxType(CIRCLE_CROP_BOX);
+			boxType = CIRCLE_CROP_BOX;
 		} else if(TextUtils.equals(lBoxType, "rect")) {
-			mCropBoxBuilder.setBoxType(RECT_CROP_BOX);
+			boxType = RECT_CROP_BOX;
 		}
 
 		int defaultLineWidth = getResources().getDimensionPixelSize(R.dimen.default_line_width);
 		int defaultAnchorSize = getResources().getDimensionPixelSize(R.dimen.default_anchor_size);
-		mCropBoxBuilder.setLineWidth(typedArray.getLayoutDimension(R.styleable.ImageCropper_line_width, defaultLineWidth))
-				.setAnchorSize(typedArray.getLayoutDimension(R.styleable.ImageCropper_anchor_size, defaultAnchorSize));
+		int lineWidth = typedArray.getLayoutDimension(R.styleable.ImageCropper_line_width, defaultLineWidth);
+		int anchorSize = typedArray.getLayoutDimension(R.styleable.ImageCropper_anchor_size, defaultAnchorSize);
+
+		mCropBoxBuilder.setBoxColor(boxColor)
+				.setBoxType(boxType)
+				.setLineWidth(lineWidth)
+				.setAnchorSize(anchorSize);
 	}
 
 	private void initImageCropper() {
