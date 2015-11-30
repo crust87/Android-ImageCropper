@@ -42,7 +42,6 @@ import android.view.SurfaceView;
 
 import com.mabi87.imagecropper.cropbox.CircleCropBox;
 import com.mabi87.imagecropper.cropbox.CropBox;
-import com.mabi87.imagecropper.cropbox.CropBoxFactory;
 import com.mabi87.imagecropper.cropbox.RectCropBox;
 
 import java.io.File;
@@ -281,7 +280,21 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 
 		mImageBound = new Rect(lLeftMargin, lTopMargin, mScaledImage.getWidth() + lLeftMargin, mScaledImage.getHeight() + lTopMargin);
 
-		mCropBox = CropBoxFactory.create(getContext(), mBoxType, lLeftMargin, lTopMargin, mImageBound, lScale, mBoxColor, mLineWidth, mAnchorSize);
+		CropBox cropBox;
+		switch(mBoxType) {
+			case CIRCLE_CROP_BOX:
+				cropBox = new CircleCropBox(getContext());
+				break;
+			case RECT_CROP_BOX:
+				cropBox = new RectCropBox(getContext());
+				break;
+			default:
+				cropBox = new CircleCropBox(getContext());
+				break;
+		}
+
+		cropBox.setAttributes(lLeftMargin, lTopMargin, mImageBound, lScale, mBoxColor, mLineWidth, mAnchorSize);
+		cropBox.init();
 
 		if(mOnCropBoxChangedListener != null) {
 			mOnCropBoxChangedListener.onCropBoxChange(mCropBox);

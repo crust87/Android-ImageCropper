@@ -127,7 +127,8 @@ public class CircleCropBox extends CropBox {
 
 		return super.move(dx, dy);
 	}
-	
+
+	// FIXME
 	// Image scale
 	public boolean scale(float d) {
 		float lRadius = mRadius - d;
