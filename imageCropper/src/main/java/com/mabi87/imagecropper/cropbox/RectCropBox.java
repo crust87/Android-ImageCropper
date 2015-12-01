@@ -38,7 +38,6 @@ public class RectCropBox extends CropBox {
 	private static final int TOP_RIGHT = 1;
 	private static final int BOTTOM_LEFT = 2;
 	private static final int BOTTOM_RIGHT = 3;
-
 	private static final int[] ANCHOR_ITEM = {TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT};
 
 	// Components
@@ -49,7 +48,6 @@ public class RectCropBox extends CropBox {
     private float mHeight;
 
 	// Working variable
-	private ACTION_LIST mCurrentEvent;
 	private int mCurrentAnchor;
 
 	protected RectCropBox(Context context) {
@@ -57,8 +55,8 @@ public class RectCropBox extends CropBox {
 	}
 
 	@Override
-	protected void setAttributes(float x, float y, Rect bound, float scale, int boxColor, int lineWidth, int anchorSize) {
-		super.setAttributes(x - mDefaultHalfSize, y - mDefaultHalfSize, bound, scale, boxColor, lineWidth, anchorSize);
+	protected void setAttributes(float leftMargin, float topMargin, Rect bound, float scale, int boxColor, int lineWidth, int anchorSize) {
+		super.setAttributes(leftMargin - mDefaultHalfSize, topMargin - mDefaultHalfSize, bound, scale, boxColor, lineWidth, anchorSize);
 
 		mWidth = mDefaultHalfSize * 2;
 		mHeight = mDefaultHalfSize * 2;
@@ -70,7 +68,7 @@ public class RectCropBox extends CropBox {
 
 		mAnchors = new ArrayList<Anchor>();
         for(int anchorItem: ANCHOR_ITEM) {
-            Anchor anchor = new Anchor(anchorItem, mAnchorSize);
+            Anchor anchor = new Anchor(anchorItem, mAnchorSize / 2);
             anchor.setColor(mBoxColor);
             mAnchors.add(anchor);
         }

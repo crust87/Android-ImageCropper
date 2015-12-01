@@ -39,16 +39,13 @@ public class CircleCropBox extends CropBox {
 	private double mAnchorLoactionY = Math.sin((45 * Math.PI) / 180);
 	private float mRadius;
 
-	// Working variable
-	private ACTION_LIST mCurrentEvent;
-
 	protected CircleCropBox(Context context) {
 		super(context);
 	}
 
 	@Override
-	protected void setAttributes(float x, float y, Rect bound, float scale, int boxColor, int lineWidth, int anchorSize) {
-		super.setAttributes(x, y, bound, scale, boxColor, lineWidth, anchorSize);
+	protected void setAttributes(float leftMargin, float topMargin, Rect bound, float scale, int boxColor, int lineWidth, int anchorSize) {
+		super.setAttributes(leftMargin, topMargin, bound, scale, boxColor, lineWidth, anchorSize);
 
 		mRadius = mDefaultHalfSize;
 	}
@@ -57,7 +54,7 @@ public class CircleCropBox extends CropBox {
 	protected void init() {
 		super.init();
 
-		mAnchor = new Anchor(0, mAnchorSize);
+		mAnchor = new Anchor(0, mAnchorSize / 2);
         mAnchor.setColor(mBoxColor);
 		setAnchor();
 	}

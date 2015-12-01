@@ -35,11 +35,10 @@ import com.mabi87.imagecropper.ImageCropper;
 import com.mabi87.imagecropper.R;
 
 public abstract class CropBox {
-	public static enum ACTION_LIST{resize, move, none}
+	public enum ACTION_LIST{resize, move, none}
 
 	// Components
 	protected Context mContext;
-	protected Rect mBound;
 	protected Paint mPaint;
 	protected Paint mMaskPaint1;
 	protected Paint mMaskPaint2;
@@ -48,6 +47,7 @@ public abstract class CropBox {
 	protected Canvas mCanvas;
 
 	// Attributes
+	protected Rect mBound;
 	protected int mMinSize;
 	protected int mMinHalfSize;
 	protected int mDefaultHalfSize;
@@ -60,6 +60,9 @@ public abstract class CropBox {
 	protected int mLineWidth;
 	protected int mAnchorSize;
 
+	// Working Variables
+	protected ACTION_LIST mCurrentEvent;
+
 	protected CropBox(Context context) {
 		mContext = context;
 
@@ -68,9 +71,9 @@ public abstract class CropBox {
 		mDefaultHalfSize = mContext.getResources().getDimensionPixelSize(R.dimen.default_box_size) / 2;
 	}
 
-	protected void setAttributes(float x, float y, Rect bound, float scale, int boxColor, int lineWidth, int anchorSize) {
-		mX = x + bound.width()/2;
-		mY = y + bound.height()/2;
+	protected void setAttributes(float leftMargin, float topMargin, Rect bound, float scale, int boxColor, int lineWidth, int anchorSize) {
+		mX = leftMargin + bound.width()/2;
+		mY = topMargin + bound.height()/2;
 		mBound = bound;
 		mScale = scale;
 		mBoxColor = boxColor;

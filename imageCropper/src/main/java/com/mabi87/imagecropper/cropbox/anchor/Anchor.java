@@ -32,14 +32,13 @@ public class Anchor {
 
 	// Attributes
 	private int mId;
-	private int mAnchorSize;
 	protected float mX;
 	protected float mY;
 	protected float mRadius;
 	private float mTouchArea;
 
-	public Anchor(int id, int anchorSize) {
-		this(id, 0, 0, anchorSize / 2);
+	public Anchor(int id, int mRadius) {
+		this(id, 0, 0, mRadius);
 	}
 	
 	public Anchor(int id, float x, float y, float radius) {
