@@ -125,22 +125,22 @@ public class CircleCropBox extends CropBox {
 		return super.move(dx, dy);
 	}
 
-	// FIXME
+	// FIXME this method needs to change
 	// Image scale
 	public boolean scale(float d) {
 		float lRadius = mRadius - d;
-		
+
 		if(lRadius > mMinHalfSize) {
 			boolean lLeft = mX - lRadius > mBound.left;
 			boolean lTop = mY - lRadius > mBound.top;
 			boolean lRight = mX + lRadius < mBound.right;
 			boolean lBottom = mY + lRadius < mBound.bottom;
-			
+
 			boolean lLeftNot = (mX + d) - lRadius > mBound.left;
 			boolean lTopNot = (mY + d) - lRadius > mBound.top;
 			boolean lRightNot = (mX - d) + lRadius < mBound.right;
 			boolean lBottomNot = (mY - d) + lRadius < mBound.bottom;
-			
+
 			if(lLeft && lTop && lRight && lBottom) {
                 mRadius = lRadius;
 			} else if(!lLeft && lTop && lRight && lBottom) {
@@ -196,11 +196,11 @@ public class CircleCropBox extends CropBox {
 					mY += d;
 				}
 			}
-
-			return true;
 		} else {
-			return false;
+            mRadius = mMinHalfSize;
 		}
+
+        return true;
 	}
 
 	@Override
