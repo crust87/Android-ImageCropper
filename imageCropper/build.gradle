@@ -1,4 +1,16 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
+
+publish {
+    userOrg = 'mabi87'
+    groupId = 'com.crust87'
+    artifactId = 'image-cropper'
+    publishVersion = '1.7.0'
+    desc = 'Image Crop View for Android'
+    website = 'https://github.com/mabi87/Android-ImageCropper'
+    issueTracker = "${website}/issues"
+    repository = "${website}.git"
+}
 
 android {
     compileSdkVersion 22
