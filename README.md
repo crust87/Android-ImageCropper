@@ -8,13 +8,18 @@ https://play.google.com/store/apps/details?id=com.mabi87.imagecropper
 
 ## Example
 
-create view and add view
+add build.gradle<br />
+``` groovy
+compile 'com.crust87:image-cropper:1.7.0'
+```
+
+create view and add view<br />
 ```java
 mImageCropper = new ImageCropper(getApplicationContext());
 mContainerImageCropper.addView(mImageCropper);
 ```
 
-or append your layout xml
+or append your layout xml<br />
 ```xml
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:imageCropper="http://schemas.android.com/apk/res-auto"
@@ -33,17 +38,17 @@ or append your layout xml
 </FrameLayout>
 ```
 
-and set image Uri
+and set image Uri<br />
 ```java
 mImageCropper.setImage(imageUri);
 ```
 
-and crop
+and crop<br/>
 ```java
 Bitmap cropedImage = mImageCropper.crop();
 ```
 
-you can set listener to crop box position and width change
+you can set listener to crop box position and width change<br/>
 ```java
 mImageCropper.setOnCropBoxChangedListener(new ImageCropper.OnCropBoxChangedListener() {
         @Override
