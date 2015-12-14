@@ -1,6 +1,6 @@
 /*
  * ImageCropper
- * https://github.com/mabi87/Android-ImageCropper
+ * https://github.com/crust87/Android-ImageCropper
  *
  * Mabi
  * crust87@gmail.com
@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.mabi87.imagecropper;
+package com.crust87.imagecropper;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -40,7 +40,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.mabi87.imagecropper.cropbox.CropBox;
+import com.crust87.imagecropper.cropbox.CropBox;
 
 import java.io.File;
 import java.io.FileInputStream;

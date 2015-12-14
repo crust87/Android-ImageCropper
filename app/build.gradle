@@ -4,11 +4,11 @@ android {
     compileSdkVersion 23
     buildToolsVersion '23.0.2'
     defaultConfig {
-        applicationId "com.mabi87.imagecropper"
+        applicationId "com.crust87.imagecropper"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 5
-        versionName "1.7"
+        versionCode 6
+        versionName "1.7.1"
     }
     buildTypes {
         release {

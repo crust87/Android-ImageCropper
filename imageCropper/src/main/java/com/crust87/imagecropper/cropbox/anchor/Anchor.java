@@ -1,6 +1,6 @@
 /*
  * ImageCropper
- * https://github.com/mabi87/Android-ImageCropper
+ * https://github.com/crust87/Android-ImageCropper
  *
  * Mabi
  * crust87@gmail.com
@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.mabi87.imagecropper.cropbox.anchor;
+package com.crust87.imagecropper.cropbox.anchor;
 
 import android.graphics.Canvas;
 import android.graphics.Color;

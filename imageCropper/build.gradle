@@ -5,9 +5,9 @@ publish {
     userOrg = 'mabi87'
     groupId = 'com.crust87'
     artifactId = 'image-cropper'
-    publishVersion = '1.7.0'
+    publishVersion = '1.7.1'
     desc = 'Image Crop View for Android'
-    website = 'https://github.com/mabi87/Android-ImageCropper'
+    website = 'https://github.com/crust87/Android-ImageCropper'
     issueTracker = "${website}/issues"
     repository = "${website}.git"
 }
@@ -19,8 +19,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 1
-        versionName "0.1.0"
+        versionCode 6
+        versionName "1.7.1"
     }
     buildTypes {
         release {

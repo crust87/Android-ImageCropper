@@ -1,6 +1,6 @@
 /*
  * ImageCropper
- * https://github.com/mabi87/Android-ImageCropper
+ * https://github.com/crust87/Android-ImageCropper
  *
  * Mabi
  * crust87@gmail.com
@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.mabi87.imagecropper.cropbox;
+package com.crust87.imagecropper.cropbox;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -31,8 +31,8 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 
-import com.mabi87.imagecropper.ImageCropper;
-import com.mabi87.imagecropper.R;
+import com.crust87.imagecropper.ImageCropper;
+import com.crust87.imagecropper.R;
 
 public abstract class CropBox {
 	public enum ACTION_LIST{resize, move, none}

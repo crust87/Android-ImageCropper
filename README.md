@@ -4,13 +4,13 @@ Image crop view for android
 ![](./Screenshot1.png) ![](./Screenshot2.png)
 
 see
-https://play.google.com/store/apps/details?id=com.mabi87.imagecropper
+https://play.google.com/store/apps/details?id=com.crust87.imagecropper
 
 ## Example
 
 add build.gradle<br />
 ``` groovy
-compile 'com.crust87:image-cropper:1.7.0'
+compile 'com.crust87:image-cropper:1.7.1'
 ```
 
 create view and add view<br />
@@ -26,7 +26,7 @@ or append your layout xml<br />
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.mabi87.imagecropper.ImageCropper
+    <com.crust87.imagecropper.ImageCropper
         android:id="@+id/imageCropper"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

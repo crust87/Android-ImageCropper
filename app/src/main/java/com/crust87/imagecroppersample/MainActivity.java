@@ -1,4 +1,4 @@
-package com.mabi87.imagecroppersample;
+package com.crust87.imagecroppersample;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,8 +14,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mabi87.imagecropper.cropbox.CropBox;
-import com.mabi87.imagecropper.ImageCropper;
+import com.crust87.imagecropper.cropbox.CropBox;
+import com.crust87.imagecropper.ImageCropper;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
