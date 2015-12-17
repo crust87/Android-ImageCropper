@@ -72,7 +72,7 @@ mImageCropper.setOnCropBoxChangedListener(new ImageCropper.OnCropBoxChangedListe
 | anchor_size | dimension | Anchor diameter |
 
 ### Java
-| Method | Parameters | Return | Description |
+| Method Name | Parameters | Return | Description |
 |:---|:---|:---|:---|
 | setImage | Uri | | Set image by Uri |
 | setImage | File | | Set image by File |
@@ -86,10 +86,7 @@ mImageCropper.setOnCropBoxChangedListener(new ImageCropper.OnCropBoxChangedListe
 | setAnchorSize | int | | Set anchor diameter by pixel |
 | isImageOpen | | isImageOpen | Return if image has opened
 
-
-
-
-<br />
+# ETC
 <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
 
 ## Licence
