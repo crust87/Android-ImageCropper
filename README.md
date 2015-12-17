@@ -1,7 +1,7 @@
 # Android-ImageCropper
 Image crop view for android
 
-![](./Screenshot1.png) ![](./Screenshot2.png)
+![](./Screenshot2.png) ![](./Screenshot3.png)
 
 see
 https://play.google.com/store/apps/details?id=com.crust87.imagecropper
