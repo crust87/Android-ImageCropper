@@ -66,7 +66,7 @@ mImageCropper.setOnCropBoxChangedListener(new ImageCropper.OnCropBoxChangedListe
 ### XML
 | Attribute | Value | Description |
 |:---|:---|:---|
-| box_type | String<br />(circle|rect) | Crop box type |
+| box_type | String<br />(circle or rect) | Crop box type |
 | box_color | color | Crop box Color |
 | line_width | dimension | Crop box line width |
 | anchor_size | dimension | Anchor diameter |
