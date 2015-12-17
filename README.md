@@ -73,6 +73,7 @@ mImageCropper.setOnCropBoxChangedListener(new ImageCropper.OnCropBoxChangedListe
 
 ### Java
 | Method Name | Parameters | Return | Description |
+|:---|:---|:---|:---|
 | setImage | Uri | | Set image by Uri |
 | setImage | File | | Set image by File |
 | setImage | String | | Set image by String that file path |
