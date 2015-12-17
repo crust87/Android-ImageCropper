@@ -66,10 +66,28 @@ mImageCropper.setOnCropBoxChangedListener(new ImageCropper.OnCropBoxChangedListe
 ### XML
 | Attribute | Value | Description |
 |:---|:---|:---|
-| box_type | String<br />(circle or rect) | Crop box type |
+| box_type | String (circle or rect) | Crop box type |
 | box_color | color | Crop box Color |
 | line_width | dimension | Crop box line width |
 | anchor_size | dimension | Anchor diameter |
+
+### Java
+| Method | Parameters | Return | Description |
+|:---|:---|:---|:---|
+| setImage | Uri | | Set image by Uri |
+| setImage | File | | Set image by File |
+| setImage | String | | Set image by String that file path |
+| crop | | Bitmap | Return cropped image as crop box
+| setOnCropBoxChangedListener | OnCropBoxChangedListener | | Set listener lesten crop box attributes change |
+| setBoxColor | int | | Set crop box color |
+| setBoxColor | String | | Set crop box color by color code |
+| setBoxType | int | | Set crop box type, 0 is circle and 1 is rect |
+| setLineWidth | int | | Set crop box line width by pixel |
+| setAnchorSize | int | | Set anchor diameter by pixel |
+| isImageOpen | | isImageOpen | Return if image has opened
+
+
+
 
 <br />
 <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
