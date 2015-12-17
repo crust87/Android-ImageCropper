@@ -406,8 +406,4 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 	public boolean isImageOpen() {
 		return isImageOpen;
 	}
-
-	public void setImageOpen(boolean imageOpen) {
-		isImageOpen = imageOpen;
-	}
 }
