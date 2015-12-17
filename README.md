@@ -62,6 +62,15 @@ mImageCropper.setOnCropBoxChangedListener(new ImageCropper.OnCropBoxChangedListe
 });
 ```
 
+## Documents
+### XML
+| Attribute | Value | Description |
+|:---|:---|:---|
+| box_type | String<br />(circle|rect) | Crop box type |
+| box_color | color | Crop box Color |
+| line_width | dimension | Crop box line width |
+| anchor_size | dimension | Anchor diameter |
+
 <br />
 <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
 
