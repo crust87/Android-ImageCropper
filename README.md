@@ -72,19 +72,19 @@ mImageCropper.setOnCropBoxChangedListener(new ImageCropper.OnCropBoxChangedListe
 | anchor_size | dimension | Anchor diameter |
 
 ### Java
-| Method Name | Parameters | Return | Description |
-|:---|:---|:---|:---|
-| setImage | Uri | | Set image by Uri |
-| setImage | File | | Set image by File |
-| setImage | String | | Set image by String that file path |
-| crop | | Bitmap | Return cropped image as crop box
-| setOnCropBox-<br />ChangedListener | OnCropBox-<br />ChangedListener | | Set listener lesten crop box attributes change |
-| setBoxColor | int | | Set crop box color |
-| setBoxColor | String | | Set crop box color by color code |
-| setBoxType | int | | Set crop box type, 0 is circle and 1 is rect |
-| setLineWidth | int | | Set crop box line width by pixel |
-| setAnchorSize | int | | Set anchor diameter by pixel |
-| isImageOpen | | isImageOpen | Return if image has opened
+| Public Methods | |
+|:---|:---|
+| void | setImage(Uri imageUri)<br />Set image by Uri |
+| void | setImage(File imageFile)<br />Set image by File |
+| void | setImage(String imagePath)<br />Set image by String that file path |
+| Bitmap | crop()<br />Return cropped image as crop box |
+| void | setOnCropBoxChangedListener(OnCropBoxChangedListener pOnCropBoxChangedListener)<br /> Set listener lesten crop box attributes change |
+| void | setBoxColor(int color)<br />Set crop box color |
+| void | setBoxColor(String colorCode)<br />Set crop box color by color code |
+| void | setBoxType(int boxType)<br />Set crop box type, 0 is circle and 1 is rect |
+| void | setLineWidth<br />Set crop box line width by pixel |
+| void | setAnchorSize(int anchorSize)<br />Set anchor diameter by pixel |
+| boolean | isImageOpen()<br />Return if image has opened |
 
 ## Licence
 Copyright 2015 Mabi
