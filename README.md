@@ -72,11 +72,11 @@ mImageCropper.setOnCropBoxChangedListener(new ImageCropper.OnCropBoxChangedListe
 | app:anchor_size | setAnchorSize(int anchorSize) | Anchor diameter |
 
 ### Public Constructors
-| | |
-|:---|:---|
-| | ImageCropper(Context context) |
-| | ImageCropper(Context context, AttributeSet attrs) |
-| | ImageCropper(Context context, AttributeSet attrs, int defStyleAttr) |
+| |
+|:---|
+| ImageCropper(Context context) |
+| ImageCropper(Context context, AttributeSet attrs) |
+| ImageCropper(Context context, AttributeSet attrs, int defStyleAttr) |
 
 ### Public Methods
 | | |
