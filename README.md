@@ -63,21 +63,23 @@ mImageCropper.setOnCropBoxChangedListener(new ImageCropper.OnCropBoxChangedListe
 ```
 
 ## Summary
-| XML Attributes | | |
-|:---|:---|:---|
+### XML Attributes
 | Attribute Name | Related Method | Description |
+|:---|:---|:---|
 | app:box_type | setBoxType(int boxType) | Crop box type |
 | app:box_color | setBoxColor(String colorCode) | Crop box Color |
 | app:line_width | setLineWidth(int lineWidth) | Crop box line width |
 | app:anchor_size | setAnchorSize(int anchorSize) | Anchor diameter |
 
-| | Public Constructors |
+### Public Constructors
+| | |
 |:---|:---|
 | | ImageCropper(Context context) |
 | | ImageCropper(Context context, AttributeSet attrs) |
 | | ImageCropper(Context context, AttributeSet attrs, int defStyleAttr) |
 
-| | Public Methods |
+### Public Methods
+| | |
 |:---|:---|
 | void | setImage(Uri imageUri)<br />Set image by Uri |
 | void | setImage(File imageFile)<br />Set image by File |
