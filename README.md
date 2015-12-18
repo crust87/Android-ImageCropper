@@ -72,7 +72,7 @@ mImageCropper.setOnCropBoxChangedListener(new ImageCropper.OnCropBoxChangedListe
 | anchor_size | dimension | Anchor diameter |
 
 ### Java
-| Public Methods | |
+| | Public Methods |
 |:---|:---|
 | void | setImage(Uri imageUri)<br />Set image by Uri |
 | void | setImage(File imageFile)<br />Set image by File |
