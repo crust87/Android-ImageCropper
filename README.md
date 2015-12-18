@@ -62,8 +62,7 @@ mImageCropper.setOnCropBoxChangedListener(new ImageCropper.OnCropBoxChangedListe
 });
 ```
 
-## Documents
-### XML
+## Summary
 | Attribute | Value | Description |
 |:---|:---|:---|
 | box_type | String (circle or rect) | Crop box type |
@@ -71,13 +70,11 @@ mImageCropper.setOnCropBoxChangedListener(new ImageCropper.OnCropBoxChangedListe
 | line_width | dimension | Crop box line width |
 | anchor_size | dimension | Anchor diameter |
 
-### Java
 | | Public Constructors |
 |:---|:---|
 | | ImageCropper(Context context) |
 | | ImageCropper(Context context, AttributeSet attrs) |
 | | ImageCropper(Context context, AttributeSet attrs, int defStyleAttr) |
-<br />
 
 | | Public Methods |
 |:---|:---|
