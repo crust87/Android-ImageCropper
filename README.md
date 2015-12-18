@@ -64,8 +64,8 @@ mImageCropper.setOnCropBoxChangedListener(new ImageCropper.OnCropBoxChangedListe
 
 ## Summary
 | XML Attributes | | |
-| Attribute Name | Related Method | Description |
 |:---|:---|:---|
+| Attribute Name | Related Method | Description |
 | app:box_type | setBoxType(int boxType) | Crop box type |
 | app:box_color | setBoxColor(String colorCode) | Crop box Color |
 | app:line_width | setLineWidth(int lineWidth) | Crop box line width |
