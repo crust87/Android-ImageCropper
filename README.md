@@ -78,7 +78,7 @@ mImageCropper.setOnCropBoxChangedListener(new ImageCropper.OnCropBoxChangedListe
 | setImage | File | | Set image by File |
 | setImage | String | | Set image by String that file path |
 | crop | | Bitmap | Return cropped image as crop box
-| setOnCropBoxChangedListener | OnCropBoxChangedListener | | Set listener lesten crop box attributes change |
+| setOnCropBox-<br />ChangedListener | OnCropBox-<br />ChangedListener | | Set listener lesten crop box attributes change |
 | setBoxColor | int | | Set crop box color |
 | setBoxColor | String | | Set crop box color by color code |
 | setBoxType | int | | Set crop box type, 0 is circle and 1 is rect |
