@@ -63,12 +63,13 @@ mImageCropper.setOnCropBoxChangedListener(new ImageCropper.OnCropBoxChangedListe
 ```
 
 ## Summary
-| Attribute | Value | Description |
+| XML Attributes | | |
+| Attribute Name | Related Method | Description |
 |:---|:---|:---|
-| box_type | String (circle or rect) | Crop box type |
-| box_color | color | Crop box Color |
-| line_width | dimension | Crop box line width |
-| anchor_size | dimension | Anchor diameter |
+| app:box_type | setBoxType(int boxType) | Crop box type |
+| app:box_color | setBoxColor(String colorCode) | Crop box Color |
+| app:line_width | setLineWidth(int lineWidth) | Crop box line width |
+| app:anchor_size | setAnchorSize(int anchorSize) | Anchor diameter |
 
 | | Public Constructors |
 |:---|:---|
@@ -86,7 +87,7 @@ mImageCropper.setOnCropBoxChangedListener(new ImageCropper.OnCropBoxChangedListe
 | void | setBoxColor(int color)<br />Set crop box color |
 | void | setBoxColor(String colorCode)<br />Set crop box color by color code |
 | void | setBoxType(int boxType)<br />Set crop box type, 0 is circle and 1 is rect |
-| void | setLineWidth<br />Set crop box line width by pixel |
+| void | setLineWidth(int lineWidth)<br />Set crop box line width by pixel |
 | void | setAnchorSize(int anchorSize)<br />Set anchor diameter by pixel |
 | boolean | isImageOpen()<br />Return if image has opened |
 
