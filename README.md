@@ -93,7 +93,7 @@ mImageCropper.setOnCropBoxChangedListener(new ImageCropper.OnCropBoxChangedListe
 | void | setAnchorSize(int anchorSize)<br />Set anchor diameter by pixel |
 | boolean | isImageOpen()<br />Return if image has opened |
 
-## Licence
+## License
 Copyright 2015 Mabi
 
 Licensed under the Apache License, Version 2.0 (the "License");<br/>
