@@ -343,6 +343,14 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 		return Bitmap.createBitmap(mImage, lCropX, lCropY, lCropWidth, lCropHeight);
 	}
 
+	public Bitmap getOriginalImage() {
+		if(!isImageOpen) {
+			return null;
+		}
+
+		return mImage;
+	}
+
 	private String getRealPathFromURI(Uri contentUri) {
 		Cursor cursor = null;
 		try {
