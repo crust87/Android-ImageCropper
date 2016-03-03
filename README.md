@@ -9,9 +9,20 @@ https://play.google.com/store/apps/details?id=com.crust87.imagecropper
 
 ## Example
 
-add build.gradle<br />
+add build.gradle in project if you don't using jcenter<br />
 ``` groovy
-compile 'com.crust87:image-cropper:1.7.1'
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+```
+
+add build.gradle in module<br />
+``` groovy
+dependencies {
+    compile 'com.crust87:image-cropper:1.7.2'
+}
 ```
 
 create view and add view<br />
