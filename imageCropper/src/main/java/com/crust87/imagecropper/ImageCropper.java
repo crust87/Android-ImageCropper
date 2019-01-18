@@ -323,24 +323,26 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 	 * @return Bitmap of cropped image
      */
 	public Bitmap crop() {
-		if(!isImageOpen) {
-			return null;
-		}
+//		if(!isImageOpen) {
+//			return null;
+//		}
+//
+//		int lCropX = mCropBox.getCropX();
+//		int lCropY = mCropBox.getCropY();
+//		int lCropWidth = mCropBox.getCropWidth();
+//		int lCropHeight = mCropBox.getCropHeight();
+//
+//		if(lCropX + lCropWidth > mImage.getWidth()) {
+//			lCropWidth -= lCropX + lCropWidth - mImage.getWidth();
+//		}
+//
+//		if(lCropY + lCropHeight > mImage.getHeight()) {
+//			lCropHeight -= lCropY + lCropHeight - mImage.getHeight();
+//		}
+//
+//		return Bitmap.createBitmap(mImage, lCropX, lCropY, lCropWidth, lCropHeight);
 
-		int lCropX = mCropBox.getCropX();
-		int lCropY = mCropBox.getCropY();
-		int lCropWidth = mCropBox.getCropWidth();
-		int lCropHeight = mCropBox.getCropHeight();
-
-		if(lCropX + lCropWidth > mImage.getWidth()) {
-			lCropWidth -= lCropX + lCropWidth - mImage.getWidth();
-		}
-
-		if(lCropY + lCropHeight > mImage.getHeight()) {
-			lCropHeight -= lCropY + lCropHeight - mImage.getHeight();
-		}
-
-		return Bitmap.createBitmap(mImage, lCropX, lCropY, lCropWidth, lCropHeight);
+		return null;
 	}
 
 	public Bitmap getOriginalImage() {
@@ -392,22 +394,6 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 		if(isImageOpen) {
 			mCropBox = mCropBoxBuilder.createCropBox(getContext());
 			invalidate();
-		}
-	}
-
-	public void setLineWidth(int lineWidth) {
-		mCropBoxBuilder.setLineWidth(lineWidth);
-
-		if(mCropBox != null) {
-			mCropBox.setLineWidth(lineWidth);
-		}
-	}
-
-	public void setAnchorSize(int anchorSize) {
-		mCropBoxBuilder.setAnchorSize(anchorSize);
-
-		if(mCropBox != null) {
-			mCropBox.setAnchorSize(anchorSize);
 		}
 	}
 
