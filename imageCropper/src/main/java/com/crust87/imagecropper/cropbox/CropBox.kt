@@ -25,11 +25,12 @@ import android.content.Context
 import android.graphics.*
 import android.view.MotionEvent
 import com.crust87.imagecropper.R
+import com.crust87.imagecropper.cropbox.anchor.Anchor
 
 class CropBox(val context: Context, val leftMargin: Float, val topMargin: Float, val bound: Rect, val scale: Float, var boxColor: Int, val lineWidth: Int, val anchorSize: Int) {
 
     enum class Action {
-        resize, move, none
+        Resize, Move, None
     }
 
     val minSize = context.resources.getDimensionPixelSize(R.dimen.min_box_Size)
@@ -43,23 +44,25 @@ class CropBox(val context: Context, val leftMargin: Float, val topMargin: Float,
         strokeWidth = lineWidth.toFloat()
     }
 
-    val maskPaint1 = Paint().apply {
+    val maskBackgroundPaint = Paint().apply {
         color = Color.BLACK
         isAntiAlias = true
     }
 
-    val maskPaint2 = Paint().apply {
+    val maskHolePaint = Paint().apply {
         color = Color.WHITE
         xfermode = PorterDuffXfermode(PorterDuff.Mode.XOR)
     }
 
-    val bitmapPaint = Paint().apply {
+    val maskPaint = Paint().apply {
         isFilterBitmap = true
         alpha = 128
     }
 
-    var bitmap: Bitmap
-    var canvas: Canvas
+    val anchors = ArrayList<Anchor>()
+
+    var maskBitmap: Bitmap
+    var maskCanvas: Canvas
 
     // Attributes
     var x = 0f
@@ -69,23 +72,29 @@ class CropBox(val context: Context, val leftMargin: Float, val topMargin: Float,
     var postX = 0f
     var postY = 0f
 
-    // Working Variables
-    var currentEvent : Action = Action.none
-
-//    protected abstract val x: Float
-//    protected abstract val y: Float
-//    protected abstract val width: Float
-//    protected abstract val height: Float
-//
-//    abstract val cropX: Int
-//    abstract val cropY: Int
-//    abstract val cropWidth: Int
-//    abstract val cropHeight: Int
+    var currentEvent : Action = Action.None
 
     init {
         paint.strokeWidth = lineWidth.toFloat()
-        bitmap = Bitmap.createBitmap(bound.width(), bound.height(), Bitmap.Config.ARGB_8888)
-        canvas = Canvas(bitmap)
+        maskBitmap = Bitmap.createBitmap(bound.width(), bound.height(), Bitmap.Config.ARGB_8888)
+        maskCanvas = Canvas(maskBitmap)
+
+        initAnchor()
+        setAnchor()
+    }
+
+    companion object {
+        const val TOP_LEFT = 0
+        const val TOP_RIGHT = 1
+        const val BOTTOM_LEFT = 2
+        const val BOTTOM_RIGHT = 3
+        val ANCHOR_LIST = arrayListOf(TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT)
+    }
+
+    fun initAnchor() = ANCHOR_LIST.map {
+        anchors.add(Anchor(it, anchorSize / 2).apply {
+            setColor(boxColor)
+        })
     }
 
     fun processTouchEvent(event: MotionEvent): Boolean {
@@ -98,8 +107,8 @@ class CropBox(val context: Context, val leftMargin: Float, val topMargin: Float,
                 postY = y
 
                 currentEvent = when (contains(event.x - leftMargin, event.y - topMargin)) {
-                    true -> Action.move
-                    false -> Action.none
+                    true -> Action.Move
+                    false -> Action.None
                 }
 
                 return false
@@ -109,7 +118,7 @@ class CropBox(val context: Context, val leftMargin: Float, val topMargin: Float,
                 val dy = postY - y
 
                 var actionResult = false
-                if(currentEvent == Action.move) {
+                if(currentEvent == Action.Move) {
                     actionResult = move(dx, dy)
                 }
 
@@ -124,7 +133,7 @@ class CropBox(val context: Context, val leftMargin: Float, val topMargin: Float,
             }
 
             MotionEvent.ACTION_UP -> {
-                currentEvent = Action.none
+                currentEvent = Action.None
 
                 return false
             }
@@ -132,6 +141,7 @@ class CropBox(val context: Context, val leftMargin: Float, val topMargin: Float,
 
         return false
     }
+
     fun move(dx: Float, dy: Float): Boolean {
         var deltaX = dx
         var deltaY = dy
@@ -162,8 +172,13 @@ class CropBox(val context: Context, val leftMargin: Float, val topMargin: Float,
         return true
     }
 
-    fun setAnchor() {
-
+    fun setAnchor() = anchors.map { anchor ->
+        when (anchor.id) {
+            TOP_LEFT -> anchor.setLocation(x, y)
+            TOP_RIGHT -> anchor.setLocation(x + width, y)
+            BOTTOM_LEFT -> anchor.setLocation(x, y + height)
+            BOTTOM_RIGHT -> anchor.setLocation(x + width, y + height);
+        }
     }
 
     fun contains(ex: Float, ey: Float): Boolean {
@@ -171,17 +186,18 @@ class CropBox(val context: Context, val leftMargin: Float, val topMargin: Float,
     }
 
     fun draw(canvas: Canvas) {
-        this.canvas.drawRect(0f, 0f, canvas.width.toFloat(), canvas.height.toFloat(), maskPaint1);
-        this.canvas.drawRect(x, y, x + width, y + height, maskPaint2);
-        this.canvas.drawRect(x, y, x + width, y + height, paint);
+        maskCanvas.drawRect(0f, 0f, canvas.width.toFloat(), canvas.height.toFloat(), maskBackgroundPaint)
+        maskCanvas.drawRect(x, y, x + width, y + height, maskHolePaint)
+        canvas.drawBitmap(maskBitmap, null, bound, maskPaint)
 
-        canvas.drawBitmap(bitmap, null, bound, bitmapPaint);
+        canvas.translate(leftMargin, topMargin)
 
-		if(currentEvent != Action.move) {
-//			for(Anchor anchor: mAnchors) {
-//				anchor.draw(canvas);
-//			}
-		}
+        canvas.drawRect(x, y, x + width, y + height, paint)
+        if(currentEvent != Action.Move) {
+            anchors.map { anchor ->
+                anchor.draw(canvas)
+            }
+        }
     }
 
     override fun toString(): String {

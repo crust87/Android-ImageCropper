@@ -41,9 +41,9 @@ class Anchor(var id: Int, var radius: Float, var x: Float = 0f, var y: Float = 0
         canvas.drawCircle(x, y, radius, paint)
     }
 
-    fun setLocation(newX: Double, newY: Double) {
-        x = newX.toFloat()
-        y = newY.toFloat()
+    fun setLocation(newX: Float, newY: Float) {
+        x = newX
+        y = newY
     }
 
     fun contains(targetX: Float, targetY: Float): Boolean {
