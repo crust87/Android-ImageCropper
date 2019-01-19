@@ -23,6 +23,7 @@ package com.crust87.imagecropper.cropbox
 
 import android.content.Context
 import android.graphics.*
+import android.util.Log
 import android.view.MotionEvent
 import com.crust87.imagecropper.R
 import com.crust87.imagecropper.cropbox.anchor.Anchor
@@ -33,7 +34,7 @@ class CropBox(val context: Context, val leftMargin: Float, val topMargin: Float,
         Resize, Move, None
     }
 
-    val minSize = context.resources.getDimensionPixelSize(R.dimen.min_box_Size)
+    val minSize = context.resources.getDimensionPixelSize(R.dimen.min_box_Size).toFloat()
 
     val paint = Paint().apply {
         color = Color.WHITE
@@ -73,6 +74,7 @@ class CropBox(val context: Context, val leftMargin: Float, val topMargin: Float,
     var postY = 0f
 
     var currentEvent : Action = Action.None
+    var currentAnchor= -1
 
     init {
         paint.strokeWidth = lineWidth.toFloat()
@@ -106,6 +108,15 @@ class CropBox(val context: Context, val leftMargin: Float, val topMargin: Float,
                 postX = x
                 postY = y
 
+                for (anchor in anchors) {
+                    if (anchor.contains(event.x - leftMargin, event.y - topMargin)) {
+                        currentEvent = Action.Resize
+                        currentAnchor = anchor.id
+
+                        return false
+                    }
+                }
+
                 currentEvent = when (contains(event.x - leftMargin, event.y - topMargin)) {
                     true -> Action.Move
                     false -> Action.None
@@ -117,9 +128,10 @@ class CropBox(val context: Context, val leftMargin: Float, val topMargin: Float,
                 val dx = postX - x
                 val dy = postY - y
 
-                var actionResult = false
-                if(currentEvent == Action.Move) {
-                    actionResult = move(dx, dy)
+                var actionResult = when (currentEvent) {
+                    Action.Move -> move(dx, dy)
+                    Action.Resize -> resize(dx, dy)
+                    else -> false
                 }
 
                 if(actionResult) {
@@ -170,6 +182,81 @@ class CropBox(val context: Context, val leftMargin: Float, val topMargin: Float,
         y -= deltaY
 
         return true
+    }
+
+    fun resize(dx: Float, dy: Float): Boolean {
+        if(currentAnchor != -1) {
+            var deltaX = x
+            var deltaY = y
+            var deltaWidth = width
+            var deltaHeight = height
+
+            when (currentAnchor) {
+                TOP_LEFT -> {
+                    deltaX -= dx
+                    deltaY -= dy
+                    deltaWidth += dx
+                    deltaHeight += dy
+                }
+                TOP_RIGHT -> {
+                    deltaY -= dy
+                    deltaWidth -= dx
+                    deltaHeight += dy
+                }
+                BOTTOM_LEFT -> {
+                    deltaX -= dx
+                    deltaWidth += dx
+                    deltaHeight -= dy
+                }
+                BOTTOM_RIGHT -> {
+                    deltaWidth -= dx
+                    deltaHeight -= dy
+                }
+            }
+
+            if(deltaX < bound.left - leftMargin) {
+                deltaX = bound.left - leftMargin
+                deltaWidth = (x + width) - deltaX
+            }
+
+            if(deltaX + deltaWidth > bound.right - leftMargin) {
+                deltaWidth = bound.right - leftMargin - deltaX
+            }
+
+            if(deltaY < bound.top - topMargin) {
+                deltaY = bound.top - topMargin
+                deltaHeight = (y + height) - deltaY
+            }
+
+            if(deltaY + deltaHeight > bound.bottom - topMargin) {
+                deltaHeight = bound.bottom - topMargin - deltaY
+            }
+
+            if(deltaWidth < minSize) {
+                if(currentAnchor == TOP_LEFT || currentAnchor == BOTTOM_LEFT) {
+                    deltaX = (x + width) - minSize
+                }
+
+                deltaWidth = minSize
+            }
+
+            if(deltaHeight < minSize) {
+                if(currentAnchor == TOP_LEFT || currentAnchor == TOP_RIGHT) {
+                    deltaY = (y + height) - minSize
+                }
+
+                deltaHeight = minSize
+            }
+
+            x = deltaX
+            y = deltaY
+            width = deltaWidth
+            height = deltaHeight
+
+            return true
+        }
+
+        return false
     }
 
     fun setAnchor() = anchors.map { anchor ->
