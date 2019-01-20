@@ -31,6 +31,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -323,26 +324,25 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 	 * @return Bitmap of cropped image
      */
 	public Bitmap crop() {
-//		if(!isImageOpen) {
-//			return null;
-//		}
-//
-//		int lCropX = mCropBox.getCropX();
-//		int lCropY = mCropBox.getCropY();
-//		int lCropWidth = mCropBox.getCropWidth();
-//		int lCropHeight = mCropBox.getCropHeight();
-//
-//		if(lCropX + lCropWidth > mImage.getWidth()) {
-//			lCropWidth -= lCropX + lCropWidth - mImage.getWidth();
-//		}
-//
-//		if(lCropY + lCropHeight > mImage.getHeight()) {
-//			lCropHeight -= lCropY + lCropHeight - mImage.getHeight();
-//		}
-//
-//		return Bitmap.createBitmap(mImage, lCropX, lCropY, lCropWidth, lCropHeight);
+		if(!isImageOpen) {
+			return null;
+		}
 
-		return null;
+		RectF cropBound = mCropBox.getCropBound();
+		int left = (int) cropBound.left;
+		int top = (int) cropBound.top;
+		int width = (int) cropBound.right - (int) cropBound.left;
+		int height = (int) cropBound.bottom - (int) cropBound.top;
+
+		if(left + width > mImage.getWidth()) {
+			width -= left + width - mImage.getWidth();
+		}
+
+		if(top + height > mImage.getHeight()) {
+			height -= top + height - mImage.getHeight();
+		}
+
+		return Bitmap.createBitmap(mImage, left, top, width, height);
 	}
 
 	public Bitmap getOriginalImage() {
