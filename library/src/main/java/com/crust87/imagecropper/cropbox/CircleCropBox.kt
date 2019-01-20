@@ -3,15 +3,12 @@ package com.crust87.imagecropper.cropbox
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Rect
-import android.util.Log
 import android.view.MotionEvent
 
 class CircleCropBox(context: Context, leftMargin: Float, topMargin: Float, bound: Rect, boxColor: Int, lineWidth: Int, anchorSize: Int)
     : CropBox(context, leftMargin, topMargin, bound, boxColor, lineWidth) {
 
-    val anchor = Anchor(context, 0, anchorSize / 2f).apply {
-        setColor(boxColor)
-    }
+    val anchor = Anchor(0, anchorSize / 2f, touchSlop)
 
     var radius: Float
         get() = width / 2
@@ -169,7 +166,7 @@ class CircleCropBox(context: Context, leftMargin: Float, topMargin: Float, bound
         canvas.translate(leftMargin, topMargin)
         canvas.drawCircle(centerX, centerY, radius, paint)
         if (currentEvent != Action.Move) {
-            anchor.draw(canvas)
+            anchor.draw(canvas, anchorPaint)
         }
     }
 

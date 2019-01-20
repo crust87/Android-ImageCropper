@@ -17,9 +17,7 @@ class RectCropBox(context: Context, leftMargin: Float, topMargin: Float, bound: 
     }
 
     val anchors = ANCHOR_LIST.map { id ->
-        Anchor(context, id, anchorSize / 2f).apply {
-            setColor(boxColor)
-        }
+        Anchor(id, anchorSize / 2f, touchSlop)
     }
 
     init {
@@ -165,7 +163,7 @@ class RectCropBox(context: Context, leftMargin: Float, topMargin: Float, bound: 
         canvas.drawRect(x, y, x + width, y + height, paint)
         if (currentEvent != Action.Move) {
             anchors.map { anchor ->
-                anchor.draw(canvas)
+                anchor.draw(canvas, anchorPaint)
             }
         }
     }

@@ -24,6 +24,7 @@ package com.crust87.imagecropper.cropbox
 import android.content.Context
 import android.graphics.*
 import android.view.MotionEvent
+import android.view.ViewConfiguration
 import com.crust87.imagecropper.ImageCropper.Companion.RECT_CROP_BOX
 import com.crust87.imagecropper.R
 
@@ -33,15 +34,20 @@ abstract class CropBox(context: Context, val leftMargin: Float, val topMargin: F
         Resize, Move, None
     }
 
+    val touchSlop = ViewConfiguration.get(context).scaledTouchSlop
+
     val minSize = context.resources.getDimensionPixelSize(R.dimen.min_box_Size).toFloat()
 
     val paint = Paint().apply {
-        color = Color.WHITE
         isAntiAlias = true
         style = Paint.Style.STROKE
         strokeWidth = lineWidth.toFloat()
         color = boxColor
-        strokeWidth = lineWidth.toFloat()
+    }
+
+    val anchorPaint = Paint().apply {
+        isAntiAlias = true
+        color = boxColor
     }
 
     val backgroundPaint = Paint().apply {

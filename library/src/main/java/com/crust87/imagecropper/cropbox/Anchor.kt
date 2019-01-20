@@ -21,23 +21,16 @@
 
 package com.crust87.imagecropper.cropbox
 
-import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
-import android.view.ViewConfiguration
 
-class Anchor(context: Context, var id: Int, var radius: Float, var x: Float = 0f, var y: Float = 0f) {
+class Anchor(var id: Int, var radius: Float, touchSlop: Int) {
 
-    var paint = Paint().apply {
-        color = Color.WHITE
-        isAntiAlias = true
-        strokeWidth = 2f
-    }
+    var x: Float = 0f
+    var y: Float = 0f
+    var touchBound = radius + touchSlop
 
-    private val touchSlop: Float = radius + ViewConfiguration.get(context).getScaledTouchSlop()
-
-    fun draw(canvas: Canvas) {
+    fun draw(canvas: Canvas, paint: Paint) {
         canvas.drawCircle(x, y, radius, paint)
     }
 
@@ -47,10 +40,6 @@ class Anchor(context: Context, var id: Int, var radius: Float, var x: Float = 0f
     }
 
     fun contains(targetX: Float, targetY: Float): Boolean {
-        return targetX >= x - touchSlop && targetX <= x + touchSlop && targetY >= y - touchSlop && targetY <= y + touchSlop
-    }
-
-    fun setColor(color: Int) {
-        paint.color = color
+        return targetX >= x - touchBound && targetX <= x + touchBound && targetY >= y - touchBound && targetY <= y + touchBound
     }
 }
