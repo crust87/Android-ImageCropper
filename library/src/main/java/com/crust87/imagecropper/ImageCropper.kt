@@ -107,6 +107,8 @@ class ImageCropper : SurfaceView, SurfaceHolder.Callback {
 
         with(cropBoxBuilder) {
             this.boxType = boxType
+            this.minSize = context.resources.getDimensionPixelSize(R.dimen.min_box_Size).toFloat()
+            this.touchSlop = ViewConfiguration.get(context).scaledTouchSlop.toFloat()
             this.boxColor = boxColor
             this.lineWidth = lineWidth
             this.anchorSize = anchorSize

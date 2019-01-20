@@ -85,15 +85,15 @@ class CircleCropBox(minSize: Float, touchSlop: Float,  bound: RectF, boxColor: I
         val dRadius = radius - d
 
         if (dRadius > minSize / 2) {
-            val left = centerX - dRadius > bound.left - bound.left
-            val top = centerY - dRadius > bound.top - bound.top
-            val right = centerX + dRadius < bound.right - bound.left
-            val bottom = centerY + dRadius < bound.bottom - bound.top
+            val left = centerX - dRadius > 0
+            val top = centerY - dRadius > 0
+            val right = centerX + dRadius < bound.width()
+            val bottom = centerY + dRadius < bound.height()
 
-            val lLeftNot = centerX + d - dRadius > bound.left - bound.left
-            val lTopNot = centerY + d - dRadius > bound.top - bound.top
-            val lRightNot = centerX - d + dRadius < bound.right - bound.left
-            val lBottomNot = centerY - d + dRadius < bound.bottom - bound.top
+            val lLeftNot = centerX + d - dRadius > 0
+            val lTopNot = centerY + d - dRadius > 0
+            val lRightNot = centerX - d + dRadius < bound.width()
+            val lBottomNot = centerY - d + dRadius < bound.height()
 
             if (left && top && right && bottom) {
                 radius = dRadius

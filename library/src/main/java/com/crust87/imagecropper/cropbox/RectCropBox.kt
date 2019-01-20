@@ -108,22 +108,22 @@ class RectCropBox(minSize: Float, touchSlop: Float, bound: RectF, boxColor: Int,
                 }
             }
 
-            if (deltaX < bound.left - bound.left) {
-                deltaX = bound.left - bound.left
+            if (deltaX < 0) {
+                deltaX = 0f
                 deltaWidth = (x + width) - deltaX
             }
 
-            if (deltaX + deltaWidth > bound.right - bound.left) {
-                deltaWidth = bound.right - bound.left - deltaX
+            if (deltaX + deltaWidth > bound.width()) {
+                deltaWidth = bound.width() - deltaX
             }
 
-            if (deltaY < bound.top - bound.top) {
-                deltaY = bound.top - bound.top
+            if (deltaY < 0) {
+                deltaY = 0f
                 deltaHeight = (y + height) - deltaY
             }
 
-            if (deltaY + deltaHeight > bound.bottom - bound.top) {
-                deltaHeight = bound.bottom - bound.top - deltaY
+            if (deltaY + deltaHeight > bound.height()) {
+                deltaHeight = bound.height() - deltaY
             }
 
             if (deltaWidth < minSize) {
