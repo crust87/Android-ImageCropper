@@ -1,12 +1,11 @@
 package com.crust87.imagecropper.cropbox
 
-import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Rect
+import android.graphics.RectF
 import android.view.MotionEvent
 
-class CircleCropBox(context: Context, leftMargin: Float, topMargin: Float, bound: Rect, boxColor: Int, lineWidth: Int, anchorSize: Int)
-    : CropBox(context, leftMargin, topMargin, bound, boxColor, lineWidth) {
+class CircleCropBox(minSize: Float, touchSlop: Float,  bound: RectF, boxColor: Int, lineWidth: Int, anchorSize: Int)
+    : CropBox(minSize, touchSlop, bound, boxColor, lineWidth) {
 
     val anchor = Anchor(0, anchorSize / 2f, touchSlop)
 
@@ -37,14 +36,14 @@ class CircleCropBox(context: Context, leftMargin: Float, topMargin: Float, bound
     private val locationY = Math.sin(45 * Math.PI / 180).toFloat()
 
     init {
-        centerX = bound.exactCenterX() - leftMargin
-        centerY = bound.exactCenterY() - topMargin
+        centerX = bound.centerX() - bound.left
+        centerY = bound.centerY() - bound.top
         setAnchor()
     }
 
     override fun processTouchEvent(event: MotionEvent): Boolean {
-        val eventX = event.x - leftMargin
-        val eventY = event.y - topMargin
+        val eventX = event.x - bound.left
+        val eventY = event.y - bound.top
         if (event.action == MotionEvent.ACTION_DOWN) {
             postX = eventX
             postY = eventY
@@ -86,15 +85,15 @@ class CircleCropBox(context: Context, leftMargin: Float, topMargin: Float, bound
         val dRadius = radius - d
 
         if (dRadius > minSize / 2) {
-            val left = centerX - dRadius > bound.left - leftMargin
-            val top = centerY - dRadius > bound.top - topMargin
-            val right = centerX + dRadius < bound.right - leftMargin
-            val bottom = centerY + dRadius < bound.bottom - topMargin
+            val left = centerX - dRadius > bound.left - bound.left
+            val top = centerY - dRadius > bound.top - bound.top
+            val right = centerX + dRadius < bound.right - bound.left
+            val bottom = centerY + dRadius < bound.bottom - bound.top
 
-            val lLeftNot = centerX + d - dRadius > bound.left - leftMargin
-            val lTopNot = centerY + d - dRadius > bound.top - topMargin
-            val lRightNot = centerX - d + dRadius < bound.right - leftMargin
-            val lBottomNot = centerY - d + dRadius < bound.bottom - topMargin
+            val lLeftNot = centerX + d - dRadius > bound.left - bound.left
+            val lTopNot = centerY + d - dRadius > bound.top - bound.top
+            val lRightNot = centerX - d + dRadius < bound.right - bound.left
+            val lBottomNot = centerY - d + dRadius < bound.bottom - bound.top
 
             if (left && top && right && bottom) {
                 radius = dRadius
@@ -163,7 +162,7 @@ class CircleCropBox(context: Context, leftMargin: Float, topMargin: Float, bound
         maskCanvas.drawCircle(centerX, centerY, radius, holePaint)
         canvas.drawBitmap(maskBitmap, null, bound, maskPaint)
 
-        canvas.translate(leftMargin, topMargin)
+        canvas.translate(bound.left, bound.top)
         canvas.drawCircle(centerX, centerY, radius, paint)
         if (currentEvent != Action.Move) {
             anchor.draw(canvas, anchorPaint)

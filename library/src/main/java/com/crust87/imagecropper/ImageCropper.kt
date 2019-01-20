@@ -32,6 +32,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import android.view.ViewConfiguration
 import com.crust87.imagecropper.cropbox.CropBox
 import java.io.File
 import java.io.FileInputStream
@@ -43,7 +44,7 @@ class ImageCropper : SurfaceView, SurfaceHolder.Callback {
     private val cropBoxBuilder: CropBox.CropBoxBuilder = CropBox.CropBoxBuilder()
     private var originImage: Bitmap? = null
     private var displayImage: Bitmap? = null
-    private val imageBound = Rect()
+    private val imageBound = RectF()
     private var imagePaint = Paint().apply {
         isFilterBitmap = true
     }
@@ -78,10 +79,13 @@ class ImageCropper : SurfaceView, SurfaceHolder.Callback {
     }
 
     private fun init() {
-        cropBoxBuilder.setBoxColor(resources.getColor(R.color.default_box_color))
-                .setBoxType(DEFAULT_BOX_TYPE)
-                .setLineWidth(resources.getDimensionPixelSize(R.dimen.default_line_width))
-                .setAnchorSize(resources.getDimensionPixelSize(R.dimen.default_anchor_size))
+        with(cropBoxBuilder) {
+            minSize = context.resources.getDimensionPixelSize(R.dimen.min_box_Size).toFloat()
+            touchSlop = ViewConfiguration.get(context).scaledTouchSlop.toFloat()
+            boxColor = resources.getColor(R.color.default_box_color)
+            lineWidth = resources.getDimensionPixelSize(R.dimen.default_line_width)
+            anchorSize = resources.getDimensionPixelSize(R.dimen.default_anchor_size)
+        }
 
         holder.addCallback(this)
         isOpened = false
@@ -101,10 +105,12 @@ class ImageCropper : SurfaceView, SurfaceHolder.Callback {
         val lineWidth = typedArray.getLayoutDimension(R.styleable.ImageCropper_line_width, defaultLineWidth)
         val anchorSize = typedArray.getLayoutDimension(R.styleable.ImageCropper_anchor_size, defaultAnchorSize)
 
-        cropBoxBuilder.setBoxColor(boxColor)
-                .setBoxType(boxType)
-                .setLineWidth(lineWidth)
-                .setAnchorSize(anchorSize)
+        with(cropBoxBuilder) {
+            this.boxType = boxType
+            this.boxColor = boxColor
+            this.lineWidth = lineWidth
+            this.anchorSize = anchorSize
+        }
 
         holder.addCallback(this)
         isOpened = false
@@ -215,19 +221,19 @@ class ImageCropper : SurfaceView, SurfaceHolder.Callback {
 
             scaledImage ?: return
 
-            val leftMargin = (viewWidth - scaledImage.width) / 2
-            val topMargin = (viewHeight - scaledImage.height) / 2
+            val leftMargin = (viewWidth - scaledImage.width) / 2f
+            val topMargin = (viewHeight - scaledImage.height) / 2f
 
             imageBound.left = leftMargin
             imageBound.top = topMargin
             imageBound.right = scaledImage.width + leftMargin
             imageBound.bottom = scaledImage.height + topMargin
 
-            cropBoxBuilder.setLeftMargin(leftMargin.toFloat())
-                    .setTopMargin(topMargin.toFloat())
-                    .setBound(imageBound)
+            with(cropBoxBuilder) {
+                this.bound = imageBound
+            }
 
-            cropBox = cropBoxBuilder.createCropBox(context).apply {
+            cropBox = cropBoxBuilder.createCropBox().apply {
                 onCropBoxChangedListener?.onCropBoxChange(this)
             }
 
@@ -310,10 +316,10 @@ class ImageCropper : SurfaceView, SurfaceHolder.Callback {
     }
 
     fun setBoxType(boxType: Int) {
-        cropBoxBuilder.setBoxType(boxType)
+        cropBoxBuilder.boxType = boxType
 
         if (isOpened) {
-            cropBox = cropBoxBuilder.createCropBox(context)
+            cropBox = cropBoxBuilder.createCropBox()
             invalidate()
         }
     }
@@ -334,6 +340,6 @@ class ImageCropper : SurfaceView, SurfaceHolder.Callback {
     companion object {
         const val CIRCLE_CROP_BOX = 0
         const val RECT_CROP_BOX = 1
-        const  val DEFAULT_BOX_TYPE = CIRCLE_CROP_BOX
+        const val DEFAULT_BOX_TYPE = CIRCLE_CROP_BOX
     }
 }

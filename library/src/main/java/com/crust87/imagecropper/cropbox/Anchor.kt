@@ -24,7 +24,7 @@ package com.crust87.imagecropper.cropbox
 import android.graphics.Canvas
 import android.graphics.Paint
 
-class Anchor(var id: Int, var radius: Float, touchSlop: Int) {
+class Anchor(var id: Int, var radius: Float, touchSlop: Float) {
 
     var x: Float = 0f
     var y: Float = 0f

@@ -8,7 +8,7 @@ class AnchorTest {
 
     @Test
     fun givenTouchSlop10_whenContains_thenTrue() {
-        val anchor = Anchor(0, 40f, 10).apply {
+        val anchor = Anchor(0, 40f, 10f).apply {
             x = 50f
             y = 50f
         }
@@ -20,7 +20,7 @@ class AnchorTest {
 
     @Test
     fun givenTouchSlop0_whenContains_thenFalse() {
-        val anchor = Anchor(0, 40f, 0).apply {
+        val anchor = Anchor(0, 40f, 0f).apply {
             x = 50f
             y = 50f
         }

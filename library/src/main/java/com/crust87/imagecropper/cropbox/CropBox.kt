@@ -21,22 +21,20 @@
 
 package com.crust87.imagecropper.cropbox
 
-import android.content.Context
 import android.graphics.*
 import android.view.MotionEvent
-import android.view.ViewConfiguration
+import com.crust87.imagecropper.ImageCropper.Companion.DEFAULT_BOX_TYPE
 import com.crust87.imagecropper.ImageCropper.Companion.RECT_CROP_BOX
-import com.crust87.imagecropper.R
 
-abstract class CropBox(context: Context, val leftMargin: Float, val topMargin: Float, val bound: Rect, var boxColor: Int, val lineWidth: Int) {
+abstract class CropBox(val minSize: Float,
+                       val touchSlop: Float,
+                       val bound: RectF,
+                       boxColor: Int,
+                       lineWidth: Int) {
 
     enum class Action {
         Resize, Move, None
     }
-
-    val touchSlop = ViewConfiguration.get(context).scaledTouchSlop
-
-    val minSize = context.resources.getDimensionPixelSize(R.dimen.min_box_Size).toFloat()
 
     val paint = Paint().apply {
         isAntiAlias = true
@@ -84,7 +82,7 @@ abstract class CropBox(context: Context, val leftMargin: Float, val topMargin: F
     internal var currentAnchor = -1
 
     init {
-        maskBitmap = Bitmap.createBitmap(bound.width(), bound.height(), Bitmap.Config.ARGB_8888)
+        maskBitmap = Bitmap.createBitmap(bound.width().toInt(), bound.height().toInt(), Bitmap.Config.ARGB_8888)
         maskCanvas = Canvas(maskBitmap)
 
         if (bound.width() < bound.height()) {
@@ -109,23 +107,23 @@ abstract class CropBox(context: Context, val leftMargin: Float, val topMargin: F
         var deltaY = dy
 
         val top = y - dy
-        if (top < (bound.top - topMargin)) {
-            deltaY = dy - (bound.top - topMargin) + top
+        if (top < 0) {
+            deltaY = dy + top
         }
 
         val bottom = y + height - dy
-        if (bottom > (bound.bottom - topMargin)) {
-            deltaY = dy - (bound.bottom - topMargin) + bottom
+        if (bottom > bound.height()) {
+            deltaY = dy - bound.height() + bottom
         }
 
         val left = x - dx
-        if (left < (bound.left - leftMargin)) {
-            deltaX = dx - (bound.left - leftMargin) + left
+        if (left < 0) {
+            deltaX = dx + left
         }
 
         val right = x + width - dx
-        if (right > (bound.right - leftMargin)) {
-            deltaX = dx - (bound.right - leftMargin) + right
+        if (right > bound.width()) {
+            deltaX = dx - bound.width() + right
         }
 
         x -= deltaX
@@ -139,53 +137,18 @@ abstract class CropBox(context: Context, val leftMargin: Float, val topMargin: F
     }
 
     class CropBoxBuilder {
-        private var newBoxType: Int = 0
-        private var newLeftMargin: Float = 0.toFloat()
-        private var newTopMargin: Float = 0.toFloat()
-        private var newBound: Rect = Rect()
-        private var newBoxColor: Int = 0
-        private var newLineWidth: Int = 0
-        private var newAnchorSize: Int = 0
+        var boxType: Int = DEFAULT_BOX_TYPE
+        var minSize : Float = 0f
+        var touchSlop: Float = 0f
+        var bound: RectF = RectF()
+        var boxColor: Int = 0
+        var lineWidth: Int = 0
+        var anchorSize: Int = 0
 
-        fun setBoxType(boxType: Int): CropBoxBuilder {
-            newBoxType = boxType
-            return this
-        }
-
-        fun setLeftMargin(leftMargin: Float): CropBoxBuilder {
-            newLeftMargin = leftMargin
-            return this
-        }
-
-        fun setTopMargin(topMargin: Float): CropBoxBuilder {
-            newTopMargin = topMargin
-            return this
-        }
-
-        fun setBound(bound: Rect): CropBoxBuilder {
-            newBound = bound
-            return this
-        }
-
-        fun setBoxColor(boxColor: Int): CropBoxBuilder {
-            newBoxColor = boxColor
-            return this
-        }
-
-        fun setLineWidth(lineWidth: Int): CropBoxBuilder {
-            newLineWidth = lineWidth
-            return this
-        }
-
-        fun setAnchorSize(anchorSize: Int): CropBoxBuilder {
-            newAnchorSize = anchorSize
-            return this
-        }
-
-        fun createCropBox(context: Context): CropBox {
-            return when (newBoxType) {
-                RECT_CROP_BOX -> RectCropBox(context, newLeftMargin, newTopMargin, newBound, newBoxColor, newLineWidth, newAnchorSize)
-                else -> CircleCropBox(context, newLeftMargin, newTopMargin, newBound, newBoxColor, newLineWidth, newAnchorSize)
+        fun createCropBox(): CropBox {
+            return when (boxType) {
+                RECT_CROP_BOX -> RectCropBox(minSize, touchSlop, bound, boxColor, lineWidth, anchorSize)
+                else -> CircleCropBox(minSize, touchSlop, bound, boxColor, lineWidth, anchorSize)
             }
         }
     }

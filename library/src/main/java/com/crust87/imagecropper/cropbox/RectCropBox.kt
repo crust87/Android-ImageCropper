@@ -1,12 +1,11 @@
 package com.crust87.imagecropper.cropbox
 
-import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Rect
+import android.graphics.RectF
 import android.view.MotionEvent
 
-class RectCropBox(context: Context, leftMargin: Float, topMargin: Float, bound: Rect, boxColor: Int, lineWidth: Int, anchorSize: Int)
-    : CropBox(context, leftMargin, topMargin, bound, boxColor, lineWidth) {
+class RectCropBox(minSize: Float, touchSlop: Float, bound: RectF, boxColor: Int, lineWidth: Int, anchorSize: Int)
+    : CropBox(minSize, touchSlop, bound, boxColor, lineWidth) {
 
     companion object {
         const val TOP_LEFT = 0
@@ -21,15 +20,15 @@ class RectCropBox(context: Context, leftMargin: Float, topMargin: Float, bound: 
     }
 
     init {
-        x = bound.exactCenterX() - width / 2 - leftMargin
-        y = bound.exactCenterY() - height / 2 - topMargin
+        x = bound.centerX() - width / 2 - bound.left
+        y = bound.centerY() - height / 2 - bound.top
 
         setAnchor()
     }
 
     override fun processTouchEvent(event: MotionEvent): Boolean {
-        val eventX = event.x - leftMargin
-        val eventY = event.y - topMargin
+        val eventX = event.x - bound.left
+        val eventY = event.y - bound.top
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
@@ -109,22 +108,22 @@ class RectCropBox(context: Context, leftMargin: Float, topMargin: Float, bound: 
                 }
             }
 
-            if (deltaX < bound.left - leftMargin) {
-                deltaX = bound.left - leftMargin
+            if (deltaX < bound.left - bound.left) {
+                deltaX = bound.left - bound.left
                 deltaWidth = (x + width) - deltaX
             }
 
-            if (deltaX + deltaWidth > bound.right - leftMargin) {
-                deltaWidth = bound.right - leftMargin - deltaX
+            if (deltaX + deltaWidth > bound.right - bound.left) {
+                deltaWidth = bound.right - bound.left - deltaX
             }
 
-            if (deltaY < bound.top - topMargin) {
-                deltaY = bound.top - topMargin
+            if (deltaY < bound.top - bound.top) {
+                deltaY = bound.top - bound.top
                 deltaHeight = (y + height) - deltaY
             }
 
-            if (deltaY + deltaHeight > bound.bottom - topMargin) {
-                deltaHeight = bound.bottom - topMargin - deltaY
+            if (deltaY + deltaHeight > bound.bottom - bound.top) {
+                deltaHeight = bound.bottom - bound.top - deltaY
             }
 
             if (deltaWidth < minSize) {
@@ -159,7 +158,7 @@ class RectCropBox(context: Context, leftMargin: Float, topMargin: Float, bound: 
         maskCanvas.drawRect(x, y, x + width, y + height, holePaint)
         canvas.drawBitmap(maskBitmap, null, bound, maskPaint)
 
-        canvas.translate(leftMargin, topMargin)
+        canvas.translate(bound.left, bound.top)
         canvas.drawRect(x, y, x + width, y + height, paint)
         if (currentEvent != Action.Move) {
             anchors.map { anchor ->
