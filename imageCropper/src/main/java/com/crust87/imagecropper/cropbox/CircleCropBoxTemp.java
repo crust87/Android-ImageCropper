@@ -21,7 +21,7 @@
 
 package com.crust87.imagecropper.cropbox;
 
-public class CircleCropBox {
+public class CircleCropBoxTemp {
 //
 //	// Components
 //	private Anchor mAnchor;
@@ -31,7 +31,7 @@ public class CircleCropBox {
 //	private double mAnchorLoactionY = Math.sin((45 * Math.PI) / 180);
 //	private float mRadius;
 //
-//	protected CircleCropBox(Context context) {
+//	protected CircleCropBoxTemp(Context context) {
 //		super(context);
 //	}
 //

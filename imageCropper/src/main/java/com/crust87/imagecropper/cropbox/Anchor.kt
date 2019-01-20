@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.crust87.imagecropper.cropbox.anchor
+package com.crust87.imagecropper.cropbox
 
 import android.graphics.Canvas
 import android.graphics.Color
@@ -35,8 +35,6 @@ class Anchor(var id: Int, var radius: Float, var x: Float = 0f, var y: Float = 0
 
     private val touchSlop: Float = radius * 2
 
-    constructor(id: Int, mRadius: Int) : this(id, mRadius.toFloat(), 0f, 0f)
-
     fun draw(canvas: Canvas) {
         canvas.drawCircle(x, y, radius, paint)
     }
@@ -48,10 +46,6 @@ class Anchor(var id: Int, var radius: Float, var x: Float = 0f, var y: Float = 0
 
     fun contains(targetX: Float, targetY: Float): Boolean {
         return targetX >= x - touchSlop && targetX <= x + touchSlop && targetY >= y - touchSlop && targetY <= y + touchSlop
-    }
-
-    fun setColor(colorCode: String) {
-        paint.color = Color.parseColor(colorCode)
     }
 
     fun setColor(color: Int) {
