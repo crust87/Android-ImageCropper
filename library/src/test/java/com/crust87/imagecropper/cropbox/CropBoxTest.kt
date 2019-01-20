@@ -1,7 +1,7 @@
 package com.crust87.imagecropper.cropbox
 
 import android.graphics.RectF
-import junit.framework.Assert.*
+import junit.framework.TestCase.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -38,74 +38,74 @@ class CropBoxTest {
     }
 
     @Test
-    fun givenDragLeft50_whenMove_thenMove50() {
+    fun givenDragLeft50_whenMove_thenMoveLeft50() {
         val cropBox = cropBoxBuilder.createCropBox()
 
         cropBox.move(50f, 0f)
 
-        assertEquals(cropBox.x, 50f)
+        assertEquals(50f, cropBox.x)
     }
 
     @Test
-    fun givenDragLeft150_whenMove_thenMove100() {
+    fun givenDragLeft150_whenMove_thenMoveLeft100() {
         val cropBox = cropBoxBuilder.createCropBox()
 
         cropBox.move(150f, 0f)
 
-        assertEquals(cropBox.x, 0f)
+        assertEquals(0f, cropBox.x)
     }
 
     @Test
-    fun givenDragTop50_whenMove_thenMove50() {
+    fun givenDragTop50_whenMove_thenMoveTop50() {
         val cropBox = cropBoxBuilder.createCropBox()
 
         cropBox.move(0f, 50f)
 
-        assertEquals(cropBox.y, 50f)
+        assertEquals(50f, cropBox.y)
     }
 
     @Test
-    fun givenDragTop150_whenMove_thenMove100() {
+    fun givenDragTop150_whenMove_thenMoveTop100() {
         val cropBox = cropBoxBuilder.createCropBox()
 
         cropBox.move(0f, 150f)
 
-        assertEquals(cropBox.y, 0f)
+        assertEquals(0f, cropBox.y)
     }
 
     @Test
-    fun givenDragRight50_whenMove_thenMove50() {
+    fun givenDragRight50_whenMove_thenMoveRight50() {
         val cropBox = cropBoxBuilder.createCropBox()
 
         cropBox.move(-50f, 0f)
 
-        assertEquals(cropBox.x, 150f)
+        assertEquals(150f, cropBox.x)
     }
 
     @Test
-    fun givenDragRight150_whenMove_thenMove100() {
+    fun givenDragRight150_whenMove_thenMoveRight100() {
         val cropBox = cropBoxBuilder.createCropBox()
 
         cropBox.move(-150f, 0f)
 
-        assertEquals(cropBox.x, 200f)
+        assertEquals(200f, cropBox.x)
     }
 
     @Test
-    fun givenDragBottom50_whenMove_thenMove50() {
+    fun givenDragBottom50_whenMove_thenMoveBottom50() {
         val cropBox = cropBoxBuilder.createCropBox()
 
         cropBox.move(0f, -50f)
 
-        assertEquals(cropBox.y, 150f)
+        assertEquals(150f, cropBox.y)
     }
 
     @Test
-    fun givenDragBottom150_whenMove_thenMove100() {
+    fun givenDragBottom150_whenMove_thenBottomMove100() {
         val cropBox = cropBoxBuilder.createCropBox()
 
         cropBox.move(0f, -150f)
 
-        assertEquals(cropBox.y, 200f)
+        assertEquals(200f, cropBox.y)
     }
 }
