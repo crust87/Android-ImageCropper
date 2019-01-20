@@ -23,10 +23,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         imageCropper.setOnCropBoxChangedListener { cropBox ->
-            textCropX.text = "crop x: $cropBox.cropX"
-            textCropY.text = "crop y: $cropBox.cropY"
-            textCropWidth.text = "crop width: $cropBox.cropWidth"
-            textCropHeight.text = "crop height: $cropBox.cropHeight"
+            textBoxInfo.text = "info: $cropBox"
         }
     }
 

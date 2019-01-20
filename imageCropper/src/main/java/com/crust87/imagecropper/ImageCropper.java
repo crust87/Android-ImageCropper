@@ -71,6 +71,7 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 	private int mViewHeight;
 	private String mImagePath;
 	private boolean isImageOpen;
+	private float scale;
 
 	// Listener
 	private OnCropBoxChangedListener mOnCropBoxChangedListener;
@@ -267,16 +268,15 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 
 		int newWidth;
 		int newHeight;
-		float lScale;
 
 		if(scaleX > scaleY) {
-			lScale = scaleY;
+			scale = scaleY;
 		} else {
-			lScale = scaleX;
+			scale = scaleX;
 		}
 
-		newWidth = (int) (mImage.getWidth() * lScale);
-		newHeight = (int) (mImage.getHeight() * lScale);
+		newWidth = (int) (mImage.getWidth() * scale);
+		newHeight = (int) (mImage.getHeight() * scale);
 
 		mScaledImage = Bitmap.createScaledBitmap(mImage, newWidth, newHeight, true);
 
@@ -287,8 +287,7 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 
 		mCropBoxBuilder.setLeftMargin(lLeftMargin)
 				.setTopMargin(lTopMargin)
-				.setBound(mImageBound)
-				.setScale(lScale);
+				.setBound(mImageBound);
 
 		mCropBox = mCropBoxBuilder.createCropBox(getContext());
 
@@ -328,21 +327,20 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 			return null;
 		}
 
-		RectF cropBound = mCropBox.getCropBound();
-		int left = (int) cropBound.left;
-		int top = (int) cropBound.top;
-		int width = (int) cropBound.right - (int) cropBound.left;
-		int height = (int) cropBound.bottom - (int) cropBound.top;
+		int x = (int) (mCropBox.getX() / scale);
+		int y = (int) (mCropBox.getY() / scale);
+		int width = (int) (mCropBox.getWidth() / scale);
+		int height = (int) (mCropBox.getHeight() / scale);
 
-		if(left + width > mImage.getWidth()) {
-			width -= left + width - mImage.getWidth();
+		if(x + width > mImage.getWidth()) {
+			width -= x + width - mImage.getWidth();
 		}
 
-		if(top + height > mImage.getHeight()) {
-			height -= top + height - mImage.getHeight();
+		if(y + height > mImage.getHeight()) {
+			height -= y + height - mImage.getHeight();
 		}
 
-		return Bitmap.createBitmap(mImage, left, top, width, height);
+		return Bitmap.createBitmap(mImage, x, y, width, height);
 	}
 
 	public Bitmap getOriginalImage() {
@@ -374,18 +372,6 @@ public class ImageCropper extends SurfaceView implements SurfaceHolder.Callback 
 
 	public interface OnCropBoxChangedListener {
 		public abstract void onCropBoxChange(CropBox cropBox);
-	}
-
-	public void setBoxColor(int color) {
-		mCropBoxBuilder.setBoxColor(color);
-
-		if(mCropBox != null) {
-			mCropBox.setColor(color);
-		}
-	}
-
-	public void setBoxColor(String colorCode) {
-		setBoxColor(Color.parseColor(colorCode));
 	}
 
 	public void setBoxType(int boxType) {

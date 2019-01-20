@@ -27,7 +27,7 @@ import android.view.MotionEvent
 import com.crust87.imagecropper.R
 import com.crust87.imagecropper.cropbox.anchor.Anchor
 
-class CropBox(val context: Context, val leftMargin: Float, val topMargin: Float, val bound: Rect, val scale: Float, var boxColor: Int, val lineWidth: Int, val anchorSize: Int) {
+class CropBox(context: Context, val leftMargin: Float, val topMargin: Float, val bound: Rect, var boxColor: Int, val lineWidth: Int, val anchorSize: Int) {
 
     companion object {
         const val TOP_LEFT = 0
@@ -69,19 +69,23 @@ class CropBox(val context: Context, val leftMargin: Float, val topMargin: Float,
 
     val anchors = ArrayList<Anchor>()
 
-    var maskBitmap: Bitmap
-    var maskCanvas: Canvas
-
-    // Attributes
+    /*
+    Attributes
+     */
     var x = 0f
     var y = 0f
     var width = minSize
     var height = minSize
-    var postX = 0f
-    var postY = 0f
 
-    var currentEvent: Action = Action.None
-    var currentAnchor = -1
+    /*
+    Working Variables
+     */
+    private var maskBitmap: Bitmap
+    private var maskCanvas: Canvas
+    private var postX = 0f
+    private var postY = 0f
+    private var currentEvent: Action = Action.None
+    private var currentAnchor = -1
 
     init {
         maskBitmap = Bitmap.createBitmap(bound.width(), bound.height(), Bitmap.Config.ARGB_8888)
@@ -89,12 +93,6 @@ class CropBox(val context: Context, val leftMargin: Float, val topMargin: Float,
 
         initAnchor()
         setAnchor()
-    }
-
-    fun initAnchor() = ANCHOR_LIST.map {
-        anchors.add(Anchor(it, anchorSize / 2).apply {
-            setColor(boxColor)
-        })
     }
 
     fun processTouchEvent(event: MotionEvent): Boolean {
@@ -254,17 +252,23 @@ class CropBox(val context: Context, val leftMargin: Float, val topMargin: Float,
         return false
     }
 
-    fun setAnchor() = anchors.map { anchor ->
+    fun contains(ex: Float, ey: Float): Boolean {
+        return ex >= x && ex <= x + width && ey >= y && ey <= y + height
+    }
+
+    open fun initAnchor() = ANCHOR_LIST.map {
+        anchors.add(Anchor(it, anchorSize / 2).apply {
+            setColor(boxColor)
+        })
+    }
+
+    open fun setAnchor() = anchors.map { anchor ->
         when (anchor.id) {
             TOP_LEFT -> anchor.setLocation(x, y)
             TOP_RIGHT -> anchor.setLocation(x + width, y)
             BOTTOM_LEFT -> anchor.setLocation(x, y + height)
             BOTTOM_RIGHT -> anchor.setLocation(x + width, y + height);
         }
-    }
-
-    fun contains(ex: Float, ey: Float): Boolean {
-        return ex >= x && ex <= x + width && ey >= y && ey <= y + height
     }
 
     fun draw(canvas: Canvas) {
@@ -281,21 +285,8 @@ class CropBox(val context: Context, val leftMargin: Float, val topMargin: Float,
         }
     }
 
-    val cropBound: RectF
-        get() = RectF().apply {
-            left = x / scale
-            top = y / scale
-            right = left + width / scale
-            bottom = top + height / scale
-        }
-
     override fun toString(): String {
         return "view x: $x, y: $y, width: $width, height: $height"
-    }
-
-    open fun setColor(color: Int) {
-        boxColor = color
-        paint.color = boxColor
     }
 
     class CropBoxBuilder {
@@ -303,7 +294,6 @@ class CropBox(val context: Context, val leftMargin: Float, val topMargin: Float,
         private var newLeftMargin: Float = 0.toFloat()
         private var newTopMargin: Float = 0.toFloat()
         private var newBound: Rect = Rect()
-        private var newScale: Float = 0.toFloat()
         private var newBoxColor: Int = 0
         private var newLineWidth: Int = 0
         private var newAnchorSize: Int = 0
@@ -328,11 +318,6 @@ class CropBox(val context: Context, val leftMargin: Float, val topMargin: Float,
             return this
         }
 
-        fun setScale(scale: Float): CropBoxBuilder {
-            newScale = scale
-            return this
-        }
-
         fun setBoxColor(boxColor: Int): CropBoxBuilder {
             newBoxColor = boxColor
             return this
@@ -349,7 +334,7 @@ class CropBox(val context: Context, val leftMargin: Float, val topMargin: Float,
         }
 
         fun createCropBox(context: Context): CropBox {
-            return CropBox(context, newLeftMargin, newTopMargin, newBound, newScale, newBoxColor, newLineWidth, newAnchorSize)
+            return CropBox(context, newLeftMargin, newTopMargin, newBound, newBoxColor, newLineWidth, newAnchorSize)
         }
     }
 }
