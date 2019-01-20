@@ -24,8 +24,7 @@ package com.crust87.imagecropper.cropbox
 import android.content.Context
 import android.graphics.*
 import android.view.MotionEvent
-import com.crust87.imagecropper.ImageCropper.CIRCLE_CROP_BOX
-import com.crust87.imagecropper.ImageCropper.RECT_CROP_BOX
+import com.crust87.imagecropper.ImageCropper.Companion.RECT_CROP_BOX
 import com.crust87.imagecropper.R
 
 abstract class CropBox(context: Context, val leftMargin: Float, val topMargin: Float, val bound: Rect, var boxColor: Int, val lineWidth: Int) {

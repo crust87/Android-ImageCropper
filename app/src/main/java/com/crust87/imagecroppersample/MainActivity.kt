@@ -77,10 +77,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-            val selectedImageUri = data.data
-
-            imageCropper.setImage(selectedImageUri)
+        if (requestCode == IMAGE_REQUEST_CODE && resultCode == RESULT_OK) {
+            data?.data?.let {
+                imageCropper.setImage(it)
+            }
         }
     }
 
@@ -92,6 +92,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun cropImage() {
+        if (!imageCropper.isOpened) {
+            return
+        }
+
         val croppedImage = imageCropper.crop()
 
         if (croppedImage != null) {
