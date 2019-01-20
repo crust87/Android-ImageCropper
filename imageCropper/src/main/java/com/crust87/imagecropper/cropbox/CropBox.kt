@@ -81,6 +81,14 @@ abstract class CropBox(context: Context, val leftMargin: Float, val topMargin: F
     init {
         maskBitmap = Bitmap.createBitmap(bound.width(), bound.height(), Bitmap.Config.ARGB_8888)
         maskCanvas = Canvas(maskBitmap)
+
+        if (bound.width() < bound.height()) {
+            width = bound.width() / 3f
+            height = width
+        } else {
+            width = bound.height() / 3f
+            height = width
+        }
     }
 
     fun contains(ex: Float, ey: Float): Boolean {
