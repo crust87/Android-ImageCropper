@@ -24,6 +24,8 @@ package com.crust87.imagecropper.cropbox
 import android.content.Context
 import android.graphics.*
 import android.view.MotionEvent
+import com.crust87.imagecropper.ImageCropper.CIRCLE_CROP_BOX
+import com.crust87.imagecropper.ImageCropper.RECT_CROP_BOX
 import com.crust87.imagecropper.R
 
 abstract class CropBox(context: Context, val leftMargin: Float, val topMargin: Float, val bound: Rect, var boxColor: Int, val lineWidth: Int) {
@@ -44,7 +46,7 @@ abstract class CropBox(context: Context, val leftMargin: Float, val topMargin: F
     }
 
     val backgroundPaint = Paint().apply {
-        color = Color.RED
+        color = Color.BLACK
         isAntiAlias = true
     }
 
@@ -88,6 +90,36 @@ abstract class CropBox(context: Context, val leftMargin: Float, val topMargin: F
     abstract fun processTouchEvent(event: MotionEvent): Boolean
 
     abstract fun draw(canvas: Canvas)
+
+    fun move(dx: Float, dy: Float): Boolean {
+        var deltaX = dx
+        var deltaY = dy
+
+        val top = y - dy
+        if (top < (bound.top - topMargin)) {
+            deltaY = dy - (bound.top - topMargin) + top
+        }
+
+        val bottom = y + height - dy
+        if (bottom > (bound.bottom - topMargin)) {
+            deltaY = dy - (bound.bottom - topMargin) + bottom
+        }
+
+        val left = x - dx
+        if (left < (bound.left - leftMargin)) {
+            deltaX = dx - (bound.left - leftMargin) + left
+        }
+
+        val right = x + width - dx
+        if (right > (bound.right - leftMargin)) {
+            deltaX = dx - (bound.right - leftMargin) + right
+        }
+
+        x -= deltaX
+        y -= deltaY
+
+        return true
+    }
 
     override fun toString(): String {
         return "view x: $x, y: $y, width: $width, height: $height"
@@ -138,7 +170,10 @@ abstract class CropBox(context: Context, val leftMargin: Float, val topMargin: F
         }
 
         fun createCropBox(context: Context): CropBox {
-            return CircleCropBox(context, newLeftMargin, newTopMargin, newBound, newBoxColor, newLineWidth, newAnchorSize)
+            return when (newBoxType) {
+                RECT_CROP_BOX -> RectCropBox(context, newLeftMargin, newTopMargin, newBound, newBoxColor, newLineWidth, newAnchorSize)
+                else -> CircleCropBox(context, newLeftMargin, newTopMargin, newBound, newBoxColor, newLineWidth, newAnchorSize)
+            }
         }
     }
 }

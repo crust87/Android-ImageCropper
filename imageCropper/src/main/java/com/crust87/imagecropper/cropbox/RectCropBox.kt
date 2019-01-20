@@ -23,6 +23,9 @@ class RectCropBox(context: Context, leftMargin: Float, topMargin: Float, bound: 
     }
 
     init {
+        x = bound.exactCenterX() - width / 2 - leftMargin
+        y = bound.exactCenterY() - height / 2 - topMargin
+
         setAnchor()
     }
 
@@ -78,35 +81,7 @@ class RectCropBox(context: Context, leftMargin: Float, topMargin: Float, bound: 
         return false
     }
 
-    fun move(dx: Float, dy: Float): Boolean {
-        var deltaX = dx
-        var deltaY = dy
 
-        val top = y - dy
-        if (top < (bound.top - topMargin)) {
-            deltaY = dy - (bound.top - topMargin) + top
-        }
-
-        val bottom = y + height - dy
-        if (bottom > (bound.bottom - topMargin)) {
-            deltaY = dy - (bound.bottom - topMargin) + bottom
-        }
-
-        val left = x - dx
-        if (left < (bound.left - leftMargin)) {
-            deltaX = dx - (bound.left - leftMargin) + left
-        }
-
-        val right = x + width - dx
-        if (right > (bound.right - leftMargin)) {
-            deltaX = dx - (bound.right - leftMargin) + right
-        }
-
-        x -= deltaX
-        y -= deltaY
-
-        return true
-    }
 
     fun resize(dx: Float, dy: Float): Boolean {
         if (currentAnchor != -1) {
