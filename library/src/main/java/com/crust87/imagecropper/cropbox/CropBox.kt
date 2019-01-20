@@ -79,7 +79,6 @@ abstract class CropBox(val minSize: Float,
     internal var postX = 0f
     internal var postY = 0f
     internal var currentEvent: Action = Action.None
-    internal var currentAnchor = -1
 
     init {
         maskBitmap = Bitmap.createBitmap(bound.width().toInt(), bound.height().toInt(), Bitmap.Config.ARGB_8888)

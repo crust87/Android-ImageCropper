@@ -14,6 +14,7 @@ class RectCropBox(minSize: Float, touchSlop: Float, bound: RectF, boxColor: Int,
         const val BOTTOM_RIGHT = 3
         val ANCHOR_LIST = arrayListOf(TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT)
     }
+    internal var currentAnchor = -1
 
     val anchors = ANCHOR_LIST.map { id ->
         Anchor(id, anchorSize / 2f, touchSlop)
