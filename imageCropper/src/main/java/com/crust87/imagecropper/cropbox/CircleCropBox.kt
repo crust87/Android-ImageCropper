@@ -9,7 +9,7 @@ import android.view.MotionEvent
 class CircleCropBox(context: Context, leftMargin: Float, topMargin: Float, bound: Rect, boxColor: Int, lineWidth: Int, anchorSize: Int)
     : CropBox(context, leftMargin, topMargin, bound, boxColor, lineWidth) {
 
-    val anchor = Anchor(0, anchorSize / 2f).apply {
+    val anchor = Anchor(context, 0, anchorSize / 2f).apply {
         setColor(boxColor)
     }
 

@@ -17,7 +17,7 @@ class RectCropBox(context: Context, leftMargin: Float, topMargin: Float, bound: 
     }
 
     val anchors = ANCHOR_LIST.map { id ->
-        Anchor(id, anchorSize / 2f).apply {
+        Anchor(context, id, anchorSize / 2f).apply {
             setColor(boxColor)
         }
     }
@@ -80,9 +80,7 @@ class RectCropBox(context: Context, leftMargin: Float, topMargin: Float, bound: 
 
         return false
     }
-
-
-
+    
     fun resize(dx: Float, dy: Float): Boolean {
         if (currentAnchor != -1) {
             var deltaX = x
