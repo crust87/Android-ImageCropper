@@ -1,1 +1,1 @@
-include ':app', ':imageCropper'
+include ':app', ':library'
